@@ -9,9 +9,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link rel="stylesheet" href="styles.css?v=20261111-media-design-2">
+    <link rel="stylesheet" href="styles.css?v=20261112-gift-unlock">
 </head>
 <body>
+
+    <div class="gift-unlock-screen" id="giftUnlockScreen" role="dialog" aria-modal="true" aria-labelledby="gift-unlock-title">
+        <section class="gift-unlock-card glass">
+            <p class="eyebrow">Una sorpresa especial</p>
+            <h1 id="gift-unlock-title">Este regalo se desbloqueará el 21 de noviembre de 2026 💖</h1>
+            <p class="gift-unlock-subtitle">La espera también es parte de nuestra historia. Vuelve cuando llegue el gran día ✨</p>
+            <div class="gift-countdown" id="giftCountdown" role="timer" aria-label="Tiempo restante para desbloquear el regalo" aria-live="off">
+                <div class="timer-box"><div class="timer-number" id="giftDays">00</div><div class="timer-label">Días</div></div>
+                <div class="timer-box"><div class="timer-number" id="giftHours">00</div><div class="timer-label">Horas</div></div>
+                <div class="timer-box"><div class="timer-number" id="giftMinutes">00</div><div class="timer-label">Minutos</div></div>
+                <div class="timer-box"><div class="timer-number" id="giftSeconds">00</div><div class="timer-label">Segundos</div></div>
+            </div>
+        </section>
+    </div>
 
     <canvas id="canvas-bg"></canvas>
 
@@ -543,6 +557,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=20261111-media-design-2" defer></script>
+    <script src="script.js?v=20261112-gift-unlock-a11y" defer></script>
 </body>
 </html>

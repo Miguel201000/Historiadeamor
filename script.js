@@ -1,3 +1,48 @@
+        const giftUnlockScreen = document.getElementById('giftUnlockScreen');
+        const giftUnlockDate = new Date(2026, 10, 21);
+        const giftCountdownUnits = {
+            days: document.getElementById('giftDays'),
+            hours: document.getElementById('giftHours'),
+            minutes: document.getElementById('giftMinutes'),
+            seconds: document.getElementById('giftSeconds')
+        };
+        const giftLockedContent = Array.from(document.body.children)
+            .filter(element => element !== giftUnlockScreen && element.tagName !== 'SCRIPT')
+            .map(element => ({ element, wasInert: element.inert }));
+        let giftCountdownInterval;
+
+        function updateGiftCountdown() {
+            const remaining = giftUnlockDate - new Date();
+            if (remaining <= 0) {
+                giftUnlockScreen.hidden = true;
+                document.body.classList.remove('gift-locked');
+                giftLockedContent.forEach(({ element, wasInert }) => {
+                    element.inert = wasInert;
+                });
+                window.clearInterval(giftCountdownInterval);
+                return;
+            }
+
+            const totalSeconds = Math.floor(remaining / 1000);
+            const values = {
+                days: Math.floor(totalSeconds / 86400),
+                hours: Math.floor((totalSeconds % 86400) / 3600),
+                minutes: Math.floor((totalSeconds % 3600) / 60),
+                seconds: totalSeconds % 60
+            };
+
+            Object.keys(giftCountdownUnits).forEach(unit => {
+                giftCountdownUnits[unit].textContent = String(values[unit]).padStart(2, '0');
+            });
+        }
+
+        document.body.classList.add('gift-locked');
+        giftLockedContent.forEach(({ element }) => {
+            element.inert = true;
+        });
+        updateGiftCountdown();
+        if (!giftUnlockScreen.hidden) giftCountdownInterval = window.setInterval(updateGiftCountdown, 1000);
+
         const isTriviaView = new URLSearchParams(window.location.search).get('sorpresa') === '1';
         const isCompactDevice = window.matchMedia('(max-width: 700px), (pointer: coarse)').matches;
         if (isTriviaView) document.body.classList.add('trivia-mode');

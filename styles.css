@@ -2127,3 +2127,56 @@
             .credits-sequence { display: contents; }
             .heart-gallery .memory-photo-card { animation: none; }
         }
+
+        body.gift-locked { overflow: hidden; }
+
+        .gift-unlock-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: grid;
+            place-items: center;
+            overflow-y: auto;
+            padding: 1.25rem;
+            background:
+                radial-gradient(ellipse at 50% 35%, rgba(168, 85, 247, 0.2), transparent 55%),
+                linear-gradient(135deg, #0f0c20, #1d102f 55%, #2a0826);
+        }
+
+        .gift-unlock-screen[hidden] { display: none; }
+
+        .gift-unlock-card {
+            width: min(100%, 720px);
+            padding: clamp(1.75rem, 5vw, 3.5rem);
+            text-align: center;
+        }
+
+        .gift-unlock-card h1 {
+            margin: 0.6rem 0 1rem;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            line-height: 1.2;
+            background: linear-gradient(45deg, #ff758c, #ff7eb3, #ffd166);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gift-unlock-subtitle {
+            color: var(--text-sub);
+            line-height: 1.7;
+        }
+
+        .gift-countdown {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .gift-countdown .timer-box { padding: 1.1rem 0.4rem; }
+        .gift-countdown .timer-number { font-size: clamp(1.35rem, 5vw, 2rem); }
+
+        @media (max-width: 420px) {
+            .gift-countdown { gap: 0.4rem; }
+            .gift-countdown .timer-label { font-size: 0.62rem; }
+        }
