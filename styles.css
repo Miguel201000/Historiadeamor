@@ -2176,7 +2176,62 @@
         .gift-countdown .timer-box { padding: 1.1rem 0.4rem; }
         .gift-countdown .timer-number { font-size: clamp(1.35rem, 5vw, 2rem); }
 
+        .developer-access-trigger {
+            position: fixed;
+            right: 1rem;
+            bottom: 1rem;
+            z-index: 1;
+            width: auto;
+            height: 46px;
+            padding: 0 1rem;
+            border: 1px solid rgba(255, 244, 233, 0.35);
+            border-radius: 999px;
+            background: rgba(15, 12, 32, 0.72);
+            color: white;
+            font: 600 0.85rem 'Montserrat', sans-serif;
+            cursor: pointer;
+            opacity: 0.9;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .developer-access-trigger:hover, .developer-access-trigger:focus-visible {
+            opacity: 1;
+            transform: scale(1.06);
+            outline: 2px solid #ffd6a2;
+            outline-offset: 3px;
+        }
+
+        .developer-access-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+            width: min(440px, calc(100vw - 2.5rem));
+            padding: 2.25rem;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .developer-access-panel[hidden] { display: none; }
+        .developer-access-panel h2 { margin: 0.5rem 0 1rem; font-family: 'Playfair Display', serif; }
+        .developer-access-close {
+            position: absolute;
+            top: 0.6rem;
+            right: 0.8rem;
+            border: 0;
+            background: transparent;
+            color: white;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+
+        .gift-password-form { margin-top: 1.25rem; }
+        .gift-password-form input { text-align: left; }
+        .gift-password-form + .riddle-feedback { margin-bottom: 0; }
+
         @media (max-width: 420px) {
             .gift-countdown { gap: 0.4rem; }
             .gift-countdown .timer-label { font-size: 0.62rem; }
+            .gift-password-form { flex-direction: column; }
+            .gift-password-form .primary-button { width: 100%; }
         }

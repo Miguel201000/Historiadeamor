@@ -1,5 +1,12 @@
         const giftUnlockScreen = document.getElementById('giftUnlockScreen');
         const giftUnlockDate = new Date(2026, 10, 21);
+        const giftPasswordHash = 'c53c4d988a0e0512306eeaf2bcee85ca07d8c399ff86585e66f52f2800787214';
+        const giftPasswordForm = document.getElementById('giftPasswordForm');
+        const giftPassword = document.getElementById('giftPassword');
+        const giftPasswordFeedback = document.getElementById('giftPasswordFeedback');
+        const developerAccessTrigger = document.getElementById('developerAccessTrigger');
+        const developerAccessPanel = document.getElementById('developerAccessPanel');
+        const developerAccessClose = document.getElementById('developerAccessClose');
         const giftCountdownUnits = {
             days: document.getElementById('giftDays'),
             hours: document.getElementById('giftHours'),
@@ -11,15 +18,19 @@
             .map(element => ({ element, wasInert: element.inert }));
         let giftCountdownInterval;
 
+        function unlockGift() {
+            giftUnlockScreen.hidden = true;
+            document.body.classList.remove('gift-locked');
+            giftLockedContent.forEach(({ element, wasInert }) => {
+                element.inert = wasInert;
+            });
+            window.clearInterval(giftCountdownInterval);
+        }
+
         function updateGiftCountdown() {
             const remaining = giftUnlockDate - new Date();
             if (remaining <= 0) {
-                giftUnlockScreen.hidden = true;
-                document.body.classList.remove('gift-locked');
-                giftLockedContent.forEach(({ element, wasInert }) => {
-                    element.inert = wasInert;
-                });
-                window.clearInterval(giftCountdownInterval);
+                unlockGift();
                 return;
             }
 
@@ -42,6 +53,50 @@
         });
         updateGiftCountdown();
         if (!giftUnlockScreen.hidden) giftCountdownInterval = window.setInterval(updateGiftCountdown, 1000);
+
+        developerAccessTrigger.addEventListener('click', () => {
+            developerAccessPanel.hidden = false;
+            giftPassword.focus();
+        });
+        developerAccessClose.addEventListener('click', () => {
+            developerAccessPanel.hidden = true;
+            giftPasswordForm.reset();
+            giftPasswordFeedback.textContent = '';
+            developerAccessTrigger.focus();
+        });
+        developerAccessPanel.addEventListener('keydown', event => {
+            if (event.key === 'Escape') developerAccessClose.click();
+        });
+
+        giftPasswordForm.addEventListener('submit', async event => {
+            event.preventDefault();
+            giftPasswordFeedback.textContent = '';
+
+            if (!window.crypto || !window.crypto.subtle) {
+                giftPasswordFeedback.textContent = 'Este navegador no permite validar la contraseña en esta conexión.';
+                return;
+            }
+
+            try {
+                const passwordBytes = new TextEncoder().encode(giftPassword.value);
+                const passwordDigest = await window.crypto.subtle.digest('SHA-256', passwordBytes);
+                const passwordHash = Array.from(new Uint8Array(passwordDigest), byte =>
+                    byte.toString(16).padStart(2, '0')
+                ).join('');
+
+                if (passwordHash !== giftPasswordHash) {
+                    giftPassword.value = '';
+                    giftPasswordFeedback.textContent = 'Esa contraseña no es correcta. Inténtalo de nuevo.';
+                    giftPassword.focus();
+                    return;
+                }
+
+                unlockGift();
+            } catch (error) {
+                giftPasswordFeedback.textContent = 'No se pudo validar la contraseña. Recarga la página e inténtalo de nuevo.';
+                console.error('No se pudo validar la contraseña del regalo.', error);
+            }
+        });
 
         const isTriviaView = new URLSearchParams(window.location.search).get('sorpresa') === '1';
         const isCompactDevice = window.matchMedia('(max-width: 700px), (pointer: coarse)').matches;
