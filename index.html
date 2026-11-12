@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link rel="stylesheet" href="styles.css?v=20261112-gift-unlock-password">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261112-countdown-teaser">
 </head>
 <body>
 
@@ -24,6 +24,11 @@
                 <div class="timer-box"><div class="timer-number" id="giftMinutes">00</div><div class="timer-label">Minutos</div></div>
                 <div class="timer-box"><div class="timer-number" id="giftSeconds">00</div><div class="timer-label">Segundos</div></div>
             </div>
+            <section class="gift-teaser" aria-label="Acertijo diario">
+                <p class="gift-teaser-label">Pista en clave</p>
+                <button class="gift-teaser-button" id="giftTeaserButton" type="button" aria-expanded="false" aria-controls="giftTeaserMessage">Descifrar pista de hoy 🗝️</button>
+                <p class="gift-teaser-message" id="giftTeaserMessage" role="status" aria-live="polite" hidden></p>
+            </section>
         </section>
         <button class="developer-access-trigger" id="developerAccessTrigger" type="button" aria-label="Abrir campo para ingresar la contraseña" title="Ingresar contraseña">🔐 Ingresar contraseña</button>
         <section class="developer-access-panel glass" id="developerAccessPanel" aria-labelledby="developerAccessTitle" hidden>
@@ -92,7 +97,7 @@
                         <div class="player-waveform playlist-waveform" aria-hidden="true">
                             <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
                         </div>
-                        <audio id="chapterThreeAudio" controls preload="metadata" aria-label="Playlist para Aleja">
+                        <audio id="chapterThreeAudio" controls preload="none" aria-label="Playlist para Aleja">
                             <source id="chapterThreeAudioSource" src="audios/cancionaleja (online-audio-converter.com).mp3" type="audio/mpeg">
                             Tu navegador no puede reproducir este audio.
                         </audio>
@@ -282,7 +287,7 @@
                             <span class="video-player-heading"><span class="video-player-dot" aria-hidden="true"></span> UN RECUERDO PARA SIEMPRE</span>
                             <span class="video-player-edition">Aleja · 3 meses</span>
                         </div>
-                        <video id="anniversaryVideo" controls playsinline preload="metadata" tabindex="0" aria-label="Video de aniversario de tres meses para Aleja">
+                        <video id="anniversaryVideo" controls playsinline preload="none" tabindex="0" aria-label="Video de aniversario de tres meses para Aleja">
                             <source src="video/aleja.mp4" type="video/mp4">
                             Tu navegador no puede reproducir este video.
                         </video>
@@ -402,7 +407,7 @@
                 <div class="playback-status" id="playback-status" aria-live="polite"></div>
             </div>
             <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
-            <audio id="audioTrack" src="audios/Cancion.mp3" preload="metadata" loop></audio>
+            <audio id="audioTrack" src="audios/Cancion.mp3" preload="none" loop></audio>
         </section>
 
         <!-- MENSAJE DE VOZ PARA ALEJA -->
@@ -568,6 +573,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=20261112-gift-unlock-password" defer></script>
+    <script src="script.js?v=20261112-countdown-teaser" defer></script>
 </body>
 </html>

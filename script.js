@@ -4,9 +4,23 @@
         const giftPasswordForm = document.getElementById('giftPasswordForm');
         const giftPassword = document.getElementById('giftPassword');
         const giftPasswordFeedback = document.getElementById('giftPasswordFeedback');
+        const giftTeaserButton = document.getElementById('giftTeaserButton');
+        const giftTeaserMessage = document.getElementById('giftTeaserMessage');
         const developerAccessTrigger = document.getElementById('developerAccessTrigger');
         const developerAccessPanel = document.getElementById('developerAccessPanel');
         const developerAccessClose = document.getElementById('developerAccessClose');
+        const giftTeaserMessages = [
+            'Una cifra desciende mientras otra avanza; ambas nacieron del mismo instante.',
+            'Hay un cielo trazado a mano donde cada punto prefiere contar algo.',
+            'Tres caminos se mueven sin abandonar el lugar; repiten el viaje para que no termine.',
+            'Lo cubierto no se abre con llave, sino con el gesto que suele borrar.',
+            'Ocho voces comparten una ruta, aunque solo una puede sonar a la vez.',
+            'Un sello de cera guarda lo que no es papel, y cede cuando cambia el modo de tocarlo.',
+            'Hay una pregunta que no se resuelve buscando afuera, sino reconociendo a quien está en cada capítulo.',
+            'Una sola constelación cabe en recuerdos que el azar no pudo ordenar.',
+            'La última caja no guarda lo que brilla: guarda una pregunta para el futuro.',
+            'No busques lomo ni páginas: dos capítulos se pliegan en una historia que todavía se escribe.'
+        ];
         const giftCountdownUnits = {
             days: document.getElementById('giftDays'),
             hours: document.getElementById('giftHours'),
@@ -25,6 +39,7 @@
                 element.inert = wasInert;
             });
             window.clearInterval(giftCountdownInterval);
+            document.dispatchEvent(new Event('gift-unlocked'));
         }
 
         function updateGiftCountdown() {
@@ -53,6 +68,18 @@
         });
         updateGiftCountdown();
         if (!giftUnlockScreen.hidden) giftCountdownInterval = window.setInterval(updateGiftCountdown, 1000);
+
+        giftTeaserButton.addEventListener('click', () => {
+            const isOpening = giftTeaserMessage.hidden;
+            if (isOpening) {
+                const daysRemaining = Math.max(0, Math.ceil((giftUnlockDate - new Date()) / 86400000));
+                const messageIndex = Math.max(0, daysRemaining - 1) % giftTeaserMessages.length;
+                giftTeaserMessage.textContent = giftTeaserMessages[messageIndex];
+            }
+            giftTeaserMessage.hidden = !isOpening;
+            giftTeaserButton.setAttribute('aria-expanded', String(isOpening));
+            giftTeaserButton.textContent = isOpening ? 'Cerrar la pista' : 'Descifrar pista de hoy 🗝️';
+        });
 
         developerAccessTrigger.addEventListener('click', () => {
             developerAccessPanel.hidden = false;
@@ -142,7 +169,7 @@
 
             currentChapterTrackIndex = index;
             chapterThreeAudioSource.src = track.src.split('/').map(encodeURIComponent).join('/');
-            chapterThreeAudio.load();
+            if (isChapterThreeFlowActive) chapterThreeAudio.load();
             chapterPlaylistCurrent.textContent = track.title;
             chapterPlaylist.querySelectorAll('button').forEach((button, buttonIndex) => {
                 button.setAttribute('aria-pressed', String(buttonIndex === index));
@@ -486,6 +513,16 @@
             });
         });
 
+        if ('IntersectionObserver' in window) {
+            const galleryVisibilityObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    memoryGalleryStage.classList.toggle('is-offscreen', !entry.isIntersecting);
+                });
+            }, { rootMargin: '120px 0px' });
+            galleryVisibilityObserver.observe(memoryGalleryStage);
+            window.addEventListener('pagehide', () => galleryVisibilityObserver.disconnect(), { once: true });
+        }
+
         function setupScratchCard(card) {
             const scratchCanvas = card.querySelector('.scratch-canvas');
             const context = scratchCanvas.getContext('2d', { willReadFrequently: true });
@@ -783,10 +820,20 @@
             });
         }
 
-        if (!isTriviaView) {
-            setInterval(updateTimer, 1000);
-            updateTimer();
+        let timerInterval = null;
+        function updateTimerVisibility() {
+            const shouldRunTimer = !isTriviaView && !document.hidden && giftUnlockScreen.hidden;
+            if (shouldRunTimer && timerInterval === null) {
+                updateTimer();
+                timerInterval = window.setInterval(updateTimer, 1000);
+            } else if (!shouldRunTimer && timerInterval !== null) {
+                window.clearInterval(timerInterval);
+                timerInterval = null;
+            }
         }
+        document.addEventListener('visibilitychange', updateTimerVisibility);
+        document.addEventListener('gift-unlocked', updateTimerVisibility);
+        updateTimerVisibility();
 
         // 2. REPRODUCTOR DE MÚSICA
         const audio = document.getElementById('audioTrack');
@@ -817,6 +864,7 @@
             console.error('No se pudo recuperar el estado de la música.', error);
             playbackStatus.innerText = 'No se pudo recuperar el estado de la música.';
         }
+        if (savedPlayback && savedPlayback.shouldPlay) audio.preload = 'metadata';
 
         function savePlaybackState(shouldPlay = !audio.paused) {
             try {
@@ -1007,7 +1055,7 @@
         }
 
         function updateBgAnimation() {
-            const shouldAnimate = !reducedMotion && !isTriviaView && !document.hidden;
+            const shouldAnimate = !reducedMotion && !isTriviaView && !document.hidden && giftUnlockScreen.hidden;
             if (shouldAnimate && !bgAnimationRunning) {
                 bgAnimationRunning = true;
                 bgFrame = requestAnimationFrame(animateBg);
@@ -1018,6 +1066,7 @@
         }
 
         document.addEventListener('visibilitychange', updateBgAnimation);
+        document.addEventListener('gift-unlocked', updateBgAnimation);
         resizeCanvas();
         updateBgAnimation();
 

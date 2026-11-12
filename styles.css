@@ -1512,9 +1512,11 @@
             display: flex;
             flex-direction: column;
             gap: 0.9rem;
-            will-change: transform;
             animation: memory-credits-scroll var(--credits-duration, 88s) linear infinite;
         }
+        .memory-gallery-stage:not(.is-offscreen) .credits-lane-track { will-change: transform; }
+        .memory-gallery-stage.is-offscreen .credits-lane-track,
+        .memory-gallery-stage.is-offscreen .heart-gallery .memory-photo-card { animation-play-state: paused; }
         .credits-lane:nth-child(2) .credits-lane-track { animation-delay: -31s; }
         .credits-lane:nth-child(3) .credits-lane-track { animation-delay: -57s; }
         .memory-photo-card {
@@ -2175,6 +2177,48 @@
 
         .gift-countdown .timer-box { padding: 1.1rem 0.4rem; }
         .gift-countdown .timer-number { font-size: clamp(1.35rem, 5vw, 2rem); }
+
+        .gift-teaser { margin: 1.6rem auto 0; }
+        .gift-teaser-label {
+            margin-bottom: 0.55rem;
+            color: #ffd6a2;
+            font-size: 0.68rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+        .gift-teaser-button {
+            min-height: 44px;
+            padding: 0.65rem 1.1rem;
+            border: 1px solid rgba(255, 214, 162, 0.48);
+            border-radius: 999px;
+            background: rgba(255, 214, 162, 0.08);
+            color: #fff8f4;
+            font: 600 0.82rem 'Montserrat', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .gift-teaser-button:hover, .gift-teaser-button:focus-visible {
+            transform: translateY(-2px);
+            background: rgba(255, 214, 162, 0.16);
+            outline: 2px solid rgba(255, 214, 162, 0.7);
+            outline-offset: 3px;
+        }
+        .gift-teaser-message {
+            max-width: 520px;
+            margin: 0.9rem auto 0;
+            padding: 0.9rem 1.1rem;
+            border: 1px solid rgba(255, 214, 162, 0.22);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.055);
+            color: var(--text-sub);
+            font: italic 1rem/1.6 'Playfair Display', serif;
+            animation: gift-teaser-reveal 0.4s ease both;
+        }
+        .gift-teaser-message[hidden] { display: none; }
+        @keyframes gift-teaser-reveal {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .developer-access-trigger {
             position: fixed;
