@@ -286,6 +286,7 @@
             chapterNav.hidden = false;
 
             if (chapter === 'three') {
+                observeMemoryGallery();
                 document.getElementById('audioTrack').pause();
                 chapterThreeAudio.pause();
                 chapterThreeAudio.currentTime = 0;
@@ -436,6 +437,10 @@
             'Un instante solo nuestro',
             'Mi persona favorita 💛'
         ];
+        let memoryGalleryInitialized = false;
+        let heartGalleryInitialized = false;
+        let galleryLoadObserver = null;
+        let galleryVisibilityObserver = null;
 
         function createMemoryPhoto(file, index, isDecorative = false) {
             const card = document.createElement('figure');
@@ -458,45 +463,85 @@
             return card;
         }
 
-        const creditLanes = Array.from({ length: 3 }, () => {
-            const lane = document.createElement('div');
-            lane.className = 'credits-lane';
-            const track = document.createElement('div');
-            track.className = 'credits-lane-track';
-            const sequence = document.createElement('div');
-            sequence.className = 'credits-sequence';
-            track.append(sequence);
-            lane.append(track);
-            creditsGallery.append(lane);
-            return { lane, track, sequence };
-        });
+        function initializeHeartGallery() {
+            if (heartGalleryInitialized) return;
+            heartGalleryInitialized = true;
 
-        memoryPhotoFiles.forEach((file, index) => {
-            const lane = creditLanes[index % creditLanes.length];
-            lane.sequence.append(createMemoryPhoto(file, index));
-            const heartCard = createMemoryPhoto(file, index);
-            if (index < heartPhotoSlots.length) {
-                heartCard.dataset.heartSlot = String(index + 1);
-                heartCard.style.gridRow = String(heartPhotoSlots[index][0]);
-                heartCard.style.gridColumn = String(heartPhotoSlots[index][1]);
+            memoryPhotoFiles.slice(0, heartPhotoSlots.length).forEach((file, index) => {
+                const card = createMemoryPhoto(file, index);
+                card.dataset.heartSlot = String(index + 1);
+                card.style.gridRow = String(heartPhotoSlots[index][0]);
+                card.style.gridColumn = String(heartPhotoSlots[index][1]);
+                heartGallery.append(card);
+            });
+        }
+
+        function initializeMemoryGallery() {
+            if (memoryGalleryInitialized) return;
+            memoryGalleryInitialized = true;
+
+            const creditLanes = Array.from({ length: 3 }, () => {
+                const lane = document.createElement('div');
+                lane.className = 'credits-lane';
+                const track = document.createElement('div');
+                track.className = 'credits-lane-track';
+                const sequence = document.createElement('div');
+                sequence.className = 'credits-sequence';
+                track.append(sequence);
+                lane.append(track);
+                creditsGallery.append(lane);
+                return { track, sequence };
+            });
+
+            memoryPhotoFiles.forEach((file, index) => {
+                creditLanes[index % creditLanes.length].sequence.append(createMemoryPhoto(file, index));
+            });
+
+            creditLanes.forEach(({ track, sequence }) => {
+                const clone = sequence.cloneNode(true);
+                clone.className = 'credits-sequence';
+                clone.setAttribute('aria-hidden', 'true');
+                clone.querySelectorAll('img').forEach(image => { image.alt = ''; });
+                track.append(clone);
+            });
+
+            if ('IntersectionObserver' in window) {
+                galleryVisibilityObserver = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        memoryGalleryStage.classList.toggle('is-offscreen', !entry.isIntersecting);
+                    });
+                }, { rootMargin: '120px 0px' });
+                galleryVisibilityObserver.observe(memoryGalleryStage);
             } else {
-                heartCard.setAttribute('aria-hidden', 'true');
+                memoryGalleryStage.classList.remove('is-offscreen');
             }
-            heartGallery.append(heartCard);
-        });
+        }
 
-        creditLanes.forEach(({ track, sequence }) => {
-            const clone = sequence.cloneNode(true);
-            clone.className = 'credits-sequence';
-            clone.setAttribute('aria-hidden', 'true');
-            clone.querySelectorAll('img').forEach(image => { image.alt = ''; });
-            track.append(clone);
-        });
+        function observeMemoryGallery() {
+            if (isTriviaView || memoryGalleryInitialized || galleryLoadObserver) return;
+            if (!('IntersectionObserver' in window)) {
+                initializeMemoryGallery();
+                return;
+            }
+
+            galleryLoadObserver = new IntersectionObserver(entries => {
+                if (!entries.some(entry => entry.isIntersecting)) return;
+                initializeMemoryGallery();
+                galleryLoadObserver.disconnect();
+                galleryLoadObserver = null;
+            }, { rootMargin: '800px 0px' });
+            galleryLoadObserver.observe(memoryGalleryStage);
+            window.addEventListener('pagehide', () => {
+                if (galleryLoadObserver) galleryLoadObserver.disconnect();
+                if (galleryVisibilityObserver) galleryVisibilityObserver.disconnect();
+            }, { once: true });
+        }
 
         memoryGalleryButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const mode = button.dataset.galleryMode;
                 const isHeartMode = mode === 'heart';
+                if (isHeartMode) initializeHeartGallery();
                 memoryGalleryStage.dataset.galleryMode = mode;
                 memoryGalleryStage.classList.toggle('is-heart-mode', isHeartMode);
                 memoryGalleryButtons.forEach(option => {
@@ -504,24 +549,14 @@
                 });
                 creditsGallery.setAttribute('aria-hidden', String(isHeartMode));
                 heartGallery.setAttribute('aria-hidden', String(!isHeartMode));
-                heartGallery.querySelectorAll('.memory-photo-card').forEach((card, index) => {
-                    card.setAttribute('aria-hidden', String(!isHeartMode || index >= heartPhotoSlots.length));
+                heartGallery.querySelectorAll('.memory-photo-card').forEach(card => {
+                    card.setAttribute('aria-hidden', String(!isHeartMode));
                 });
                 memoryGalleryCaption.textContent = isHeartMode
                     ? 'Todos estos momentos forman parte del mismo corazón: el nuestro. 💗'
                     : 'Un recuerdo tras otro, como los créditos de nuestra película favorita.';
             });
         });
-
-        if ('IntersectionObserver' in window) {
-            const galleryVisibilityObserver = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    memoryGalleryStage.classList.toggle('is-offscreen', !entry.isIntersecting);
-                });
-            }, { rootMargin: '120px 0px' });
-            galleryVisibilityObserver.observe(memoryGalleryStage);
-            window.addEventListener('pagehide', () => galleryVisibilityObserver.disconnect(), { once: true });
-        }
 
         function setupScratchCard(card) {
             const scratchCanvas = card.querySelector('.scratch-canvas');
