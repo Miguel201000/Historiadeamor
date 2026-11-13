@@ -139,7 +139,7 @@
         const chapterPlaylist = document.getElementById('chapterPlaylist');
         const chapterPlaylistSkip = document.getElementById('chapterPlaylistSkip');
         const anniversaryLetter = document.getElementById('anniversaryLetter');
-        const waxSeal = document.getElementById('waxSeal');
+        const openAnniversaryVideoButton = document.getElementById('openAnniversaryVideo');
         const anniversaryPlayer = document.getElementById('anniversaryPlayer');
         const anniversaryVideo = document.getElementById('anniversaryVideo');
         const anniversaryVideoStatus = document.getElementById('anniversaryVideoStatus');
@@ -148,8 +148,6 @@
             three: document.getElementById('chapterThree')
         };
         let isChapterThreeFlowActive = false;
-        let sealPointerStart = null;
-        let isAnniversarySealBroken = false;
         const chapterPlaylistTracks = [
             { src: 'audios/cancionaleja (online-audio-converter.com).mp3', title: 'Nuestra canción de 3 meses' },
             { src: 'musica3meses/WhatsApp Audio 2026-11-11 at 8.32.14 PM.mp3', title: 'Audio sorpresa' },
@@ -225,34 +223,16 @@
             if (isChapterThreeFlowActive) playNextRandomChapterTrack();
         });
 
-        function breakAnniversarySeal() {
-            if (isAnniversarySealBroken) return;
-            isAnniversarySealBroken = true;
-            waxSeal.disabled = true;
-            waxSeal.setAttribute('aria-expanded', 'true');
-            anniversaryLetter.classList.add('is-breaking');
-            window.setTimeout(() => {
-                anniversaryLetter.hidden = true;
-                anniversaryPlayer.hidden = false;
-                anniversaryVideo.focus();
-            }, 700);
+        function openAnniversaryVideo() {
+            if (openAnniversaryVideoButton.disabled) return;
+            openAnniversaryVideoButton.disabled = true;
+            openAnniversaryVideoButton.setAttribute('aria-expanded', 'true');
+            anniversaryLetter.hidden = true;
+            anniversaryPlayer.hidden = false;
+            anniversaryVideo.focus();
         }
 
-        waxSeal.addEventListener('click', breakAnniversarySeal);
-        waxSeal.addEventListener('pointerdown', event => {
-            sealPointerStart = { id: event.pointerId, x: event.clientX, y: event.clientY };
-        });
-        window.addEventListener('pointermove', event => {
-            if (!sealPointerStart || sealPointerStart.id !== event.pointerId) return;
-            const distance = Math.hypot(event.clientX - sealPointerStart.x, event.clientY - sealPointerStart.y);
-            if (distance >= 38) breakAnniversarySeal();
-        });
-        window.addEventListener('pointerup', event => {
-            if (sealPointerStart && sealPointerStart.id === event.pointerId) sealPointerStart = null;
-        });
-        window.addEventListener('pointercancel', event => {
-            if (sealPointerStart && sealPointerStart.id === event.pointerId) sealPointerStart = null;
-        });
+        openAnniversaryVideoButton.addEventListener('click', openAnniversaryVideo);
         anniversaryVideo.addEventListener('error', () => {
             anniversaryVideoStatus.textContent = 'No se pudo cargar el video. Revisa que aleja.mp4 esté en la carpeta video.';
         });
@@ -417,18 +397,8 @@
             'WhatsApp Image 2026-11-10 at 7.30.08 PM (1).jpeg',
             'WhatsApp Image 2026-11-10 at 7.30.08 PM.jpeg'
         ];
-        const heartPhotoSlots = [
-            [1, 2], [1, 4],
-            [2, 1], [2, 2], [2, 3], [2, 4], [2, 5],
-            [3, 1], [3, 2], [3, 3], [3, 4], [3, 5],
-            [4, 2], [4, 3], [4, 4],
-            [5, 3]
-        ];
-        const creditsGallery = document.getElementById('creditsGallery');
-        const heartGallery = document.getElementById('heartGallery');
+        const memoryAlbum = document.getElementById('memoryAlbum');
         const memoryGalleryStage = document.getElementById('memoryGalleryStage');
-        const memoryGalleryCaption = document.getElementById('memoryGalleryCaption');
-        const memoryGalleryButtons = document.querySelectorAll('.memory-gallery-option');
         const memoryPhotoTitles = [
             'Un día para recordar ✨',
             'Contigo cualquier lugar es hogar',
@@ -438,19 +408,16 @@
             'Mi persona favorita 💛'
         ];
         let memoryGalleryInitialized = false;
-        let heartGalleryInitialized = false;
         let galleryLoadObserver = null;
-        let galleryVisibilityObserver = null;
 
-        function createMemoryPhoto(file, index, isDecorative = false) {
+        function createMemoryPhoto(file, index) {
             const card = document.createElement('figure');
             card.className = 'memory-photo-card';
-            card.style.setProperty('--photo-tilt', `${(index % 5 - 2) * 1.2}deg`);
-            card.style.setProperty('--float-delay', `${(index % 6) * -0.55}s`);
+            card.dataset.memoryNumber = String(index + 1).padStart(2, '0');
 
             const image = document.createElement('img');
             image.src = `Imagenes3meses/${encodeURIComponent(file)}`;
-            image.alt = isDecorative ? '' : `Recuerdo de pareja ${index + 1}`;
+            image.alt = `Recuerdo de pareja ${index + 1}`;
             image.loading = 'lazy';
             image.decoding = 'async';
 
@@ -458,63 +425,15 @@
             caption.className = 'memory-photo-caption';
             caption.textContent = memoryPhotoTitles[index % memoryPhotoTitles.length];
             card.append(image, caption);
-
-            if (isDecorative) card.setAttribute('aria-hidden', 'true');
             return card;
-        }
-
-        function initializeHeartGallery() {
-            if (heartGalleryInitialized) return;
-            heartGalleryInitialized = true;
-
-            memoryPhotoFiles.slice(0, heartPhotoSlots.length).forEach((file, index) => {
-                const card = createMemoryPhoto(file, index);
-                card.dataset.heartSlot = String(index + 1);
-                card.style.gridRow = String(heartPhotoSlots[index][0]);
-                card.style.gridColumn = String(heartPhotoSlots[index][1]);
-                heartGallery.append(card);
-            });
         }
 
         function initializeMemoryGallery() {
             if (memoryGalleryInitialized) return;
             memoryGalleryInitialized = true;
-
-            const creditLanes = Array.from({ length: 3 }, () => {
-                const lane = document.createElement('div');
-                lane.className = 'credits-lane';
-                const track = document.createElement('div');
-                track.className = 'credits-lane-track';
-                const sequence = document.createElement('div');
-                sequence.className = 'credits-sequence';
-                track.append(sequence);
-                lane.append(track);
-                creditsGallery.append(lane);
-                return { track, sequence };
-            });
-
             memoryPhotoFiles.forEach((file, index) => {
-                creditLanes[index % creditLanes.length].sequence.append(createMemoryPhoto(file, index));
+                memoryAlbum.append(createMemoryPhoto(file, index));
             });
-
-            creditLanes.forEach(({ track, sequence }) => {
-                const clone = sequence.cloneNode(true);
-                clone.className = 'credits-sequence';
-                clone.setAttribute('aria-hidden', 'true');
-                clone.querySelectorAll('img').forEach(image => { image.alt = ''; });
-                track.append(clone);
-            });
-
-            if ('IntersectionObserver' in window) {
-                galleryVisibilityObserver = new IntersectionObserver(entries => {
-                    entries.forEach(entry => {
-                        memoryGalleryStage.classList.toggle('is-offscreen', !entry.isIntersecting);
-                    });
-                }, { rootMargin: '120px 0px' });
-                galleryVisibilityObserver.observe(memoryGalleryStage);
-            } else {
-                memoryGalleryStage.classList.remove('is-offscreen');
-            }
         }
 
         function observeMemoryGallery() {
@@ -533,30 +452,8 @@
             galleryLoadObserver.observe(memoryGalleryStage);
             window.addEventListener('pagehide', () => {
                 if (galleryLoadObserver) galleryLoadObserver.disconnect();
-                if (galleryVisibilityObserver) galleryVisibilityObserver.disconnect();
             }, { once: true });
         }
-
-        memoryGalleryButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const mode = button.dataset.galleryMode;
-                const isHeartMode = mode === 'heart';
-                if (isHeartMode) initializeHeartGallery();
-                memoryGalleryStage.dataset.galleryMode = mode;
-                memoryGalleryStage.classList.toggle('is-heart-mode', isHeartMode);
-                memoryGalleryButtons.forEach(option => {
-                    option.setAttribute('aria-pressed', String(option === button));
-                });
-                creditsGallery.setAttribute('aria-hidden', String(isHeartMode));
-                heartGallery.setAttribute('aria-hidden', String(!isHeartMode));
-                heartGallery.querySelectorAll('.memory-photo-card').forEach(card => {
-                    card.setAttribute('aria-hidden', String(!isHeartMode));
-                });
-                memoryGalleryCaption.textContent = isHeartMode
-                    ? 'Todos estos momentos forman parte del mismo corazón: el nuestro. 💗'
-                    : 'Un recuerdo tras otro, como los créditos de nuestra película favorita.';
-            });
-        });
 
         function setupScratchCard(card) {
             const scratchCanvas = card.querySelector('.scratch-canvas');

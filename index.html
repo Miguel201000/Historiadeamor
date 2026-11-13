@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261112-countdown-teaser">
+    <link rel="stylesheet" href="styles.css?v=20261112-postcard-ticket">
 </head>
 <body>
 
@@ -244,38 +244,33 @@
 
             <section class="chapter-section memory-gallery-section" aria-labelledby="memory-gallery-title">
                 <p class="eyebrow section-eyebrow">Nuestros instantes favoritos</p>
-                <h2 class="section-title" id="memory-gallery-title">Un carrete lleno de nosotros 📸</h2>
-                <p class="section-copy">Cada foto guarda un pedacito de nuestra historia. Elige cómo quieres revivirlos.</p>
-                <div class="memory-gallery-switch" role="group" aria-label="Elegir diseño de la galería">
-                    <button class="memory-gallery-option" type="button" data-gallery-mode="credits" aria-pressed="true">
-                        <span aria-hidden="true">🎞️</span> Créditos de película
-                    </button>
-                    <button class="memory-gallery-option" type="button" data-gallery-mode="heart" aria-pressed="false">
-                        <span aria-hidden="true">♡</span> En forma de corazón
-                    </button>
+                <h2 class="section-title" id="memory-gallery-title">Nuestro álbum de postales 📸</h2>
+                <p class="section-copy">Pequeños recuerdos de nuestra historia, reunidos en un solo lugar.</p>
+                <div class="memory-gallery-stage" id="memoryGalleryStage">
+                    <div class="memory-album" id="memoryAlbum" aria-label="Álbum de nuestros recuerdos"></div>
                 </div>
-                <div class="memory-gallery-stage is-offscreen" id="memoryGalleryStage" data-gallery-mode="credits">
-                    <div class="credits-gallery" id="creditsGallery" aria-label="Fotos flotando como créditos de una película"></div>
-                    <div class="heart-gallery" id="heartGallery" aria-label="Fotos organizadas en forma de corazón" aria-hidden="true"></div>
-                </div>
-                <p class="memory-gallery-caption" id="memoryGalleryCaption" aria-live="polite">Un recuerdo tras otro, como los créditos de nuestra película favorita.</p>
+                <p class="memory-gallery-caption" aria-live="polite">Cada postal guarda un momento que siempre quiero recordar. 💌</p>
             </section>
 
             <section class="chapter-section anniversary-video" aria-labelledby="anniversary-video-title">
                 <p class="eyebrow section-eyebrow">Un recuerdo solo para ti</p>
                 <h2 class="section-title" id="anniversary-video-title">Tres meses de nosotros</h2>
-                <p class="section-copy anniversary-intro">Un pequeño recuerdo preparado con todo mi amor.<br>Rompe el sello para descubrirlo.</p>
+                <p class="section-copy anniversary-intro">Un pequeño recuerdo preparado con todo mi amor.<br>Tu entrada especial te espera abajo.</p>
 
                 <div class="anniversary-letter" id="anniversaryLetter">
                     <div class="anniversary-letter-paper">
                         <span class="letter-date">NUESTROS TRES MESES</span>
                         <span class="letter-ornament" aria-hidden="true">✦ &nbsp; ♡ &nbsp; ✦</span>
                         <p class="letter-note">Para mi persona favorita,<br><em>con todo mi amor.</em></p>
-                        <div class="wax-seal-area">
-                            <button class="wax-seal" id="waxSeal" type="button" aria-label="Romper el sello de cera para descubrir tu video" aria-expanded="false" aria-controls="anniversaryPlayer">
-                                <span class="wax-seal-mark" aria-hidden="true">A</span>
+                        <div class="movie-ticket">
+                            <span class="movie-ticket-stub" aria-hidden="true">🎟️</span>
+                            <div class="movie-ticket-copy">
+                                <span>UNA FUNCIÓN ESPECIAL</span>
+                                <strong>Un recuerdo solo para ti</strong>
+                            </div>
+                            <button class="movie-ticket-button" id="openAnniversaryVideo" type="button" aria-expanded="false" aria-controls="anniversaryPlayer">
+                                Ver nuestro video <span aria-hidden="true">▶</span>
                             </button>
-                            <span class="seal-instruction">Toca o arrastra el sello para abrir</span>
                         </div>
                         <span class="letter-signature">Siempre tuyo <span aria-hidden="true">♡</span></span>
                     </div>
@@ -573,6 +568,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=20261112-countdown-teaser" defer></script>
+    <script src="script.js?v=20261112-postcard-ticket" defer></script>
 </body>
 </html>
