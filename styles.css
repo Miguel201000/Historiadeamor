@@ -1361,6 +1361,7 @@
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+            text-decoration: none;
         }
 
         .chapter-choice > span:first-child { color: #ffd6a2; font-size: 0.77rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
@@ -1394,8 +1395,10 @@
         }
 
         .chapter-nav[hidden] { display: none; }
-        .chapter-nav button {
+        .chapter-nav button, .chapter-nav-link {
+            display: inline-flex;
             min-height: 38px;
+            align-items: center;
             padding: 0.45rem 0.85rem;
             border: 0;
             border-radius: 999px;
@@ -1404,10 +1407,11 @@
             font: 600 0.78rem 'Montserrat', sans-serif;
             cursor: pointer;
             transition: background 0.2s ease, color 0.2s ease;
+            text-decoration: none;
         }
 
         .chapter-nav button[aria-pressed="true"] { background: rgba(255, 213, 188, 0.2); color: #ffe0ad; }
-        .chapter-nav button:hover, .chapter-nav button:focus-visible { color: #fff; outline: 1px solid rgba(255, 224, 173, 0.7); }
+        .chapter-nav button:hover, .chapter-nav button:focus-visible, .chapter-nav-link:hover, .chapter-nav-link:focus-visible { color: #fff; outline: 1px solid rgba(255, 224, 173, 0.7); }
         .nav-caption { padding-left: 0.6rem; color: rgba(255, 245, 239, 0.55); font-size: 0.68rem; }
 
         .chapter-three .container { max-width: 980px; padding-top: 5.5rem; }
@@ -1825,6 +1829,46 @@
         .ring-button { min-width: 230px; min-height: 58px; background: linear-gradient(115deg, #eb8790, #cd687d 55%, #b35876); font-size: 1rem; }
         body.ring-reveal .chapter-three { filter: brightness(0.66); transition: filter 0.65s ease; }
 
+        .chapter-four-preview {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .chapter-four-button {
+            min-height: 54px;
+            padding: 0.85rem 1.5rem;
+            border: 1px solid rgba(255, 224, 207, 0.28);
+            border-radius: 999px;
+            background: linear-gradient(120deg, rgba(255, 235, 224, 0.1), rgba(191, 131, 173, 0.09));
+            box-shadow: inset 0 1px rgba(255, 255, 255, 0.12), 0 10px 28px rgba(27, 11, 34, 0.16);
+            color: rgba(255, 248, 244, 0.78);
+            font: 600 0.9rem 'Montserrat', sans-serif;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+        .chapter-four-button:hover, .chapter-four-button:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(255, 214, 162, 0.55);
+            background: rgba(255, 235, 224, 0.14);
+            outline: 2px solid rgba(255, 214, 162, 0.55);
+            outline-offset: 3px;
+        }
+        .chapter-four-message {
+            width: min(100%, 520px);
+            margin: 1rem auto 0;
+            padding: 1rem 1.25rem;
+            border: 1px solid rgba(255, 214, 162, 0.28);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.07);
+            color: #ffe4d7;
+            font: italic 1rem/1.65 'Playfair Display', serif;
+            box-shadow: 0 12px 30px rgba(27, 11, 34, 0.18);
+            animation: gift-teaser-reveal 0.35s ease both;
+        }
+        .chapter-four-message[hidden] { display: none; }
+
         .letter-modal, .ring-modal {
             position: fixed;
             inset: 0;
@@ -2002,6 +2046,7 @@
             .splash-stars { animation: none; }
             .chapter-view.is-active, .splash-card, .letter-modal-card, .ring-modal-card { animation: none; }
             .happiness-note.is-flying, .bucket-heart, .emergency-love-heart { animation: none; }
+            .chapter-four-message { animation: none; }
             .secret-reason-inner { transition: none; }
             .player-waveform i, .voice-player-icon, .playlist-player.is-playing .playlist-record { animation: none; }
         }
@@ -2082,6 +2127,7 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.35);
             cursor: pointer;
             transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+            text-decoration: none;
         }
         .gift-preview-button::before, .gift-preview-button::after {
             color: #ffe6a3;
@@ -2101,9 +2147,10 @@
             outline: 2px solid rgba(255, 224, 173, 0.8);
             outline-offset: 4px;
         }
-        .gift-preview-back {
-            display: none;
+        .two-month-back {
+            display: inline-flex;
             min-height: 44px;
+            align-items: center;
             margin: 0 0 1rem;
             padding: 0.65rem 1rem;
             border: 1px solid rgba(255, 214, 162, 0.45);
@@ -2112,10 +2159,15 @@
             color: #fff8f4;
             font: 600 0.8rem 'Montserrat', sans-serif;
             cursor: pointer;
+            text-decoration: none;
         }
-        body.gift-two-month-preview { overflow-x: hidden; overflow-y: auto; }
-        body.gift-two-month-preview .gift-preview-back { display: inline-flex; align-items: center; }
-        body.gift-two-month-preview .emergency-love-trigger { display: none !important; }
+        .two-month-back:hover, .two-month-back:focus-visible { background: rgba(255, 214, 162, 0.12); outline: 2px solid rgba(255, 214, 162, 0.7); outline-offset: 3px; }
+        .two-month-page .envelope { appearance: none; color: #fff; font: inherit; cursor: pointer; }
+        .two-month-page .envelope-title { display: block; }
+        .two-month-page .letter-content { text-align: left; }
+        .two-month-page .letter-content[hidden] { display: none; }
+        .two-month-page .letter-content > span { display: block; margin-bottom: 1.2rem; }
+        .two-month-page .letter-content .letter-closing { margin: 1.5rem 0 0; font-weight: 700; text-align: center; }
 
         .gift-teaser { margin: 1.6rem auto 0; }
         .gift-teaser-label {

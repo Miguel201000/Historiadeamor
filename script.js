@@ -4,9 +4,6 @@
         const giftPasswordForm = document.getElementById('giftPasswordForm');
         const giftPassword = document.getElementById('giftPassword');
         const giftPasswordFeedback = document.getElementById('giftPasswordFeedback');
-        const giftPreviewTwoMonthsButton = document.getElementById('giftPreviewTwoMonthsButton');
-        const returnToCountdownButton = document.getElementById('returnToCountdownButton');
-        const twoMonthChapter = document.getElementById('chapterTwo');
         const giftTeaserButton = document.getElementById('giftTeaserButton');
         const giftTeaserMessage = document.getElementById('giftTeaserMessage');
         const developerAccessTrigger = document.getElementById('developerAccessTrigger');
@@ -34,18 +31,15 @@
         let giftCountdownInterval;
 
         function unlockGift() {
-            const wasPreviewingTwoMonths = document.body.classList.contains('gift-two-month-preview');
             giftUnlockScreen.hidden = true;
-            document.body.classList.remove('gift-locked', 'gift-two-month-preview');
+            developerAccessTrigger.hidden = true;
+            developerAccessPanel.hidden = true;
+            document.body.classList.remove('gift-locked');
             giftLockedContent.forEach(({ element, wasInert }) => {
                 element.inert = wasInert;
             });
             window.clearInterval(giftCountdownInterval);
             document.dispatchEvent(new Event('gift-unlocked'));
-            if (wasPreviewingTwoMonths) {
-                selectChapter('two', true);
-                chapterNav.hidden = true;
-            }
         }
 
         function updateGiftCountdown() {
@@ -68,47 +62,12 @@
             });
         }
 
-        function previewTwoMonthChapter() {
-            updateGiftCountdown();
-            if (!document.body.classList.contains('gift-locked')) return;
-
-            giftUnlockScreen.hidden = true;
-            document.body.classList.remove('gift-locked');
-            document.body.classList.add('gift-two-month-preview');
-            selectChapter('two');
-            chapterNav.hidden = true;
-            giftLockedContent.forEach(({ element }) => {
-                element.inert = element !== twoMonthChapter;
-            });
-            twoMonthChapter.scrollIntoView();
-            returnToCountdownButton.focus();
-        }
-
-        function returnToCountdown() {
-            if (!document.body.classList.contains('gift-two-month-preview')) return;
-            updateGiftCountdown();
-            if (!document.body.classList.contains('gift-two-month-preview')) return;
-
-            document.body.classList.remove('gift-two-month-preview');
-            document.body.classList.add('gift-locked');
-            giftLockedContent.forEach(({ element }) => {
-                element.inert = true;
-            });
-            selectChapter('two', true);
-            chapterNav.hidden = true;
-            giftUnlockScreen.hidden = false;
-            giftPreviewTwoMonthsButton.focus();
-        }
-
         document.body.classList.add('gift-locked');
         giftLockedContent.forEach(({ element }) => {
             element.inert = true;
         });
         updateGiftCountdown();
         if (!giftUnlockScreen.hidden) giftCountdownInterval = window.setInterval(updateGiftCountdown, 1000);
-
-        giftPreviewTwoMonthsButton.addEventListener('click', previewTwoMonthChapter);
-        returnToCountdownButton.addEventListener('click', returnToCountdown);
 
         giftTeaserButton.addEventListener('click', () => {
             const isOpening = giftTeaserMessage.hidden;
@@ -184,13 +143,8 @@
         const anniversaryPlayer = document.getElementById('anniversaryPlayer');
         const anniversaryVideo = document.getElementById('anniversaryVideo');
         const anniversaryVideoStatus = document.getElementById('anniversaryVideoStatus');
-        const backgroundMusicTracks = [
-            chapterThreeAudio,
-            document.getElementById('audioTrack')
-        ];
         let pausedMusicTracks = null;
         const chapterViews = {
-            two: document.getElementById('chapterTwo'),
             three: document.getElementById('chapterThree')
         };
         let isChapterThreeFlowActive = false;
@@ -285,7 +239,7 @@
         anniversaryVideo.addEventListener('playing', () => {
             anniversaryVideo.closest('.anniversary-video-frame').classList.add('is-playing');
             if (pausedMusicTracks !== null) return;
-            pausedMusicTracks = backgroundMusicTracks.filter(track => !track.paused && !track.ended);
+            pausedMusicTracks = [chapterThreeAudio].filter(track => !track.paused && !track.ended);
             pausedMusicTracks.forEach(track => track.pause());
         });
         anniversaryVideo.addEventListener('ended', () => {
@@ -294,11 +248,7 @@
             pausedMusicTracks = null;
             tracksToResume.forEach(track => {
                 track.play().catch(error => {
-                    if (track === chapterThreeAudio) {
-                        chapterThreeAudioStatus.textContent = 'El video terminó. Toca reproducir en los controles para reanudar la canción.';
-                    } else {
-                        document.getElementById('playback-status').textContent = 'El video terminó. Toca ▶ para reanudar la música.';
-                    }
+                    chapterThreeAudioStatus.textContent = 'El video terminó. Toca reproducir en los controles para reanudar la canción.';
                     if (!error || (error.name !== 'NotAllowedError' && error.name !== 'AbortError')) {
                         console.error('No se pudo reanudar la música después del video.', error);
                     }
@@ -333,7 +283,6 @@
 
             if (chapter === 'three') {
                 observeMemoryGallery();
-                document.getElementById('audioTrack').pause();
                 chapterThreeAudio.pause();
                 chapterThreeAudio.currentTime = 0;
                 previousRandomTrackIndex = -1;
@@ -704,6 +653,14 @@
             }
         });
 
+        const chapterFourButton = document.getElementById('chapterFourButton');
+        const chapterFourMessage = document.getElementById('chapterFourMessage');
+        chapterFourButton.addEventListener('click', () => {
+            const isOpening = chapterFourMessage.hidden;
+            chapterFourMessage.hidden = !isOpening;
+            chapterFourButton.setAttribute('aria-expanded', String(isOpening));
+        });
+
         document.querySelectorAll('[data-close-letter]').forEach(button => {
             button.addEventListener('click', () => closeModal(letterModal));
         });
@@ -718,79 +675,7 @@
             }
         });
 
-        const dateIdeas = [
-            'Noche de Snoopy, palomitas y una manta para acurrucarnos 🍿☁️',
-            'Preparar algo rico juntos y elegir nuestro episodio o película favorita 🍪🎬',
-            'Paseo por un cafecito bonito y una charla sin mirar el reloj ☕💞',
-            'Tarde de pijama, snacks y una maratón de dibujos que te hagan sonreír 🧸✨',
-            'Intercambiar una notita bonita y guardarla como recuerdo de nuestra cita 💌🐾',
-            'Salir por un helado y después volver a casa a descansar juntitos 🍦💕',
-            'Hacer un picnic sencillo con tus snacks favoritos y una playlist bonita 🧺🎶',
-            'Dibujar a Snoopy juntos, aunque terminemos inventando nuestro propio personaje 🎨🐶',
-            'Armar un fuerte de almohadas y contar historias bajo una guirnalda de luces 🏕️✨',
-            'Preparar chocolate caliente y ver una película abrazaditos ☕🎥',
-            'Hacer galletas con formas divertidas y decorarlas como queramos 🍪💗',
-            'Salir a caminar al atardecer y tomarnos fotos bonitas juntos 🌇📸',
-            'Crear una playlist con canciones que nos recuerden a nuestra historia 🎧💕',
-            'Tener una cita de café y postre donde cada uno elija algo para compartir 🧁☕',
-            'Jugar cartas o un juego de mesa y que quien pierda deba dar un abrazo 😄🃏',
-            'Hacer una mini sesión de fotos con poses tiernas y graciosas 📷🐾',
-            'Elegir un libro o cuento corto y leerlo juntos, turnándonos cada página 📖💞',
-            'Preparar una cena sencilla juntos y poner la mesa como si fuera una ocasión especial 🍝🕯️',
-            'Salir a buscar el mejor postre de la zona y calificarlo como críticos expertos 🍰⭐',
-            'Hacer una noche temática de pijamas, snacks y nuestra película favorita 🌙🍿',
-            'Escribir tres cosas que queremos hacer juntos y escoger la primera para nuestra próxima cita 📝💖',
-            'Pintar tazas o hacer una manualidad para tener un recuerdo hecho por los dos 🎨☕',
-            'Ir a una librería o tienda bonita y elegir un pequeño detalle sorpresa el uno para el otro 🎁📚',
-            'Ver las nubes y encontrarles formas mientras inventamos nombres para cada una ☁️😊',
-            'Preparar una degustación de dulces y elegir juntos nuestro favorito 🍬💛',
-            'Hacer una caminata tranquila y parar por algo rico para llevar 🥐🚶‍♀️',
-            'Recrear nuestra primera cita y contar qué fue lo que más nos gustó de ese día 🌹✨',
-            'Hacer una cápsula del tiempo con una foto y una nota para leerla en el futuro ⏳💌',
-            'Cantar nuestras canciones favoritas en un karaoke casero, sin importar cómo suene 🎤😂',
-            'Preparar una noche de autocuidado con mascarillas, música suave y muchos mimos 🧖‍♀️🫶',
-            'Visitar un parque, sentarnos juntitos y disfrutar un rato sin prisas 🌳💑',
-            'Hacer un intercambio de dibujos: cada quien dibuja cómo ve al otro 🖍️❤️',
-            'Elegir una receta nueva y cocinarla en equipo; la diversión cuenta aunque salga diferente 👩‍🍳🍓',
-            'Buscar un lugar bonito para ver las estrellas y pedir un deseo juntos 🌌💫',
-            'Hacer una búsqueda del tesoro con notitas cariñosas escondidas por la casa 🔎💌',
-            'Tener una cita sorpresa en casa: uno prepara el ambiente y el otro elige la música 🕯️🎵',
-            'Ir por bebidas ricas y dar un paseo mientras nos contamos cómo estuvo la semana 🧋💕',
-            'Armar un rompecabezas juntos con una película de fondo 🧩🎬',
-            'Hacer una lista de apodos tiernos y elegir uno nuevo solo para nuestra próxima cita 🐻💗',
-            'Organizar un desayuno especial y empezar el día con una cita tranquila 🥞☀️',
-            'Elegir fotos favoritas y crear juntos un mini álbum de nuestros recuerdos 📸📔',
-            'Hacer una tarde de preguntas curiosas para descubrir todavía más cosas el uno del otro 💬💖',
-            'Pasear por un mercado o feria y escoger algo rico para compartir 🎪🍓',
-            'Crear tarjetas de cupones caseros: abrazos, besitos, postres y planes a elección 🎟️😘',
-            'Ver una película con temática perruna y escoger al personaje más adorable 🐾🎞️',
-            'Preparar una manta en el suelo, poner música bajita y hacer un picnic dentro de casa 🧺🏠',
-            'Hacer una competencia amistosa de quién prepara el snack más rico 🥪🏆',
-            'Salir a conocer un rinconcito nuevo de la ciudad y guardarlo como nuestro lugar secreto 🗺️💞',
-            'Escribir una carta para abrir en nuestro próximo aniversario de meses 💌🗓️',
-            'Hacer una tarde de manualidades para decorar un marco con una foto nuestra 🖼️💕',
-            'Elegir una película cada uno y decidir con una moneda cuál vemos primero 🪙🍿',
-            'Preparar limonada o una bebida favorita y brindar por todas nuestras aventuras 🍹🥂',
-            'Inventar juntos una historia romántica protagonizada por dos personajes muy despistados 📚😄',
-            'Regalarnos una tarde sin celulares para conversar, reír y estar presentes 📵🫶',
-            'Hacer una lista de nuestros planes soñados y elegir uno que podamos cumplir pronto 🌈📝',
-            'Salir a desayunar algo rico y luego dar una vuelta de la mano 🥐🤍',
-            'Darnos un abrazo largo mientras escuchamos una canción que nos encante 🤗🎶',
-            'Preparar una mini fiesta para dos con postre, luces y nuestra música favorita 🎉💝'
-        ];
-        let previousDateIdea = -1;
-        document.getElementById('newDateIdea').addEventListener('click', () => {
-            const availableIdeas = dateIdeas.map((_, index) => index).filter(index => index !== previousDateIdea);
-            const nextIdea = availableIdeas[Math.floor(Math.random() * availableIdeas.length)];
-            previousDateIdea = nextIdea;
-            const idea = document.getElementById('dateIdea');
-            idea.classList.remove('is-changing');
-            void idea.offsetWidth;
-            idea.textContent = dateIdeas[nextIdea];
-            idea.classList.add('is-changing');
-        });
-
-        // 1. FECHA DEL CONTADOR (21 de agosto; cumple dos meses el 21 de octubre)
+        // Contador del capítulo de tres meses.
         const startDate = new Date('2026-08-21T00:00:00');
 
         function updateTimer() {
@@ -799,7 +684,6 @@
 
             if (diff < 0) {
                 ['days', 'hours', 'minutes', 'seconds'].forEach(unit => {
-                    document.getElementById(unit).textContent = '00';
                     document.getElementById(`${unit}-three`).textContent = '00';
                 });
                 return;
@@ -813,16 +697,16 @@
             [days, hours, minutes, seconds].forEach((value, index) => {
                 const unit = ['days', 'hours', 'minutes', 'seconds'][index];
                 const formatted = String(value).padStart(2, '0');
-                document.getElementById(unit).textContent = formatted;
                 document.getElementById(`${unit}-three`).textContent = formatted;
             });
         }
 
         let timerInterval = null;
         function updateTimerVisibility() {
-            const shouldRunTimer = !isTriviaView && !document.hidden && giftUnlockScreen.hidden;
+            const canUpdateTimer = !isTriviaView && giftUnlockScreen.hidden;
+            if (canUpdateTimer) updateTimer();
+            const shouldRunTimer = canUpdateTimer && !document.hidden;
             if (shouldRunTimer && timerInterval === null) {
-                updateTimer();
                 timerInterval = window.setInterval(updateTimer, 1000);
             } else if (!shouldRunTimer && timerInterval !== null) {
                 window.clearInterval(timerInterval);
@@ -832,161 +716,6 @@
         document.addEventListener('visibilitychange', updateTimerVisibility);
         document.addEventListener('gift-unlocked', updateTimerVisibility);
         updateTimerVisibility();
-
-        // 2. REPRODUCTOR DE MÚSICA
-        const audio = document.getElementById('audioTrack');
-        const vinyl = document.getElementById('vinyl');
-        const playBtn = document.getElementById('playBtn');
-        const playbackStatus = document.getElementById('playback-status');
-        const playbackStateKey = 'regalo-musica-reproduccion';
-        let savedPlayback = null;
-        const voiceAudio = document.getElementById('voiceAudio');
-        const voiceStatus = document.getElementById('voice-status');
-
-        voiceAudio.addEventListener('error', () => {
-            voiceStatus.innerText = 'No se pudo cargar el mensajito de voz. Inténtalo de nuevo más tarde.';
-        });
-        voiceAudio.addEventListener('playing', () => {
-            document.getElementById('voiceAudioPlayer').classList.add('is-playing');
-            voiceStatus.textContent = '';
-        });
-        ['pause', 'ended'].forEach(eventName => {
-            voiceAudio.addEventListener(eventName, () => {
-                document.getElementById('voiceAudioPlayer').classList.remove('is-playing');
-            });
-        });
-
-        try {
-            savedPlayback = JSON.parse(localStorage.getItem(playbackStateKey) || 'null');
-        } catch (error) {
-            console.error('No se pudo recuperar el estado de la música.', error);
-            playbackStatus.innerText = 'No se pudo recuperar el estado de la música.';
-        }
-        if (savedPlayback && savedPlayback.shouldPlay) audio.preload = 'metadata';
-
-        function savePlaybackState(shouldPlay = !audio.paused) {
-            try {
-                localStorage.setItem(playbackStateKey, JSON.stringify({
-                    shouldPlay,
-                    currentTime: audio.currentTime
-                }));
-            } catch (error) {
-                console.error('No se pudo guardar el estado de la música.', error);
-                playbackStatus.innerText = 'No se pudo guardar el progreso de la canción.';
-            }
-        }
-
-        function updatePlaybackUI(isPlaying) {
-            playBtn.innerText = isPlaying ? '❚❚' : '▶';
-            playBtn.setAttribute('aria-label', isPlaying ? 'Pausar música' : 'Reproducir música');
-            vinyl.style.animationPlayState = isPlaying ? 'running' : 'paused';
-            document.querySelector('.music-player').classList.toggle('is-playing', isPlaying);
-        }
-
-        function getAudioErrorMessage() {
-            if (!audio.error) {
-                return 'No se pudo cargar Cancion.mp3. Revisa la conexión e inténtalo de nuevo.';
-            }
-
-            switch (audio.error.code) {
-                case MediaError.MEDIA_ERR_ABORTED:
-                    return 'La carga de la canción se interrumpió. Toca ▶ para intentarlo de nuevo.';
-                case MediaError.MEDIA_ERR_NETWORK:
-                    return 'No se pudo descargar Cancion.mp3. Revisa la conexión e inténtalo de nuevo.';
-                case MediaError.MEDIA_ERR_DECODE:
-                    return 'Cancion.mp3 se descargó, pero el navegador no pudo decodificar el audio.';
-                case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-                    return 'No se encontró Cancion.mp3 o su formato no es compatible.';
-                default:
-                    return 'No se pudo cargar Cancion.mp3. Revisa que esté junto a index.html.';
-            }
-        }
-
-        async function playAudio() {
-            try {
-                await audio.play();
-                playbackStatus.innerText = '';
-            } catch (error) {
-                updatePlaybackUI(false);
-                if (error && error.name === 'NotAllowedError') {
-                    playbackStatus.innerText = 'Toca ▶ para reanudar la música.';
-                } else if (error && error.name === 'AbortError') {
-                    playbackStatus.innerText = 'La reproducción se interrumpió. Toca ▶ para intentarlo de nuevo.';
-                } else if (audio.error || (error && error.name === 'NotSupportedError')) {
-                    playbackStatus.innerText = getAudioErrorMessage();
-                } else {
-                    playbackStatus.innerText = 'No se pudo iniciar el audio. Revisa la salida de sonido e inténtalo de nuevo.';
-                    console.error('No se pudo reproducir la canción.', error);
-                }
-            }
-        }
-
-        audio.addEventListener('play', () => updatePlaybackUI(true));
-        audio.addEventListener('pause', () => updatePlaybackUI(false));
-        audio.addEventListener('timeupdate', () => savePlaybackState());
-        audio.addEventListener('error', () => {
-            playbackStatus.innerText = getAudioErrorMessage();
-        });
-
-        let playbackRestored = false;
-        function restorePlayback() {
-            if (playbackRestored) return;
-            playbackRestored = true;
-
-            const savedTime = Number(savedPlayback && savedPlayback.currentTime);
-            if (Number.isFinite(savedTime) && savedTime > 0 && savedTime < audio.duration) {
-                audio.currentTime = savedTime;
-            }
-            if (savedPlayback && savedPlayback.shouldPlay && !isChapterThreeFlowActive) {
-                playAudio();
-            }
-        }
-
-        if (!isTriviaView) {
-            audio.addEventListener('loadedmetadata', restorePlayback, { once: true });
-            if (audio.readyState >= 1) {
-                restorePlayback();
-            }
-        }
-
-        function togglePlay() {
-            if (audio.paused) {
-                savePlaybackState(true);
-                playAudio();
-            } else {
-                savePlaybackState(false);
-                audio.pause();
-            }
-        }
-
-        window.addEventListener('pagehide', () => savePlaybackState());
-
-        // 3. CARTA DE AMOR
-        function toggleReason(button) {
-            const isRevealed = button.classList.toggle('revealed');
-            button.setAttribute('aria-expanded', String(isRevealed));
-        }
-
-        function openLetter() {
-            const content = document.getElementById('letterText');
-            const title = document.getElementById('env-title');
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
-                title.innerText = 'Toca aquí para abrir la carta';
-            } else {
-                content.style.display = 'block';
-                title.innerText = 'Con todo mi amor... 💖';
-                
-                // Lluvia de confeti de corazones
-                confetti({
-                    particleCount: isCompactDevice ? 28 : 60,
-                    spread: 70,
-                    origin: { y: 0.7 },
-                    colors: ['#ff4b72', '#ff7eb3', '#ffffff'],
-                    disableForReducedMotion: true
-                });
-            }
-        }
 
         // 4. ANIMACIÓN CANVAS DE FONDO (Corazones flotantes)
         const canvas = document.getElementById('canvas-bg');
@@ -1068,164 +797,18 @@
         resizeCanvas();
         updateBgAnimation();
 
-        function initStarMap() {
-            const stage = document.getElementById('starMapStage');
-            const starCanvas = document.getElementById('starMapCanvas');
-            const tooltip = document.getElementById('starMemoryTooltip');
-            if (!stage || !starCanvas || !tooltip || isTriviaView) return;
-
-            const starContext = starCanvas.getContext('2d');
-            if (!starContext) {
-                console.error('No se pudo iniciar el lienzo del mapa estelar.');
-                return;
-            }
-
-            const memoryStars = [...stage.querySelectorAll('.memory-star')];
-            const constellation = memoryStars.map(star => ({
-                x: parseFloat(star.style.getPropertyValue('--star-x')) / 100,
-                y: parseFloat(star.style.getPropertyValue('--star-y')) / 100
-            }));
-            const backgroundStars = Array.from({ length: isCompactDevice ? 38 : 75 }, () => ({
-                x: Math.random(),
-                y: Math.random(),
-                radius: Math.random() * 1.2 + 0.25,
-                phase: Math.random() * Math.PI * 2,
-                speed: Math.random() * 0.0018 + 0.0004
-            }));
-            let width = 0;
-            let height = 0;
-            let animationFrame = 0;
-            let lastFrameTime = 0;
-            const mapReduceMotion = reducedMotion;
-            let mapIsVisible = !('IntersectionObserver' in window);
-
-            function resizeStarMap() {
-                const bounds = stage.getBoundingClientRect();
-                const pixelRatio = Math.min(window.devicePixelRatio || 1, isCompactDevice ? 1 : 1.5);
-                width = bounds.width;
-                height = bounds.height;
-                starCanvas.width = Math.round(width * pixelRatio);
-                starCanvas.height = Math.round(height * pixelRatio);
-                starContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-                drawStarMap(performance.now());
-            }
-
-            function drawStarMap(time) {
-                starContext.clearRect(0, 0, width, height);
-                backgroundStars.forEach(star => {
-                    const twinkle = 0.35 + (Math.sin(time * star.speed + star.phase) + 1) * 0.32;
-                    starContext.beginPath();
-                    starContext.fillStyle = `rgba(238, 220, 255, ${twinkle})`;
-                    starContext.arc(star.x * width, star.y * height, star.radius, 0, Math.PI * 2);
-                    starContext.fill();
-                });
-
-                starContext.save();
-                starContext.beginPath();
-                starContext.moveTo(constellation[0].x * width, constellation[0].y * height);
-                constellation.slice(1).forEach(point => starContext.lineTo(point.x * width, point.y * height));
-                starContext.strokeStyle = 'rgba(198, 139, 255, 0.48)';
-                starContext.lineWidth = 1;
-                starContext.shadowColor = '#b66aff';
-                starContext.shadowBlur = 12;
-                starContext.stroke();
-                starContext.restore();
-            }
-
-            function animateStarMap(time) {
-                if (!mapIsVisible || document.hidden || mapReduceMotion) {
-                    animationFrame = 0;
-                    return;
-                }
-                if (time - lastFrameTime >= 50) {
-                    lastFrameTime = time;
-                    drawStarMap(time);
-                }
-                animationFrame = requestAnimationFrame(animateStarMap);
-            }
-
-            function updateStarMapAnimation() {
-                const shouldAnimate = mapIsVisible && !document.hidden && !mapReduceMotion;
-                if (shouldAnimate && !animationFrame) {
-                    animationFrame = requestAnimationFrame(animateStarMap);
-                } else if (!shouldAnimate && animationFrame) {
-                    cancelAnimationFrame(animationFrame);
-                    animationFrame = 0;
-                }
-            }
-
-            function showMemory(star) {
-                tooltip.textContent = star.dataset.memory;
-                tooltip.classList.add('is-visible');
-                memoryStars.forEach(item => item.setAttribute('aria-pressed', String(item === star)));
-                if (star.classList.contains('star-main') && typeof confetti === 'function') {
-                    const bounds = star.getBoundingClientRect();
-                    confetti({
-                        particleCount: isCompactDevice ? 14 : 28,
-                        spread: 42,
-                        startVelocity: 16,
-                        gravity: 0.8,
-                        ticks: 100,
-                        scalar: 0.65,
-                        origin: {
-                            x: (bounds.left + bounds.width / 2) / window.innerWidth,
-                            y: (bounds.top + bounds.height / 2) / window.innerHeight
-                        },
-                        colors: ['#ffd166', '#fff1bd', '#ffcf70', '#ffffff'],
-                        disableForReducedMotion: true
-                    });
-                }
-            }
-
-            memoryStars.forEach(star => {
-                star.addEventListener('mouseenter', () => showMemory(star));
-                star.addEventListener('focus', () => showMemory(star));
-                star.addEventListener('click', () => showMemory(star));
-                star.addEventListener('keydown', event => {
-                    if (event.key === 'Escape') {
-                        tooltip.classList.remove('is-visible');
-                        star.setAttribute('aria-pressed', 'false');
-                        star.blur();
-                    }
-                });
-            });
-
-            const resizeObserver = new ResizeObserver(resizeStarMap);
-            resizeObserver.observe(stage);
-            if (mapReduceMotion) {
-                drawStarMap(0);
-            }
-            const intersectionObserver = 'IntersectionObserver' in window
-                ? new IntersectionObserver(entries => {
-                    mapIsVisible = entries.some(entry => entry.isIntersecting);
-                    updateStarMapAnimation();
-                }, { threshold: 0.05 })
-                : null;
-            if (intersectionObserver) intersectionObserver.observe(stage);
-            document.addEventListener('visibilitychange', updateStarMapAnimation);
-            updateStarMapAnimation();
-            window.addEventListener('pagehide', () => {
-                cancelAnimationFrame(animationFrame);
-                resizeObserver.disconnect();
-                if (intersectionObserver) intersectionObserver.disconnect();
-                document.removeEventListener('visibilitychange', updateStarMapAnimation);
-            }, { once: true });
-        }
-
-        initStarMap();
-
         // Banco editable: agrega objetos con pregunta, opciones y respuesta correcta.
         const loveQuestions = [
             { question: '¿Qué convierte un día sencillo en uno especial?', options: ['Compartirlo contigo', 'Un día libre', 'Un regalo caro', 'Dormir hasta tarde'], answer: 'Compartirlo contigo' },
             { question: '¿Cuál es nuestro plan perfecto para una tarde juntos?', options: ['Una tarde de películas', 'Hacer trámites', 'Ordenar el clóset', 'Salir Juntos'], answer: 'Salir Juntos' },
             { question: '¿Qué es lo que más quiero seguir coleccionando contigo?', options: ['Recuerdos bonitos', 'Tazas', 'Puntos de viaje', 'Besos'], answer: 'Recuerdos bonitos' },
-            { question: '¿Cuál es el mejor lugar para recibir un abrazo?', options: ['A tu lado', 'En el colegio', 'En el supermercado', 'En la fila del banco'], answer: 'En el colegio' },
-            { question: '¿Qué postre sabe mejor si lo compartimos?', options: ['Cualquiera contigo', 'Solo gelatina', 'Ninguno', 'Yo'], answer: 'Yo' },
+            { question: '¿Cuál es el mejor lugar para recibir un abrazo?', options: ['A tu lado', 'En el colegio', 'En el supermercado', 'En la fila del banco'], answer: 'A tu lado' },
+            { question: '¿Qué postre sabe mejor si lo compartimos?', options: ['Cualquiera contigo', 'Solo gelatina', 'Ninguno', 'Yo'], answer: 'Cualquiera contigo' },
             { question: '¿Qué quiero para nuestra próxima salida?', options: ['Que tú la elijas', 'Quedarme trabajando', 'Irme a zarsal', 'No salir nunca'], answer: 'Que tú la elijas' },
             { question: '¿Qué hace que nuestra historia sea única?', options: ['Que la escribimos juntos', 'Que tiene muchas páginas', 'Que es una película', 'Que tiene un final'], answer: 'Que la escribimos juntos' },
-            { question: '¿Qué significa un abrazo gigante?', options: ['Un montón de cariño', 'Un saludo formal', 'Una subida de grados', 'Una despedida'], answer: 'Un montón de cariño' }
-            ,{ question: '¿Qué es lo que más me gusta de ti?', options: ['Tu sonrisa', 'Tu risa', 'Tus subidas de grados', 'Todo lo anterior'], answer: 'Todo lo anterior' },
-            { question: '¿Cual es el amor de tu vida?', options: ['Sebastian', 'osuna', 'tu primo', 'Totas las anteriores'], answer: 'Estar contigo' }
+            { question: '¿Qué significa un abrazo gigante?', options: ['Un montón de cariño', 'Un saludo formal', 'Una subida de grados', 'Una despedida'], answer: 'Un montón de cariño' },
+            { question: '¿Qué es lo que más me gusta de ti?', options: ['Tu sonrisa', 'Tu risa', 'Tu forma de ser', 'Todo lo anterior'], answer: 'Todo lo anterior' },
+            { question: '¿Cuál es el amor de tu vida?', options: ['Sebastian', 'Osuna', 'Tu primo', 'Estar contigo'], answer: 'Estar contigo' }
         ];
         const triviaQuestionsPerGame = 5;
         const loveCoupons = ['Abrazo gigante 🤗', 'Helado o postre 🍦', 'Tarde de películas 🎬', 'Muchos Besitos'];
