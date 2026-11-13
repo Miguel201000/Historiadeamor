@@ -4,6 +4,9 @@
         const giftPasswordForm = document.getElementById('giftPasswordForm');
         const giftPassword = document.getElementById('giftPassword');
         const giftPasswordFeedback = document.getElementById('giftPasswordFeedback');
+        const giftPreviewTwoMonthsButton = document.getElementById('giftPreviewTwoMonthsButton');
+        const returnToCountdownButton = document.getElementById('returnToCountdownButton');
+        const twoMonthChapter = document.getElementById('chapterTwo');
         const giftTeaserButton = document.getElementById('giftTeaserButton');
         const giftTeaserMessage = document.getElementById('giftTeaserMessage');
         const developerAccessTrigger = document.getElementById('developerAccessTrigger');
@@ -31,13 +34,18 @@
         let giftCountdownInterval;
 
         function unlockGift() {
+            const wasPreviewingTwoMonths = document.body.classList.contains('gift-two-month-preview');
             giftUnlockScreen.hidden = true;
-            document.body.classList.remove('gift-locked');
+            document.body.classList.remove('gift-locked', 'gift-two-month-preview');
             giftLockedContent.forEach(({ element, wasInert }) => {
                 element.inert = wasInert;
             });
             window.clearInterval(giftCountdownInterval);
             document.dispatchEvent(new Event('gift-unlocked'));
+            if (wasPreviewingTwoMonths) {
+                selectChapter('two', true);
+                chapterNav.hidden = true;
+            }
         }
 
         function updateGiftCountdown() {
@@ -60,12 +68,47 @@
             });
         }
 
+        function previewTwoMonthChapter() {
+            updateGiftCountdown();
+            if (!document.body.classList.contains('gift-locked')) return;
+
+            giftUnlockScreen.hidden = true;
+            document.body.classList.remove('gift-locked');
+            document.body.classList.add('gift-two-month-preview');
+            selectChapter('two');
+            chapterNav.hidden = true;
+            giftLockedContent.forEach(({ element }) => {
+                element.inert = element !== twoMonthChapter;
+            });
+            twoMonthChapter.scrollIntoView();
+            returnToCountdownButton.focus();
+        }
+
+        function returnToCountdown() {
+            if (!document.body.classList.contains('gift-two-month-preview')) return;
+            updateGiftCountdown();
+            if (!document.body.classList.contains('gift-two-month-preview')) return;
+
+            document.body.classList.remove('gift-two-month-preview');
+            document.body.classList.add('gift-locked');
+            giftLockedContent.forEach(({ element }) => {
+                element.inert = true;
+            });
+            selectChapter('two', true);
+            chapterNav.hidden = true;
+            giftUnlockScreen.hidden = false;
+            giftPreviewTwoMonthsButton.focus();
+        }
+
         document.body.classList.add('gift-locked');
         giftLockedContent.forEach(({ element }) => {
             element.inert = true;
         });
         updateGiftCountdown();
         if (!giftUnlockScreen.hidden) giftCountdownInterval = window.setInterval(updateGiftCountdown, 1000);
+
+        giftPreviewTwoMonthsButton.addEventListener('click', previewTwoMonthChapter);
+        returnToCountdownButton.addEventListener('click', returnToCountdown);
 
         giftTeaserButton.addEventListener('click', () => {
             const isOpening = giftTeaserMessage.hidden;
@@ -141,6 +184,11 @@
         const anniversaryPlayer = document.getElementById('anniversaryPlayer');
         const anniversaryVideo = document.getElementById('anniversaryVideo');
         const anniversaryVideoStatus = document.getElementById('anniversaryVideoStatus');
+        const backgroundMusicTracks = [
+            chapterThreeAudio,
+            document.getElementById('audioTrack')
+        ];
+        let pausedMusicTracks = null;
         const chapterViews = {
             two: document.getElementById('chapterTwo'),
             three: document.getElementById('chapterThree')
@@ -236,6 +284,26 @@
         });
         anniversaryVideo.addEventListener('playing', () => {
             anniversaryVideo.closest('.anniversary-video-frame').classList.add('is-playing');
+            if (pausedMusicTracks !== null) return;
+            pausedMusicTracks = backgroundMusicTracks.filter(track => !track.paused && !track.ended);
+            pausedMusicTracks.forEach(track => track.pause());
+        });
+        anniversaryVideo.addEventListener('ended', () => {
+            if (pausedMusicTracks === null) return;
+            const tracksToResume = pausedMusicTracks;
+            pausedMusicTracks = null;
+            tracksToResume.forEach(track => {
+                track.play().catch(error => {
+                    if (track === chapterThreeAudio) {
+                        chapterThreeAudioStatus.textContent = 'El video terminó. Toca reproducir en los controles para reanudar la canción.';
+                    } else {
+                        document.getElementById('playback-status').textContent = 'El video terminó. Toca ▶ para reanudar la música.';
+                    }
+                    if (!error || (error.name !== 'NotAllowedError' && error.name !== 'AbortError')) {
+                        console.error('No se pudo reanudar la música después del video.', error);
+                    }
+                });
+            });
         });
         ['pause', 'ended'].forEach(eventName => {
             anniversaryVideo.addEventListener(eventName, () => {
@@ -324,7 +392,7 @@
         }
 
         const happinessNotes = [
-            'Tu sonrisa tiene una forma preciosa de hacer mejor cualquier día. 💛',
+            'Tu sonrisa tiene una forma preciosa de hacer mejor cualquier día. 💞',
             'Me encanta compartir la vida contigo, incluso en los momentos más sencillos. ☁️',
             'Eres una persona increíble y mereces que hoy te pasen cosas bonitas. ✨',
             'Un recuerdo para guardar: cada risa contigo se queda conmigo. 💞',

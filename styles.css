@@ -2054,6 +2054,69 @@
         .gift-countdown .timer-box { padding: 1.1rem 0.4rem; }
         .gift-countdown .timer-number { font-size: clamp(1.35rem, 5vw, 2rem); }
 
+        .gift-preview-invitation {
+            margin: 1.6rem auto 0;
+            color: var(--text-sub);
+            line-height: 1.6;
+        }
+        .gift-preview-button {
+            display: inline-flex;
+            min-height: 54px;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            margin-top: 0.35rem;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid rgba(255, 238, 244, 0.82);
+            border-radius: 999px;
+            background:
+                radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.28), transparent 38%),
+                linear-gradient(120deg, #ff6489, #d94f92 54%, #9f4f9b);
+            color: #fff;
+            font: 700 0.9rem 'Montserrat', sans-serif;
+            letter-spacing: 0.02em;
+            text-shadow: 0 1px 3px rgba(74, 15, 50, 0.4);
+            box-shadow:
+                0 0 0 4px rgba(255, 117, 140, 0.13),
+                0 10px 28px rgba(237, 78, 133, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.35);
+            cursor: pointer;
+            transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .gift-preview-button::before, .gift-preview-button::after {
+            color: #ffe6a3;
+            font-size: 0.9rem;
+        }
+        .gift-preview-button::before { content: '✦'; }
+        .gift-preview-button::after { content: '♡'; }
+        .gift-preview-button:hover, .gift-preview-button:focus-visible {
+            transform: translateY(-2px);
+            background:
+                radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.34), transparent 38%),
+                linear-gradient(120deg, #ff527d, #cf3e85 54%, #914093);
+            box-shadow:
+                0 0 0 5px rgba(255, 117, 140, 0.18),
+                0 14px 34px rgba(237, 78, 133, 0.52),
+                inset 0 1px 0 rgba(255, 255, 255, 0.42);
+            outline: 2px solid rgba(255, 224, 173, 0.8);
+            outline-offset: 4px;
+        }
+        .gift-preview-back {
+            display: none;
+            min-height: 44px;
+            margin: 0 0 1rem;
+            padding: 0.65rem 1rem;
+            border: 1px solid rgba(255, 214, 162, 0.45);
+            border-radius: 999px;
+            background: rgba(15, 12, 32, 0.45);
+            color: #fff8f4;
+            font: 600 0.8rem 'Montserrat', sans-serif;
+            cursor: pointer;
+        }
+        body.gift-two-month-preview { overflow-x: hidden; overflow-y: auto; }
+        body.gift-two-month-preview .gift-preview-back { display: inline-flex; align-items: center; }
+        body.gift-two-month-preview .emergency-love-trigger { display: none !important; }
+
         .gift-teaser { margin: 1.6rem auto 0; }
         .gift-teaser-label {
             margin-bottom: 0.55rem;

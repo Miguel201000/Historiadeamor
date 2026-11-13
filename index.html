@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261112-postcard-ticket">
+    <link rel="stylesheet" href="styles.css?v=20261113-gift-preview">
 </head>
 <body>
 
@@ -24,6 +24,11 @@
                 <div class="timer-box"><div class="timer-number" id="giftMinutes">00</div><div class="timer-label">Minutos</div></div>
                 <div class="timer-box"><div class="timer-number" id="giftSeconds">00</div><div class="timer-label">Segundos</div></div>
             </div>
+            <section class="gift-preview-invitation" aria-label="Recuerdos mientras esperas">
+                <p class="gift-preview-label">Mientras esperas...</p>
+                <p>Puedes volver a visitar un capítulo muy especial.</p>
+                <button class="gift-preview-button" id="giftPreviewTwoMonthsButton" type="button">Revivir nuestros 2 meses 💖</button>
+            </section>
             <section class="gift-teaser" aria-label="Acertijo diario">
                 <p class="gift-teaser-label">Pista en clave</p>
                 <button class="gift-teaser-button" id="giftTeaserButton" type="button" aria-expanded="false" aria-controls="giftTeaserMessage">Descifrar pista de hoy 🗝️</button>
@@ -87,8 +92,8 @@
             </section>
 
             <section class="chapter-section chapter-soundtrack glass" aria-labelledby="chapter-soundtrack-title">
-                <p class="eyebrow section-eyebrow">Nuestra banda sonora</p>
-                <h2 class="section-title" id="chapter-soundtrack-title">Canciones para nosotros 🎶</h2>
+                <p class="eyebrow section-eyebrow">Banda sonora</p>
+                <h2 class="section-title" id="chapter-soundtrack-title">Canciones🎶</h2>
                 <div class="playlist-player" id="chapterPlaylistPlayer">
                     <div class="playlist-record" aria-hidden="true"><span>♡</span></div>
                     <div class="playlist-player-content">
@@ -175,7 +180,7 @@
                             <button class="scratch-reveal-button" type="button">Revelar detalle</button>
                         </div>
                         <div class="scratch-card">
-                            <p class="scratch-prize">Tú eliges nuestra próxima salida 🌅</p>
+                            <p class="scratch-prize">Tú eliges nuestra próxima salida</p>
                             <canvas class="scratch-canvas" aria-hidden="true"></canvas>
                             <button class="scratch-reveal-button" type="button">Revelar detalle</button>
                         </div>
@@ -366,6 +371,7 @@
     </main>
 
     <div class="container chapter-view chapter-two" id="chapterTwo" aria-label="Capítulo de 2 meses">
+        <button class="gift-preview-back" id="returnToCountdownButton" type="button">← Volver a la cuenta regresiva</button>
         
         <!-- HERO Y CONTADOR DE TIEMPO -->
         <section class="hero glass">
@@ -571,6 +577,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=20261112-postcard-ticket" defer></script>
+    <script src="script.js?v=20261113-gift-preview" defer></script>
 </body>
 </html>
