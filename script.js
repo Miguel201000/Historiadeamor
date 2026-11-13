@@ -405,7 +405,7 @@
             'Nuestra aventura favorita',
             'Risas que guardo conmigo',
             'Un instante solo nuestro',
-            'Mi persona favorita 💛'
+            'Mi persona favorita'
         ];
         let memoryGalleryInitialized = false;
         let galleryLoadObserver = null;
