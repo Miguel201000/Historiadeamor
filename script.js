@@ -10,16 +10,14 @@
         const developerAccessPanel = document.getElementById('developerAccessPanel');
         const developerAccessClose = document.getElementById('developerAccessClose');
         const giftTeaserMessages = [
-            'Una cifra desciende mientras otra avanza; ambas nacieron del mismo instante.',
-            'Hay un cielo trazado a mano donde cada punto prefiere contar algo.',
-            'Tres caminos se mueven sin abandonar el lugar; repiten el viaje para que no termine.',
-            'Lo cubierto no se abre con llave, sino con el gesto que suele borrar.',
-            'Ocho voces comparten una ruta, aunque solo una puede sonar a la vez.',
-            'Un sello de cera guarda lo que no es papel, y cede cuando cambia el modo de tocarlo.',
-            'Hay una pregunta que no se resuelve buscando afuera, sino reconociendo a quien está en cada capítulo.',
-            'Una sola constelación cabe en recuerdos que el azar no pudo ordenar.',
-            'La última caja no guarda lo que brilla: guarda una pregunta para el futuro.',
-            'No busques lomo ni páginas: dos capítulos se pliegan en una historia que todavía se escribe.'
+            'Una cajita guarda una pregunta y una promesa pensada para nuestro futuro.',
+            'Tres meses caben en una entrada de cine, pero la función es solo nuestra.',
+            'Cada postal conserva un instante; juntas cuentan nuestro álbum.',
+            'Cinco letras bastan para abrir el secreto que empieza con una pregunta.',
+            'No todas las sorpresas se leen: algunas se descubren al raspar.',
+            'Un frasco guarda pequeñas palabras listas para alegrarte el día.',
+            'Hay palabras esperando en sobres para cuando llegue el momento adecuado.',
+            'Ocho melodías hacen compañía a nuestra historia.'
         ];
         const giftCountdownUnits = {
             days: document.getElementById('giftDays'),
@@ -73,7 +71,7 @@
             const isOpening = giftTeaserMessage.hidden;
             if (isOpening) {
                 const daysRemaining = Math.max(0, Math.ceil((giftUnlockDate - new Date()) / 86400000));
-                const messageIndex = Math.max(0, daysRemaining - 1) % giftTeaserMessages.length;
+                const messageIndex = Math.max(0, Math.min(daysRemaining, giftTeaserMessages.length) - 1);
                 giftTeaserMessage.textContent = giftTeaserMessages[messageIndex];
             }
             giftTeaserMessage.hidden = !isOpening;
