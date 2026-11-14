@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261114-mobile-performance-1">
+    <link rel="stylesheet" href="styles.css?v=20261114-countdown-video-once-1">
 </head>
 <body>
 
@@ -24,28 +24,18 @@
                 <div class="timer-box"><div class="timer-number" id="giftMinutes">00</div><div class="timer-label">Minutos</div></div>
                 <div class="timer-box"><div class="timer-number" id="giftSeconds">00</div><div class="timer-label">Segundos</div></div>
             </div>
-            <section class="gift-preview-invitation" aria-label="Recuerdos mientras esperas">
-                <p class="gift-preview-label">Mientras esperas...</p>
-                <p>Puedes volver a visitar un capítulo muy especial.</p>
-                <a class="gift-preview-button" href="dos-meses.html">Revivir nuestros 2 meses 💖</a>
-            </section>
-            <section class="gift-teaser" aria-label="Acertijo diario">
-                <p class="gift-teaser-label">Pista en clave</p>
-                <button class="gift-teaser-button" id="giftTeaserButton" type="button" aria-expanded="false" aria-controls="giftTeaserMessage">Descifrar pista de hoy 🗝️</button>
-                <p class="gift-teaser-message" id="giftTeaserMessage" role="status" aria-live="polite" hidden></p>
-            </section>
         </section>
-        <button class="developer-access-trigger" id="developerAccessTrigger" type="button" aria-label="Abrir campo para ingresar la contraseña" title="Ingresar contraseña">🔐 Ingresar contraseña</button>
-        <section class="developer-access-panel glass" id="developerAccessPanel" aria-labelledby="developerAccessTitle" hidden>
-            <button class="developer-access-close" id="developerAccessClose" type="button" aria-label="Cerrar acceso de desarrollador">×</button>
-            <h2 id="developerAccessTitle">Acceso de desarrollador</h2>
-            <form class="riddle-form gift-password-form" id="giftPasswordForm">
-                <label class="sr-only" for="giftPassword">Contraseña para desbloquear el regalo</label>
-                <input id="giftPassword" name="password" type="password" autocomplete="off" placeholder="Contraseña" required>
-                <button class="primary-button" type="submit">🔐</button>
-            </form>
-            <p class="riddle-feedback" id="giftPasswordFeedback" role="status" aria-live="polite"></p>
-        </section>
+    </div>
+
+    <div class="countdown-video-screen" id="countdownVideoScreen" hidden>
+        <video id="countdownVideo" playsinline preload="none" aria-label="Video de cuenta regresiva">
+            <source src="video/cuentaregresiva2_lTHFyzGy%20(online-video-cutter.com).mp4" type="video/mp4">
+            Tu navegador no puede reproducir este video.
+        </video>
+        <button class="countdown-video-audio" id="countdownVideoAudio" type="button" aria-pressed="false">
+            🔊 Reproducir con sonido
+        </button>
+        <p class="countdown-video-status" id="countdownVideoStatus" role="status" aria-live="polite"></p>
     </div>
 
     <div id="canvas-bg" aria-hidden="true"></div>
@@ -378,6 +368,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=20261114-mobile-performance-1" defer></script>
+    <script src="script.js?v=20261114-countdown-video-once-1" defer></script>
 </body>
 </html>

@@ -2283,3 +2283,31 @@
             .movie-ticket { grid-template-columns: 48px minmax(0, 1fr); gap: 0.6rem; }
             .movie-ticket-button { grid-column: 1 / -1; width: 100%; }
         }
+
+        .countdown-video-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 10001;
+            display: grid;
+            place-items: center;
+            background: #000;
+        }
+        .countdown-video-screen[hidden] { display: none; }
+        .countdown-video-screen video { width: 100%; height: 100%; object-fit: contain; }
+        .countdown-video-audio {
+            position: absolute;
+            z-index: 1;
+            right: 50%;
+            bottom: 1.5rem;
+            transform: translateX(50%);
+            min-height: 48px;
+            padding: 0.7rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            border-radius: 999px;
+            background: rgba(15, 12, 32, 0.82);
+            color: #fff;
+            font: 600 0.9rem 'Montserrat', sans-serif;
+            cursor: pointer;
+        }
+        .countdown-video-audio:focus-visible { outline: 2px solid #ffd6a2; outline-offset: 3px; }
+        .countdown-video-status { position: absolute; top: 1rem; color: #fff; text-align: center; }

@@ -1,24 +1,10 @@
         const giftUnlockScreen = document.getElementById('giftUnlockScreen');
         const giftUnlockDate = new Date(2026, 10, 21);
-        const giftPasswordHash = 'c53c4d988a0e0512306eeaf2bcee85ca07d8c399ff86585e66f52f2800787214';
-        const giftPasswordForm = document.getElementById('giftPasswordForm');
-        const giftPassword = document.getElementById('giftPassword');
-        const giftPasswordFeedback = document.getElementById('giftPasswordFeedback');
-        const giftTeaserButton = document.getElementById('giftTeaserButton');
-        const giftTeaserMessage = document.getElementById('giftTeaserMessage');
-        const developerAccessTrigger = document.getElementById('developerAccessTrigger');
-        const developerAccessPanel = document.getElementById('developerAccessPanel');
-        const developerAccessClose = document.getElementById('developerAccessClose');
-        const giftTeaserMessages = [
-            'Una cajita guarda una pregunta y una promesa pensada para nuestro futuro.',
-            'Tres meses caben en una entrada de cine, pero la función es solo nuestra.',
-            'Cada postal conserva un instante; juntas cuentan nuestro álbum.',
-            'Cinco letras bastan para abrir el secreto que empieza con una pregunta.',
-            'No todas las sorpresas se leen: algunas se descubren al raspar.',
-            'Un frasco guarda pequeñas palabras listas para alegrarte el día.',
-            'Hay palabras esperando en sobres para cuando llegue el momento adecuado.',
-            'Ocho melodías hacen compañía a nuestra historia.'
-        ];
+        const countdownVideoScreen = document.getElementById('countdownVideoScreen');
+        const countdownVideo = document.getElementById('countdownVideo');
+        const countdownVideoAudio = document.getElementById('countdownVideoAudio');
+        const countdownVideoStatus = document.getElementById('countdownVideoStatus');
+        const countdownVideoStorageKey = 'nuestraHistoriaCountdownVideo2Completed';
         const giftCountdownUnits = {
             days: document.getElementById('giftDays'),
             hours: document.getElementById('giftHours'),
@@ -26,14 +12,24 @@
             seconds: document.getElementById('giftSeconds')
         };
         const giftLockedContent = Array.from(document.body.children)
-            .filter(element => element !== giftUnlockScreen && element.tagName !== 'SCRIPT')
+            .filter(element => element !== giftUnlockScreen && element !== countdownVideoScreen && element.tagName !== 'SCRIPT')
             .map(element => ({ element, wasInert: element.inert }));
         let giftCountdownInterval;
+        let countdownVideoStarted = false;
+
+        function hasCompletedCountdownVideo() {
+            try {
+                return window.localStorage.getItem(countdownVideoStorageKey) === 'true';
+            } catch (error) {
+                console.error('No se pudo consultar si el video ya se reprodujo.', error);
+                return false;
+            }
+        }
 
         function unlockGift() {
+            countdownVideoScreen.hidden = true;
+            countdownVideo.pause();
             giftUnlockScreen.hidden = true;
-            developerAccessTrigger.hidden = true;
-            developerAccessPanel.hidden = true;
             document.body.classList.remove('gift-locked');
             giftLockedContent.forEach(({ element, wasInert }) => {
                 element.inert = wasInert;
@@ -42,10 +38,75 @@
             document.dispatchEvent(new Event('gift-unlocked'));
         }
 
+        function updateCountdownVideoAudioButton() {
+            const soundEnabled = !countdownVideo.muted && countdownVideo.volume > 0;
+            countdownVideoAudio.setAttribute('aria-pressed', String(soundEnabled));
+            countdownVideoAudio.textContent = soundEnabled
+                ? '🔊 Sonido activado'
+                : countdownVideo.paused ? '🔊 Reproducir con sonido' : '🔊 Activar sonido';
+        }
+
+        function handleCountdownVideoPlayError(error) {
+            countdownVideoStatus.textContent = error && error.name === 'NotAllowedError'
+                ? 'Tu navegador bloqueó el inicio automático con sonido. Toca «Reproducir con sonido» para empezar.'
+                : 'No se pudo reproducir el video. Toca reproducir para intentarlo de nuevo.';
+            countdownVideo.controls = true;
+            updateCountdownVideoAudioButton();
+            if (!error || error.name !== 'NotAllowedError') {
+                console.error('No se pudo reproducir el video de cuenta regresiva.', error);
+            }
+        }
+
+        function startCountdownVideo() {
+            if (countdownVideoStarted) return;
+            countdownVideoStarted = true;
+            giftUnlockScreen.hidden = true;
+            countdownVideoScreen.hidden = false;
+            window.clearInterval(giftCountdownInterval);
+
+            countdownVideo.autoplay = true;
+            countdownVideo.controls = true;
+            countdownVideo.muted = false;
+            countdownVideo.volume = 1;
+            countdownVideo.play().then(() => {
+                countdownVideoStatus.textContent = '';
+                updateCountdownVideoAudioButton();
+            }).catch(handleCountdownVideoPlayError);
+        }
+
+        countdownVideo.addEventListener('ended', () => {
+            try {
+                window.localStorage.setItem(countdownVideoStorageKey, 'true');
+            } catch (error) {
+                console.error('No se pudo guardar que el video de cuenta regresiva ya terminó.', error);
+            }
+            unlockGift();
+        });
+        ['playing', 'pause', 'volumechange'].forEach(eventName => {
+            countdownVideo.addEventListener(eventName, updateCountdownVideoAudioButton);
+        });
+        countdownVideoAudio.addEventListener('click', () => {
+            countdownVideo.muted = false;
+            countdownVideo.volume = 1;
+            countdownVideo.controls = true;
+            countdownVideo.play().then(() => {
+                countdownVideoStatus.textContent = '';
+                updateCountdownVideoAudioButton();
+            }).catch(handleCountdownVideoPlayError);
+        });
+        countdownVideo.addEventListener('error', () => {
+            countdownVideoStatus.textContent = 'No se pudo cargar el video. Revisa que esté en la carpeta video.';
+            countdownVideo.controls = true;
+        });
+
         function updateGiftCountdown() {
             const remaining = giftUnlockDate - new Date();
             if (remaining <= 0) {
-                unlockGift();
+                if (hasCompletedCountdownVideo()) {
+                    unlockGift();
+                } else {
+                    startCountdownVideo();
+                }
                 return;
             }
 
@@ -66,64 +127,12 @@
         giftLockedContent.forEach(({ element }) => {
             element.inert = true;
         });
-        updateGiftCountdown();
-        if (!giftUnlockScreen.hidden) giftCountdownInterval = window.setInterval(updateGiftCountdown, 1000);
-
-        giftTeaserButton.addEventListener('click', () => {
-            const isOpening = giftTeaserMessage.hidden;
-            if (isOpening) {
-                const daysRemaining = Math.max(0, Math.ceil((giftUnlockDate - new Date()) / 86400000));
-                const messageIndex = Math.max(0, Math.min(daysRemaining, giftTeaserMessages.length) - 1);
-                giftTeaserMessage.textContent = giftTeaserMessages[messageIndex];
-            }
-            giftTeaserMessage.hidden = !isOpening;
-            giftTeaserButton.setAttribute('aria-expanded', String(isOpening));
-            giftTeaserButton.textContent = isOpening ? 'Cerrar la pista' : 'Descifrar pista de hoy 🗝️';
-        });
-
-        developerAccessTrigger.addEventListener('click', () => {
-            developerAccessPanel.hidden = false;
-            giftPassword.focus();
-        });
-        developerAccessClose.addEventListener('click', () => {
-            developerAccessPanel.hidden = true;
-            giftPasswordForm.reset();
-            giftPasswordFeedback.textContent = '';
-            developerAccessTrigger.focus();
-        });
-        developerAccessPanel.addEventListener('keydown', event => {
-            if (event.key === 'Escape') developerAccessClose.click();
-        });
-
-        giftPasswordForm.addEventListener('submit', async event => {
-            event.preventDefault();
-            giftPasswordFeedback.textContent = '';
-
-            if (!window.crypto || !window.crypto.subtle) {
-                giftPasswordFeedback.textContent = 'Este navegador no permite validar la contraseña en esta conexión.';
-                return;
-            }
-
-            try {
-                const passwordBytes = new TextEncoder().encode(giftPassword.value);
-                const passwordDigest = await window.crypto.subtle.digest('SHA-256', passwordBytes);
-                const passwordHash = Array.from(new Uint8Array(passwordDigest), byte =>
-                    byte.toString(16).padStart(2, '0')
-                ).join('');
-
-                if (passwordHash !== giftPasswordHash) {
-                    giftPassword.value = '';
-                    giftPasswordFeedback.textContent = 'Esa contraseña no es correcta. Inténtalo de nuevo.';
-                    giftPassword.focus();
-                    return;
-                }
-
-                unlockGift();
-            } catch (error) {
-                giftPasswordFeedback.textContent = 'No se pudo validar la contraseña. Recarga la página e inténtalo de nuevo.';
-                console.error('No se pudo validar la contraseña del regalo.', error);
-            }
-        });
+        if (hasCompletedCountdownVideo()) {
+            unlockGift();
+        } else {
+            updateGiftCountdown();
+            if (!giftUnlockScreen.hidden) giftCountdownInterval = window.setInterval(updateGiftCountdown, 1000);
+        }
 
         const isTriviaView = new URLSearchParams(window.location.search).get('sorpresa') === '1';
         const isCompactDevice = window.matchMedia('(max-width: 700px), (pointer: coarse)').matches;
