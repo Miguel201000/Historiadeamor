@@ -2103,6 +2103,22 @@
         .gift-countdown .timer-box { padding: 1.1rem 0.4rem; }
         .gift-countdown .timer-number { font-size: clamp(1.35rem, 5vw, 2rem); }
 
+        .countdown-audio-button {
+            min-height: 48px;
+            margin-top: 1.25rem;
+            padding: 0.7rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            font: 600 0.9rem 'Montserrat', sans-serif;
+            cursor: pointer;
+        }
+        .countdown-audio-button[hidden] { display: none; }
+        .countdown-audio-button:focus-visible { outline: 2px solid #ffd6a2; outline-offset: 3px; }
+        .countdown-audio-status { margin: 0.65rem 0 0; color: var(--text-sub); }
+        .countdown-audio-status:empty { display: none; }
+
         .gift-preview-invitation {
             margin: 1.6rem auto 0;
             color: var(--text-sub);

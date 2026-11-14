@@ -1,5 +1,8 @@
         const giftUnlockScreen = document.getElementById('giftUnlockScreen');
         const giftUnlockDate = new Date(2026, 10, 21);
+        const countdownBackgroundAudio = document.getElementById('countdownBackgroundAudio');
+        const countdownBackgroundAudioButton = document.getElementById('countdownBackgroundAudioButton');
+        const countdownBackgroundAudioStatus = document.getElementById('countdownBackgroundAudioStatus');
         const countdownVideoScreen = document.getElementById('countdownVideoScreen');
         const countdownVideo = document.getElementById('countdownVideo');
         const countdownVideoAudio = document.getElementById('countdownVideoAudio');
@@ -27,6 +30,7 @@
         }
 
         function unlockGift() {
+            stopCountdownBackgroundAudio();
             countdownVideoScreen.hidden = true;
             countdownVideo.pause();
             giftUnlockScreen.hidden = true;
@@ -37,6 +41,44 @@
             window.clearInterval(giftCountdownInterval);
             document.dispatchEvent(new Event('gift-unlocked'));
         }
+
+        function stopCountdownBackgroundAudio() {
+            countdownBackgroundAudio.pause();
+            countdownBackgroundAudioButton.hidden = true;
+            countdownBackgroundAudioStatus.textContent = '';
+        }
+
+        function handleCountdownBackgroundAudioPlayError(error) {
+            if (giftUnlockScreen.hidden) return;
+
+            if (error && error.name === 'NotAllowedError') {
+                countdownBackgroundAudioButton.hidden = false;
+                countdownBackgroundAudioStatus.textContent = 'Tu navegador bloqueó la música automática. Toca «Activar música de fondo» para escucharla.';
+                return;
+            }
+
+            countdownBackgroundAudioStatus.textContent = 'No se pudo reproducir la música de fondo. Revisa que el archivo esté en la carpeta audios.';
+            if (!error || error.name !== 'AbortError') {
+                console.error('No se pudo reproducir la música de fondo de la cuenta regresiva.', error);
+            }
+        }
+
+        function startCountdownBackgroundAudio() {
+            if (giftUnlockScreen.hidden) return;
+
+            countdownBackgroundAudio.loop = true;
+            countdownBackgroundAudio.play().then(() => {
+                countdownBackgroundAudioButton.hidden = true;
+                countdownBackgroundAudioStatus.textContent = '';
+            }).catch(handleCountdownBackgroundAudioPlayError);
+        }
+
+        countdownBackgroundAudioButton.addEventListener('click', startCountdownBackgroundAudio);
+        countdownBackgroundAudio.addEventListener('error', () => {
+            if (giftUnlockScreen.hidden) return;
+            countdownBackgroundAudioStatus.textContent = 'No se pudo cargar la música de fondo. Revisa que el archivo esté en la carpeta audios.';
+            console.error('No se pudo cargar la música de fondo de la cuenta regresiva.', countdownBackgroundAudio.error);
+        });
 
         function updateCountdownVideoAudioButton() {
             const soundEnabled = !countdownVideo.muted && countdownVideo.volume > 0;
@@ -102,6 +144,7 @@
         function updateGiftCountdown() {
             const remaining = giftUnlockDate - new Date();
             if (remaining <= 0) {
+                stopCountdownBackgroundAudio();
                 if (hasCompletedCountdownVideo()) {
                     unlockGift();
                 } else {
@@ -131,7 +174,10 @@
             unlockGift();
         } else {
             updateGiftCountdown();
-            if (!giftUnlockScreen.hidden) giftCountdownInterval = window.setInterval(updateGiftCountdown, 1000);
+            if (!giftUnlockScreen.hidden) {
+                startCountdownBackgroundAudio();
+                giftCountdownInterval = window.setInterval(updateGiftCountdown, 1000);
+            }
         }
 
         const isTriviaView = new URLSearchParams(window.location.search).get('sorpresa') === '1';

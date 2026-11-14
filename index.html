@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261114-countdown-video-once-1">
+    <link rel="stylesheet" href="styles.css?v=20261114-countdown-background-audio-1">
 </head>
 <body>
 
@@ -24,6 +24,14 @@
                 <div class="timer-box"><div class="timer-number" id="giftMinutes">00</div><div class="timer-label">Minutos</div></div>
                 <div class="timer-box"><div class="timer-number" id="giftSeconds">00</div><div class="timer-label">Segundos</div></div>
             </div>
+            <button class="countdown-audio-button" id="countdownBackgroundAudioButton" type="button" hidden>
+                🔊 Activar música de fondo
+            </button>
+            <p class="countdown-audio-status" id="countdownBackgroundAudioStatus" role="status" aria-live="polite"></p>
+            <audio id="countdownBackgroundAudio" loop preload="none" aria-label="Música de fondo de la cuenta regresiva" hidden>
+                <source src="audios/holahola%20(online-audio-converter.com).mp3" type="audio/mpeg">
+                Tu navegador no puede reproducir este audio.
+            </audio>
         </section>
     </div>
 
@@ -368,6 +376,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=20261114-countdown-video-once-1" defer></script>
+    <script src="script.js?v=20261114-countdown-background-audio-1" defer></script>
 </body>
 </html>
