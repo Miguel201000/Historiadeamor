@@ -308,18 +308,13 @@ function initStarMap() {
         x: parseFloat(star.style.getPropertyValue('--star-x')) / 100,
         y: parseFloat(star.style.getPropertyValue('--star-y')) / 100
     }));
-    const backgroundStars = Array.from({ length: isCompactDevice ? 38 : 75 }, () => ({
+    const backgroundStars = Array.from({ length: isCompactDevice ? 12 : 15 }, () => ({
         x: Math.random(),
         y: Math.random(),
-        radius: Math.random() * 1.2 + 0.25,
-        phase: Math.random() * Math.PI * 2,
-        speed: Math.random() * 0.0018 + 0.0004
+        radius: Math.random() * 1.2 + 0.25
     }));
     let width = 0;
     let height = 0;
-    let animationFrame = 0;
-    let lastFrameTime = 0;
-    let mapIsVisible = !('IntersectionObserver' in window);
 
     function resizeStarMap() {
         const bounds = stage.getBoundingClientRect();
@@ -329,15 +324,14 @@ function initStarMap() {
         starCanvas.width = Math.round(width * pixelRatio);
         starCanvas.height = Math.round(height * pixelRatio);
         context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-        drawStarMap(performance.now());
+        drawStarMap();
     }
 
-    function drawStarMap(time) {
+    function drawStarMap() {
         context.clearRect(0, 0, width, height);
         backgroundStars.forEach(star => {
-            const twinkle = 0.35 + (Math.sin(time * star.speed + star.phase) + 1) * 0.32;
             context.beginPath();
-            context.fillStyle = `rgba(238, 220, 255, ${twinkle})`;
+            context.fillStyle = 'rgba(238, 220, 255, 0.7)';
             context.arc(star.x * width, star.y * height, star.radius, 0, Math.PI * 2);
             context.fill();
         });
@@ -350,31 +344,9 @@ function initStarMap() {
         context.strokeStyle = 'rgba(198, 139, 255, 0.48)';
         context.lineWidth = 1;
         context.shadowColor = '#b66aff';
-        context.shadowBlur = 12;
+        context.shadowBlur = 5;
         context.stroke();
         context.restore();
-    }
-
-    function animateStarMap(time) {
-        if (!mapIsVisible || document.hidden || reducedMotion) {
-            animationFrame = 0;
-            return;
-        }
-        if (time - lastFrameTime >= 50) {
-            lastFrameTime = time;
-            drawStarMap(time);
-        }
-        animationFrame = requestAnimationFrame(animateStarMap);
-    }
-
-    function updateStarMapAnimation() {
-        const shouldAnimate = mapIsVisible && !document.hidden && !reducedMotion;
-        if (shouldAnimate && !animationFrame) {
-            animationFrame = requestAnimationFrame(animateStarMap);
-        } else if (!shouldAnimate && animationFrame) {
-            cancelAnimationFrame(animationFrame);
-            animationFrame = 0;
-        }
     }
 
     function showMemory(star) {
@@ -415,93 +387,28 @@ function initStarMap() {
 
     const resizeObserver = new ResizeObserver(resizeStarMap);
     resizeObserver.observe(stage);
-    const intersectionObserver = 'IntersectionObserver' in window
-        ? new IntersectionObserver(entries => {
-            mapIsVisible = entries.some(entry => entry.isIntersecting);
-            updateStarMapAnimation();
-        }, { threshold: 0.05 })
-        : null;
-    if (intersectionObserver) intersectionObserver.observe(stage);
-    document.addEventListener('visibilitychange', updateStarMapAnimation);
-    updateStarMapAnimation();
-    if (reducedMotion) drawStarMap(0);
     window.addEventListener('pagehide', () => {
-        cancelAnimationFrame(animationFrame);
         resizeObserver.disconnect();
-        if (intersectionObserver) intersectionObserver.disconnect();
-        document.removeEventListener('visibilitychange', updateStarMapAnimation);
     }, { once: true });
 }
 
 initStarMap();
 
 const backgroundCanvas = document.getElementById('canvas-bg');
-const backgroundContext = backgroundCanvas.getContext('2d');
-let particles = [];
-let backgroundFrame = 0;
-let lastBackgroundFrameTime = 0;
-let backgroundAnimationRunning = false;
-const backgroundFrameInterval = isCompactDevice ? 1000 / 24 : 1000 / 30;
-
-function resizeBackgroundCanvas() {
-    backgroundCanvas.width = window.innerWidth;
-    backgroundCanvas.height = window.innerHeight;
-    const particleCount = reducedMotion ? 0 : (isCompactDevice ? 12 : 28);
-    particles = Array.from({ length: particleCount }, () => ({
-        x: Math.random() * backgroundCanvas.width,
-        y: backgroundCanvas.height + Math.random() * 100,
-        size: Math.random() * 6 + 3,
-        speed: Math.random() * 1.5 + 0.5,
-        opacity: Math.random() * 0.5 + 0.3
-    }));
-    drawBackground();
-}
-
-function drawBackground() {
-    backgroundContext.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
-    particles.forEach(particle => {
-        particle.y -= particle.speed;
-        if (particle.y < -20) {
-            particle.y = backgroundCanvas.height + 20;
-            particle.x = Math.random() * backgroundCanvas.width;
-        }
-        backgroundContext.globalAlpha = particle.opacity;
-        backgroundContext.fillStyle = '#ff4b72';
-        backgroundContext.beginPath();
-        backgroundContext.arc(particle.x, particle.y, particle.size / 2, 0, Math.PI * 2);
-        backgroundContext.fill();
-    });
-    backgroundContext.globalAlpha = 1;
-}
-
-function animateBackground(time) {
-    if (!backgroundAnimationRunning) return;
-    backgroundFrame = requestAnimationFrame(animateBackground);
-    if (time - lastBackgroundFrameTime < backgroundFrameInterval) return;
-    lastBackgroundFrameTime = time;
-    drawBackground();
-}
-
-function updateBackgroundAnimation() {
-    const shouldAnimate = !reducedMotion && !document.hidden;
-    if (shouldAnimate && !backgroundAnimationRunning) {
-        backgroundAnimationRunning = true;
-        backgroundFrame = requestAnimationFrame(animateBackground);
-    } else if (!shouldAnimate && backgroundAnimationRunning) {
-        backgroundAnimationRunning = false;
-        cancelAnimationFrame(backgroundFrame);
+function createBackgroundParticles() {
+    if (reducedMotion) return;
+    const particleCount = isCompactDevice ? 12 : 15;
+    for (let index = 0; index < particleCount; index++) {
+        const particle = document.createElement('span');
+        particle.className = 'background-particle';
+        particle.setAttribute('aria-hidden', 'true');
+        particle.textContent = '♡';
+        particle.style.setProperty('--particle-x', `${Math.random() * 100}%`);
+        particle.style.setProperty('--particle-duration', `${14 + Math.random() * 12}s`);
+        particle.style.setProperty('--particle-delay', `${-Math.random() * 24}s`);
+        particle.style.setProperty('--particle-opacity', `${0.2 + Math.random() * 0.3}`);
+        backgroundCanvas.append(particle);
     }
 }
 
-if (backgroundContext) {
-    window.addEventListener('resize', resizeBackgroundCanvas);
-    document.addEventListener('visibilitychange', updateBackgroundAnimation);
-    window.addEventListener('pagehide', () => {
-        cancelAnimationFrame(backgroundFrame);
-        document.removeEventListener('visibilitychange', updateBackgroundAnimation);
-    }, { once: true });
-    resizeBackgroundCanvas();
-    updateBackgroundAnimation();
-} else {
-    console.error('No se pudo iniciar el lienzo de fondo.');
-}
+createBackgroundParticles();

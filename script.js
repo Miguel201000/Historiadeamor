@@ -717,85 +717,27 @@
         document.addEventListener('gift-unlocked', updateTimerVisibility);
         updateTimerVisibility();
 
-        // 4. ANIMACIÓN CANVAS DE FONDO (Corazones flotantes)
-        const canvas = document.getElementById('canvas-bg');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let bgFrame = 0;
-        let lastBgFrameTime = 0;
-        let bgAnimationRunning = false;
-        const bgFrameInterval = isCompactDevice ? 1000 / 24 : 1000 / 30;
+        // Partículas CSS para evitar redibujar el fondo mientras se hace scroll.
+        const backgroundParticles = document.getElementById('canvas-bg');
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const particleCount = reducedMotion || isTriviaView ? 0 : (isCompactDevice ? 12 : 28);
-            particles = Array.from({ length: particleCount }, () => new Particle());
-            drawBg();
-        }
-
-        window.addEventListener('resize', resizeCanvas);
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = canvas.height + Math.random() * 100;
-                this.size = Math.random() * 12 + 6;
-                this.speedY = Math.random() * 1.5 + 0.5;
-                this.opacity = Math.random() * 0.5 + 0.3;
-            }
-
-            update() {
-                this.y -= this.speedY;
-                if (this.y < -20) {
-                    this.y = canvas.height + 20;
-                    this.x = Math.random() * canvas.width;
-                }
-            }
-
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = this.opacity;
-                ctx.fillStyle = '#ff4b72';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
+        function createBackgroundParticles() {
+            if (reducedMotion || isTriviaView) return;
+            const particleCount = isCompactDevice ? 12 : 15;
+            for (let index = 0; index < particleCount; index++) {
+                const particle = document.createElement('span');
+                particle.className = 'background-particle';
+                particle.setAttribute('aria-hidden', 'true');
+                particle.textContent = '♡';
+                particle.style.setProperty('--particle-x', `${Math.random() * 100}%`);
+                particle.style.setProperty('--particle-duration', `${14 + Math.random() * 12}s`);
+                particle.style.setProperty('--particle-delay', `${-Math.random() * 24}s`);
+                particle.style.setProperty('--particle-opacity', `${0.2 + Math.random() * 0.3}`);
+                backgroundParticles.append(particle);
             }
         }
 
-        function drawBg() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-        }
-
-        function animateBg(time) {
-            if (!bgAnimationRunning) return;
-            bgFrame = requestAnimationFrame(animateBg);
-            if (time - lastBgFrameTime < bgFrameInterval) return;
-            lastBgFrameTime = time;
-            drawBg();
-        }
-
-        function updateBgAnimation() {
-            const shouldAnimate = !reducedMotion && !isTriviaView && !document.hidden && giftUnlockScreen.hidden;
-            if (shouldAnimate && !bgAnimationRunning) {
-                bgAnimationRunning = true;
-                bgFrame = requestAnimationFrame(animateBg);
-            } else if (!shouldAnimate && bgAnimationRunning) {
-                bgAnimationRunning = false;
-                cancelAnimationFrame(bgFrame);
-            }
-        }
-
-        document.addEventListener('visibilitychange', updateBgAnimation);
-        document.addEventListener('gift-unlocked', updateBgAnimation);
-        resizeCanvas();
-        updateBgAnimation();
+        createBackgroundParticles();
 
         // Banco editable: agrega objetos con pregunta, opciones y respuesta correcta.
         const loveQuestions = [
