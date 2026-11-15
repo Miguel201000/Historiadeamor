@@ -19,6 +19,8 @@
             .map(element => ({ element, wasInert: element.inert }));
         let giftCountdownInterval;
         let countdownVideoStarted = false;
+        let lastCountdownVideoTime = 0;
+        let restoringCountdownVideoSeek = false;
 
         function hasCompletedCountdownVideo() {
             try {
@@ -91,8 +93,7 @@
         function handleCountdownVideoPlayError(error) {
             countdownVideoStatus.textContent = error && error.name === 'NotAllowedError'
                 ? 'Tu navegador bloqueó el inicio automático con sonido. Toca «Reproducir con sonido» para empezar.'
-                : 'No se pudo reproducir el video. Toca reproducir para intentarlo de nuevo.';
-            countdownVideo.controls = true;
+                : 'No se pudo reproducir el video. Revisa la conexión e inténtalo de nuevo con «Reproducir con sonido».';
             updateCountdownVideoAudioButton();
             if (!error || error.name !== 'NotAllowedError') {
                 console.error('No se pudo reproducir el video de cuenta regresiva.', error);
@@ -107,7 +108,7 @@
             window.clearInterval(giftCountdownInterval);
 
             countdownVideo.autoplay = true;
-            countdownVideo.controls = true;
+            countdownVideo.controls = false;
             countdownVideo.muted = false;
             countdownVideo.volume = 1;
             countdownVideo.play().then(() => {
@@ -124,13 +125,27 @@
             }
             unlockGift();
         });
+        countdownVideo.addEventListener('timeupdate', () => {
+            if (!restoringCountdownVideoSeek) {
+                lastCountdownVideoTime = countdownVideo.currentTime;
+            }
+        });
+        countdownVideo.addEventListener('seeking', () => {
+            if (restoringCountdownVideoSeek) return;
+
+            restoringCountdownVideoSeek = true;
+            countdownVideo.currentTime = lastCountdownVideoTime;
+        });
+        countdownVideo.addEventListener('seeked', () => {
+            restoringCountdownVideoSeek = false;
+        });
         ['playing', 'pause', 'volumechange'].forEach(eventName => {
             countdownVideo.addEventListener(eventName, updateCountdownVideoAudioButton);
         });
         countdownVideoAudio.addEventListener('click', () => {
             countdownVideo.muted = false;
             countdownVideo.volume = 1;
-            countdownVideo.controls = true;
+            countdownVideo.controls = false;
             countdownVideo.play().then(() => {
                 countdownVideoStatus.textContent = '';
                 updateCountdownVideoAudioButton();
@@ -138,7 +153,6 @@
         });
         countdownVideo.addEventListener('error', () => {
             countdownVideoStatus.textContent = 'No se pudo cargar el video. Revisa que esté en la carpeta video.';
-            countdownVideo.controls = true;
         });
 
         function updateGiftCountdown() {

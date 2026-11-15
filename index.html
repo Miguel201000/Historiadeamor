@@ -9,11 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261114-countdown-animations-4">
+    <link rel="stylesheet" href="styles.css?v=20261115-countdown-text-glow-1">
 </head>
 <body>
 
     <div class="gift-unlock-screen" id="giftUnlockScreen" role="dialog" aria-modal="true" aria-labelledby="gift-unlock-title">
+        <div class="countdown-floating-hearts" aria-hidden="true">
+            <span>♡</span><span>✦</span><span>♡</span><span>♥</span><span>✧</span>
+        </div>
         <section class="gift-unlock-card glass">
             <p class="eyebrow">Una sorpresa especial</p>
             <h1 id="gift-unlock-title">Este regalo se desbloqueará muy pronto 💖</h1>
@@ -36,7 +39,7 @@
     </div>
 
     <div class="countdown-video-screen" id="countdownVideoScreen" hidden>
-        <video id="countdownVideo" playsinline preload="none" aria-label="Video de cuenta regresiva">
+        <video id="countdownVideo" disablepictureinpicture playsinline preload="none" aria-label="Video de cuenta regresiva">
             <source src="video/cuentaregresiva2_lTHFyzGy%20(online-video-cutter.com).mp4" type="video/mp4">
             Tu navegador no puede reproducir este video.
         </video>
@@ -350,6 +353,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=20261114-countdown-animations-4" defer></script>
+    <script src="script.js?v=20261115-countdown-video-no-seek-2" defer></script>
 </body>
 </html>

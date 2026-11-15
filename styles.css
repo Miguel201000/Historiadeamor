@@ -1895,6 +1895,10 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
+            .countdown-floating-hearts { display: none; }
+            .gift-unlock-card h1,
+            .gift-unlock-card > .eyebrow,
+            .gift-unlock-subtitle { animation: none; }
             .splash-stars { animation: none; }
             .chapter-view.is-active, .splash-card, .letter-modal-card, .ring-modal-card { animation: none; }
             .happiness-note.is-flying, .bucket-heart, .emergency-love-heart { animation: none; }
@@ -1951,16 +1955,41 @@
 
         .gift-unlock-screen[hidden] { display: none; }
 
+        .countdown-floating-hearts {
+            position: absolute;
+            z-index: 1;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .countdown-floating-hearts span {
+            position: absolute;
+            bottom: -2.5rem;
+            color: rgba(255, 190, 207, 0.72);
+            font-size: 1.35rem;
+            text-shadow: 0 0 16px rgba(255, 117, 140, 0.55);
+            animation: countdown-floating-heart 19s linear infinite;
+        }
+        .countdown-floating-hearts span:nth-child(1) { left: 7%; animation-duration: 18s; animation-delay: -12s; }
+        .countdown-floating-hearts span:nth-child(2) { left: 24%; font-size: 0.9rem; animation-duration: 22s; animation-delay: -4s; }
+        .countdown-floating-hearts span:nth-child(3) { left: 73%; font-size: 1.6rem; animation-duration: 20s; animation-delay: -16s; }
+        .countdown-floating-hearts span:nth-child(4) { left: 91%; font-size: 1.1rem; animation-duration: 24s; animation-delay: -8s; }
+        .countdown-floating-hearts span:nth-child(5) { left: 49%; font-size: 0.85rem; animation-duration: 21s; animation-delay: -19s; }
+
         .gift-unlock-card {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             width: min(100%, 720px);
             padding: clamp(1.75rem, 5vw, 3.5rem);
             text-align: center;
             animation: countdown-card-arrive 850ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
         }
 
-        .gift-unlock-card > .eyebrow { animation: countdown-copy-rise 700ms 120ms both; }
+        .gift-unlock-card > .eyebrow {
+            animation:
+                countdown-copy-rise 700ms 120ms both,
+                countdown-copy-glow 3.6s ease-in-out 900ms infinite;
+        }
 
         .gift-unlock-card h1 {
             margin: 0.6rem 0 1rem;
@@ -1973,13 +2002,16 @@
             -webkit-text-fill-color: transparent;
             animation:
                 countdown-title-shimmer 5s ease-in-out infinite,
-                countdown-copy-rise 800ms 240ms both;
+                countdown-copy-rise 800ms 240ms both,
+                countdown-title-glow 4.8s ease-in-out infinite alternate;
         }
 
         .gift-unlock-subtitle {
             color: var(--text-sub);
             line-height: 1.7;
-            animation: countdown-copy-rise 800ms 380ms both;
+            animation:
+                countdown-copy-rise 800ms 380ms both,
+                countdown-copy-glow 4.2s ease-in-out 1.2s infinite;
         }
 
         .gift-countdown {
@@ -2040,6 +2072,14 @@
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
         }
+        @keyframes countdown-title-glow {
+            from { filter: drop-shadow(0 0 0 rgba(255, 117, 140, 0)); }
+            to { filter: drop-shadow(0 0 10px rgba(255, 117, 140, 0.48)); }
+        }
+        @keyframes countdown-copy-glow {
+            0%, 100% { text-shadow: 0 0 0 rgba(255, 209, 102, 0); }
+            50% { text-shadow: 0 0 10px rgba(255, 209, 102, 0.48); }
+        }
         @keyframes countdown-screen-glow {
             from { background-position: 0% 35%, 0 0; }
             to { background-position: 100% 65%, 0 0; }
@@ -2071,6 +2111,11 @@
         @keyframes countdown-heart-float {
             0%, 100% { opacity: 0.25; transform: translateY(2px) scale(0.8); }
             50% { opacity: 0.85; transform: translateY(-4px) scale(1.05); }
+        }
+        @keyframes countdown-floating-heart {
+            0% { opacity: 0; transform: translate3d(-12px, 0, 0) scale(0.75) rotate(-12deg); }
+            12%, 78% { opacity: 0.7; }
+            100% { opacity: 0; transform: translate3d(22px, -112vh, 0) scale(1.15) rotate(24deg); }
         }
         @keyframes countdown-number-tick {
             0% { opacity: 0.55; transform: translateY(-7px) scale(0.92); }
