@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261114-countdown-background-audio-1">
+    <link rel="stylesheet" href="styles.css?v=20261114-countdown-animations-4">
 </head>
 <body>
 
@@ -258,42 +258,16 @@
             <section class="chapter-section anniversary-video" aria-labelledby="anniversary-video-title">
                 <p class="eyebrow section-eyebrow">Un recuerdo solo para ti</p>
                 <h2 class="section-title" id="anniversary-video-title">Tres meses de nosotros</h2>
-                <p class="section-copy anniversary-intro">Un pequeño recuerdo preparado con todo mi amor.<br>Tu entrada especial te espera abajo.</p>
+                <p class="section-copy anniversary-intro">Un pequeño recuerdo preparado con todo mi amor. Reprodúcelo aquí o descárgalo para guardarlo.</p>
 
-                <div class="anniversary-letter" id="anniversaryLetter">
-                    <div class="anniversary-letter-paper">
-                        <span class="letter-date">NUESTROS TRES MESES</span>
-                        <span class="letter-ornament" aria-hidden="true">✦ &nbsp; ♡ &nbsp; ✦</span>
-                        <p class="letter-note">Para mi persona favorita,<br><em>con todo mi amor.</em></p>
-                        <div class="movie-ticket">
-                            <span class="movie-ticket-stub" aria-hidden="true">🎟️</span>
-                            <div class="movie-ticket-copy">
-                                <span>UNA FUNCIÓN ESPECIAL</span>
-                                <strong>Un recuerdo solo para ti</strong>
-                            </div>
-                            <button class="movie-ticket-button" id="openAnniversaryVideo" type="button" aria-expanded="false" aria-controls="anniversaryPlayer">
-                                Ver nuestro video <span aria-hidden="true">▶</span>
-                            </button>
-                        </div>
-                        <span class="letter-signature">Siempre tuyo <span aria-hidden="true">♡</span></span>
-                    </div>
-                </div>
-
-                <div class="anniversary-player" id="anniversaryPlayer" hidden>
-                    <div class="anniversary-video-frame">
-                        <div class="video-player-header">
-                            <span class="video-player-heading"><span class="video-player-dot" aria-hidden="true"></span> UN RECUERDO PARA SIEMPRE</span>
-                            <span class="video-player-edition">Aleja · 3 meses</span>
-                        </div>
-                        <video id="anniversaryVideo" controls playsinline preload="none" tabindex="0" aria-label="Video de aniversario de tres meses para Aleja">
-                            <source src="video/aleja.mp4" type="video/mp4">
-                            Tu navegador no puede reproducir este video.
-                        </video>
-                        <a class="video-download-button" href="video/aleja.mp4" download="Nuestro_Video_Aleja.mp4">
-                            Por si quieres descargar el video<span aria-hidden="true">♡</span>
-                        </a>
-                        <div class="video-player-footer"><span aria-hidden="true">♡</span> Un pedacito de nuestra historia</div>
-                    </div>
+                <div class="anniversary-player">
+                    <video class="anniversary-video-player" id="anniversaryVideo" controls playsinline preload="none" tabindex="0" aria-label="Video de aniversario de tres meses para Aleja">
+                        <source src="video/aleja.mp4" type="video/mp4">
+                        Tu navegador no puede reproducir este video.
+                    </video>
+                    <a class="video-download-button" href="video/aleja.mp4" download="Nuestro_Video_Aleja.mp4">
+                        Descargar nuestro video <span aria-hidden="true">↓</span>
+                    </a>
                     <p class="anniversary-video-status" id="anniversaryVideoStatus" role="status" aria-live="polite"></p>
                 </div>
             </section>
@@ -376,6 +350,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=20261114-countdown-background-audio-1" defer></script>
+    <script src="script.js?v=20261114-countdown-animations-4" defer></script>
 </body>
 </html>

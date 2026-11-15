@@ -1557,170 +1557,24 @@
             font-size: clamp(2rem, 5vw, 2.8rem);
         }
         .anniversary-intro { font-size: 0.93rem; }
-        .anniversary-letter {
-            position: relative;
-            width: min(100%, 570px);
-            margin: 2.2rem auto 0;
-        }
-        .anniversary-letter::before,
-        .anniversary-letter::after {
-            position: absolute;
-            z-index: -1;
-            border-radius: 13px;
-            content: "";
-            inset: 9px -8px -8px;
-        }
-        .anniversary-letter::before {
-            background: linear-gradient(135deg, #d6a78e, #aa7183 60%, #82576e);
-            box-shadow: 0 12px 26px rgba(20, 7, 27, 0.26);
-            transform: rotate(1.3deg);
-        }
-        .anniversary-letter::after {
-            border: 1px solid rgba(255, 222, 192, 0.24);
-            transform: rotate(-1.1deg);
-        }
-        .anniversary-letter-paper {
-            position: relative;
-            display: flex;
-            min-height: 365px;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            overflow: hidden;
-            padding: 1.6rem 1.5rem 1.35rem;
-            border: 1px solid rgba(255, 250, 239, 0.88);
-            border-radius: 10px;
-            background:
-                radial-gradient(ellipse at 50% 44%, rgba(255, 255, 255, 0.86), transparent 67%),
-                repeating-linear-gradient(0deg, rgba(165, 105, 105, 0.025) 0, rgba(165, 105, 105, 0.025) 1px, transparent 1px, transparent 5px),
-                linear-gradient(145deg, #fff7e9, #f9e3d8 57%, #f0d8e0);
-            box-shadow: 0 12px 26px rgba(37, 13, 33, 0.2), inset 0 0 20px rgba(180, 103, 105, 0.08), inset 0 1px rgba(255, 255, 255, 0.95);
-            color: #704756;
-        }
-        .anniversary-letter-paper::before,
-        .anniversary-letter-paper::after {
-            position: absolute;
-            z-index: 0;
-            content: "";
-            pointer-events: none;
-        }
-        .anniversary-letter-paper::before {
-            inset: 11px;
-            border: 1px solid rgba(174, 123, 112, 0.2);
-            border-radius: 5px;
-        }
-        .anniversary-letter-paper::after {
-            top: 50%;
-            left: 50%;
-            width: 210px;
-            height: 210px;
-            border: 1px solid rgba(173, 123, 115, 0.1);
-            border-radius: 50%;
-            box-shadow: 0 0 0 9px rgba(173, 123, 115, 0.035), 0 0 0 19px rgba(173, 123, 115, 0.025);
-            transform: translate(-50%, -50%);
-        }
-        .letter-date, .letter-ornament, .letter-note, .movie-ticket, .letter-signature {
-            position: relative;
-            z-index: 1;
-        }
-        .letter-date {
-            margin-top: 0.45rem;
-            color: #a87372;
-            font-size: 0.62rem;
-            font-weight: 600;
-            letter-spacing: 0.22em;
-        }
-        .letter-ornament { margin: 0.4rem 0 -0.7rem; color: #bb8b66; font-size: 0.78rem; letter-spacing: 0.15em; }
-        .letter-note {
-            margin: 0.7rem 0 0.2rem;
-            color: #73495a;
-            font: 1.45rem/1.55 'Playfair Display', serif;
-        }
-        .letter-note em {
-            color: #a56873;
-            font-weight: 400;
-        }
-        .movie-ticket {
-            display: grid;
-            width: min(100%, 520px);
-            grid-template-columns: 58px minmax(0, 1fr) auto;
-            align-items: center;
-            gap: 0.8rem;
-            margin: 0.8rem auto 0;
-            padding: 0.8rem;
-            border: 1px dashed rgba(160, 94, 105, 0.55);
-            border-radius: 14px;
-            background: rgba(255, 244, 232, 0.78);
-            text-align: left;
-        }
-        .movie-ticket-stub {
-            display: grid;
-            min-height: 54px;
-            place-items: center;
-            border-right: 1px dashed rgba(160, 94, 105, 0.45);
-            font-size: 1.65rem;
-        }
-        .movie-ticket-copy { display: grid; min-width: 0; gap: 0.3rem; }
-        .movie-ticket-copy > span {
-            color: #a87372;
-            font-size: 0.58rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-        }
-        .movie-ticket-copy strong { color: #73495a; font: 600 0.88rem/1.35 'Playfair Display', serif; }
-        .movie-ticket-button {
-            min-height: 44px;
-            padding: 0.65rem 0.85rem;
-            border: 0;
-            border-radius: 10px;
-            background: #9c536f;
-            color: #fff8f4;
-            font: 600 0.72rem 'Montserrat', sans-serif;
-            cursor: pointer;
-        }
-        .movie-ticket-button:hover { background: #82415d; }
-        .movie-ticket-button:focus-visible { outline: 2px solid #9a5d65; outline-offset: 3px; }
-        .letter-signature { align-self: flex-end; margin: 0 0.45rem 0.35rem 0; color: #9c6a70; font: italic 1rem 'Playfair Display', serif; }
         .anniversary-player {
             width: min(100%, 760px);
             margin: 2rem auto 0;
         }
-        .anniversary-player[hidden] { display: none; }
-        .anniversary-video-frame {
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 224, 207, 0.33);
-            border-radius: 22px;
-            background:
-                radial-gradient(ellipse at 50% 0%, rgba(242, 170, 155, 0.16), transparent 45%),
-                linear-gradient(145deg, rgba(40, 20, 46, 0.94), rgba(26, 13, 33, 0.96));
-            box-shadow: 0 12px 28px rgba(25, 9, 29, 0.3), 0 0 14px rgba(255, 179, 157, 0.08);
-        }
-        .video-player-header, .video-player-footer {
-            display: flex;
-            min-height: 46px;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            color: rgba(255, 238, 229, 0.74);
-            font-size: 0.64rem;
-            letter-spacing: 0.08em;
-        }
-        .video-player-header { border-bottom: 1px solid rgba(255, 231, 219, 0.1); }
-        .video-player-heading { display: inline-flex; align-items: center; gap: 0.5rem; color: #ffe0c8; font-weight: 600; }
-        .video-player-dot { width: 7px; height: 7px; border-radius: 50%; background: #f4ad9e; box-shadow: 0 0 11px rgba(255, 176, 154, 0.78); }
-        .video-player-edition { color: rgba(255, 225, 210, 0.55); letter-spacing: 0.04em; }
-        .anniversary-video-frame video {
+        .anniversary-video-player {
             display: block;
             width: 100%;
             max-height: min(72vh, 680px);
-            border-inline: 1px solid rgba(255, 230, 219, 0.08);
-            background: #180e1c;
+            border: 1px solid rgba(255, 224, 207, 0.38);
+            border-radius: 18px;
+            background: rgba(24, 14, 28, 0.8);
+            box-shadow: 0 12px 28px rgba(25, 9, 29, 0.24);
             object-fit: contain;
             color-scheme: dark;
             accent-color: #e7a0a0;
+            transition: box-shadow 180ms ease;
         }
+        .anniversary-video-player.is-playing { box-shadow: 0 12px 32px rgba(25, 9, 29, 0.32), 0 0 20px rgba(255, 179, 157, 0.2); }
         .video-download-button {
             display: flex;
             width: fit-content;
@@ -1729,7 +1583,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.55rem;
-            margin: 1rem auto;
+            margin: 1.1rem auto 0;
             padding: 0.75rem 1.25rem;
             border: 1px solid rgba(255, 224, 207, 0.42);
             border-radius: 999px;
@@ -1744,9 +1598,6 @@
         .video-download-button:hover { transform: translateY(-2px); box-shadow: 0 11px 24px rgba(31, 12, 30, 0.36), inset 0 1px rgba(255, 255, 255, 0.3); filter: brightness(1.06); }
         .video-download-button:focus-visible { outline: 2px solid #ffe0c8; outline-offset: 3px; }
         .video-download-button span { color: #fff8f4; font-size: 1.1rem; }
-        .video-player-footer { min-height: 38px; justify-content: center; border-top: 1px solid rgba(255, 231, 219, 0.1); color: rgba(255, 232, 220, 0.62); font: italic 0.78rem 'Playfair Display', serif; letter-spacing: 0; }
-        .video-player-footer span { color: #f2b2a7; }
-        .anniversary-video-frame.is-playing { box-shadow: 0 12px 28px rgba(25, 9, 29, 0.3), 0 0 18px rgba(255, 179, 157, 0.16); }
         .anniversary-video-status { min-height: 1.4em; margin-top: 0.75rem; color: rgba(255, 239, 230, 0.78); font-size: 0.82rem; }
         .section-copy { max-width: 590px; margin: 0 auto; color: rgba(255, 246, 241, 0.78); line-height: 1.7; text-align: center; }
         .riddle-form { display: flex; max-width: 570px; gap: 0.75rem; margin: 1.7rem auto 0; }
@@ -2004,11 +1855,8 @@
             .voice-player-icon { width: 46px; height: 46px; flex-basis: 46px; border-radius: 14px; }
             .playlist-player { gap: 0.75rem; border-radius: 17px; }
             .playlist-record { width: 64px; height: 64px; flex-basis: 64px; }
-            .video-player-header { min-height: 42px; padding: 0.65rem 0.75rem; font-size: 0.55rem; }
-            .video-player-footer { font-size: 0.72rem; }
             .anniversary-video { border-radius: 23px; }
-            .anniversary-letter-paper { min-height: 400px; }
-            .anniversary-video-frame { border-radius: 15px; }
+            .anniversary-video-player { border-radius: 14px; }
             .memory-gallery-section { border-radius: 22px; }
             .memory-gallery-stage { border-radius: 17px; }
             .future-envelopes { grid-template-columns: 1fr; }
@@ -2037,7 +1885,7 @@
             .playlist-player-kicker { font-size: 0.55rem; }
             .playlist-player .chapter-playlist-current { font-size: 0.9rem; }
             .chapter-playlist { grid-template-columns: 1fr; }
-            .video-player-header { align-items: flex-start; flex-direction: column; gap: 0.3rem; }
+
             .letter-modal, .ring-modal, .emergency-love-modal { padding: 0.8rem; }
             .jewelry-box { transform: scale(.9); margin-top: -0.3rem; margin-bottom: 0.4rem; }
             .scratch-grid { grid-template-columns: 1fr; }
@@ -2064,19 +1912,55 @@
             display: grid;
             place-items: center;
             overflow-y: auto;
+            isolation: isolate;
             padding: 1.25rem;
             background:
                 radial-gradient(ellipse at 50% 35%, rgba(168, 85, 247, 0.2), transparent 55%),
                 linear-gradient(135deg, #0f0c20, #1d102f 55%, #2a0826);
+            background-size: 180% 180%, 100% 100%;
+            animation: countdown-screen-glow 18s ease-in-out infinite alternate;
+        }
+
+        .gift-unlock-screen::before,
+        .gift-unlock-screen::after {
+            position: absolute;
+            z-index: 0;
+            inset: 0;
+            content: "";
+            pointer-events: none;
+        }
+
+        .gift-unlock-screen::before {
+            opacity: 0.3;
+            background-image:
+                radial-gradient(circle, rgba(255, 226, 190, 0.8) 1px, transparent 1.8px),
+                radial-gradient(circle, rgba(255, 130, 150, 0.75) 1px, transparent 2px),
+                radial-gradient(circle, rgba(212, 170, 255, 0.65) 1px, transparent 2px);
+            background-position: 0 0, 32px 46px, 16px 98px;
+            background-size: 74px 74px, 110px 110px, 153px 153px;
+            animation: countdown-starfield-drift 38s linear infinite;
+        }
+
+        .gift-unlock-screen::after {
+            background:
+                radial-gradient(ellipse at 12% 18%, rgba(255, 117, 140, 0.2), transparent 34%),
+                radial-gradient(ellipse at 88% 78%, rgba(168, 85, 247, 0.2), transparent 38%),
+                radial-gradient(ellipse at 60% 5%, rgba(255, 209, 102, 0.1), transparent 30%);
+            animation: countdown-orbs-drift 16s ease-in-out infinite alternate;
         }
 
         .gift-unlock-screen[hidden] { display: none; }
 
         .gift-unlock-card {
+            position: relative;
+            z-index: 1;
             width: min(100%, 720px);
             padding: clamp(1.75rem, 5vw, 3.5rem);
             text-align: center;
+            animation: countdown-card-arrive 850ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
         }
+
+        .gift-unlock-card > .eyebrow { animation: countdown-copy-rise 700ms 120ms both; }
 
         .gift-unlock-card h1 {
             margin: 0.6rem 0 1rem;
@@ -2084,13 +1968,18 @@
             font-size: clamp(2rem, 6vw, 3.2rem);
             line-height: 1.2;
             background: linear-gradient(45deg, #ff758c, #ff7eb3, #ffd166);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation:
+                countdown-title-shimmer 5s ease-in-out infinite,
+                countdown-copy-rise 800ms 240ms both;
         }
 
         .gift-unlock-subtitle {
             color: var(--text-sub);
             line-height: 1.7;
+            animation: countdown-copy-rise 800ms 380ms both;
         }
 
         .gift-countdown {
@@ -2098,10 +1987,96 @@
             grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 0.75rem;
             margin-top: 2rem;
+            animation: countdown-copy-rise 800ms 500ms both;
         }
 
-        .gift-countdown .timer-box { padding: 1.1rem 0.4rem; }
+        .gift-countdown .timer-box {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            padding: 1.1rem 0.4rem;
+            animation:
+                countdown-box-arrive 650ms cubic-bezier(0.2, 0.8, 0.2, 1) both,
+                countdown-box-glow 3s ease-in-out 700ms infinite alternate;
+        }
+        .gift-countdown .timer-box::before,
+        .gift-countdown .timer-box::after {
+            position: absolute;
+            z-index: -1;
+            color: rgba(255, 214, 162, 0.72);
+            pointer-events: none;
+        }
+        .gift-countdown .timer-box::before {
+            top: 0.3rem;
+            right: 0.5rem;
+            content: "✦";
+            font-size: 0.65rem;
+            animation: countdown-star-twinkle 1.8s ease-in-out infinite;
+        }
+        .gift-countdown .timer-box::after {
+            bottom: 0.15rem;
+            left: 0.5rem;
+            content: "♡";
+            font-size: 0.75rem;
+            animation: countdown-heart-float 3.2s ease-in-out infinite;
+        }
+        .gift-countdown .timer-box:nth-child(2) { animation-delay: 90ms; }
+        .gift-countdown .timer-box:nth-child(3) { animation-delay: 180ms; }
+        .gift-countdown .timer-box:nth-child(4) { animation-delay: 270ms; }
+        .gift-countdown .timer-box:nth-child(2)::before,
+        .gift-countdown .timer-box:nth-child(2)::after { animation-delay: 0.45s; }
+        .gift-countdown .timer-box:nth-child(3)::before,
+        .gift-countdown .timer-box:nth-child(3)::after { animation-delay: 0.9s; }
+        .gift-countdown .timer-box:nth-child(4)::before,
+        .gift-countdown .timer-box:nth-child(4)::after { animation-delay: 1.35s; }
         .gift-countdown .timer-number { font-size: clamp(1.35rem, 5vw, 2rem); }
+        .gift-countdown .timer-number.is-changing { animation: countdown-number-tick 480ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+        @keyframes countdown-card-arrive {
+            from { opacity: 0; transform: translateY(18px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes countdown-title-shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes countdown-screen-glow {
+            from { background-position: 0% 35%, 0 0; }
+            to { background-position: 100% 65%, 0 0; }
+        }
+        @keyframes countdown-starfield-drift {
+            from { background-position: 0 0, 32px 46px, 16px 98px; }
+            to { background-position: 74px -74px, -78px 156px, 169px -55px; }
+        }
+        @keyframes countdown-orbs-drift {
+            from { transform: translate3d(-1.5%, 1%, 0) scale(1); }
+            to { transform: translate3d(1.5%, -1%, 0) scale(1.08); }
+        }
+        @keyframes countdown-copy-rise {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes countdown-box-arrive {
+            from { opacity: 0; transform: translateY(14px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes countdown-box-glow {
+            from { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(255, 117, 140, 0); }
+            to { border-color: rgba(255, 130, 150, 0.58); box-shadow: 0 0 18px rgba(255, 117, 140, 0.2), inset 0 0 12px rgba(255, 209, 102, 0.08); }
+        }
+        @keyframes countdown-star-twinkle {
+            0%, 100% { opacity: 0.25; transform: scale(0.7) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(24deg); }
+        }
+        @keyframes countdown-heart-float {
+            0%, 100% { opacity: 0.25; transform: translateY(2px) scale(0.8); }
+            50% { opacity: 0.85; transform: translateY(-4px) scale(1.05); }
+        }
+        @keyframes countdown-number-tick {
+            0% { opacity: 0.55; transform: translateY(-7px) scale(0.92); }
+            55% { opacity: 1; transform: translateY(2px) scale(1.08); text-shadow: 0 0 18px rgba(255, 75, 114, 0.85); }
+            100% { transform: translateY(0) scale(1); }
+        }
 
         .countdown-audio-button {
             min-height: 48px;
@@ -2296,8 +2271,6 @@
             .memory-album { gap: 0.55rem; }
             .memory-photo-card { padding: 0.35rem; box-shadow: 0 3px 9px rgba(24, 8, 29, 0.16); }
             .memory-photo-card::before { top: 0.6rem; left: 0.6rem; }
-            .movie-ticket { grid-template-columns: 48px minmax(0, 1fr); gap: 0.6rem; }
-            .movie-ticket-button { grid-column: 1 / -1; width: 100%; }
         }
 
         .countdown-video-screen {

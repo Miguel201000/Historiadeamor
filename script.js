@@ -162,7 +162,14 @@
             };
 
             Object.keys(giftCountdownUnits).forEach(unit => {
-                giftCountdownUnits[unit].textContent = String(values[unit]).padStart(2, '0');
+                const element = giftCountdownUnits[unit];
+                const nextValue = String(values[unit]).padStart(2, '0');
+                if (element.textContent === nextValue) return;
+
+                element.textContent = nextValue;
+                element.classList.remove('is-changing');
+                void element.offsetWidth;
+                element.classList.add('is-changing');
             });
         }
 
@@ -193,9 +200,6 @@
         const chapterPlaylistCurrent = document.getElementById('chapterPlaylistCurrent');
         const chapterPlaylist = document.getElementById('chapterPlaylist');
         const chapterPlaylistSkip = document.getElementById('chapterPlaylistSkip');
-        const anniversaryLetter = document.getElementById('anniversaryLetter');
-        const openAnniversaryVideoButton = document.getElementById('openAnniversaryVideo');
-        const anniversaryPlayer = document.getElementById('anniversaryPlayer');
         const anniversaryVideo = document.getElementById('anniversaryVideo');
         const anniversaryVideoStatus = document.getElementById('anniversaryVideoStatus');
         let pausedMusicTracks = null;
@@ -278,21 +282,11 @@
             if (isChapterThreeFlowActive) playNextRandomChapterTrack();
         });
 
-        function openAnniversaryVideo() {
-            if (openAnniversaryVideoButton.disabled) return;
-            openAnniversaryVideoButton.disabled = true;
-            openAnniversaryVideoButton.setAttribute('aria-expanded', 'true');
-            anniversaryLetter.hidden = true;
-            anniversaryPlayer.hidden = false;
-            anniversaryVideo.focus();
-        }
-
-        openAnniversaryVideoButton.addEventListener('click', openAnniversaryVideo);
         anniversaryVideo.addEventListener('error', () => {
             anniversaryVideoStatus.textContent = 'No se pudo cargar el video. Revisa que aleja.mp4 esté en la carpeta video.';
         });
         anniversaryVideo.addEventListener('playing', () => {
-            anniversaryVideo.closest('.anniversary-video-frame').classList.add('is-playing');
+            anniversaryVideo.classList.add('is-playing');
             if (pausedMusicTracks !== null) return;
             pausedMusicTracks = [chapterThreeAudio].filter(track => !track.paused && !track.ended);
             pausedMusicTracks.forEach(track => track.pause());
@@ -312,7 +306,7 @@
         });
         ['pause', 'ended'].forEach(eventName => {
             anniversaryVideo.addEventListener(eventName, () => {
-                anniversaryVideo.closest('.anniversary-video-frame').classList.remove('is-playing');
+                anniversaryVideo.classList.remove('is-playing');
             });
         });
 
