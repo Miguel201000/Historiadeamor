@@ -335,6 +335,12 @@
                 view.classList.toggle('is-active', isActive);
                 view.setAttribute('aria-hidden', String(!isActive));
             });
+            if (chapter === 'three') {
+                const chapterView = chapterViews.three;
+                chapterView.classList.remove('is-entering');
+                void chapterView.offsetWidth;
+                chapterView.classList.add('is-entering');
+            }
             document.querySelectorAll('[data-chapter]').forEach(button => {
                 if (button.closest('.chapter-nav')) {
                     button.setAttribute('aria-pressed', String(button.dataset.chapter === chapter));

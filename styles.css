@@ -1426,6 +1426,19 @@
         .chapter-three .hero h1 { font-size: clamp(2.15rem, 6vw, 3.55rem); }
         .chapter-three .hero > p:not(.eyebrow) { color: rgba(255, 244, 240, 0.82); }
         .chapter-three .timer-number { color: #ffd6a2; text-shadow: 0 0 16px rgba(255, 176, 154, 0.5); }
+        .chapter-three.is-entering .hero { animation: chapter-hero-enter 850ms cubic-bezier(.2,.8,.2,1) both; }
+        .chapter-three.is-entering .timer-box { animation: chapter-timer-enter 550ms cubic-bezier(.2,.8,.2,1) both; }
+        .chapter-three.is-entering .timer-box:nth-child(2) { animation-delay: 180ms; }
+        .chapter-three.is-entering .timer-box:nth-child(3) { animation-delay: 270ms; }
+        .chapter-three.is-entering .timer-box:nth-child(4) { animation-delay: 360ms; }
+        @keyframes chapter-hero-enter {
+            from { opacity: 0; transform: translateY(24px) scale(.975); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes chapter-timer-enter {
+            from { opacity: 0; transform: translateY(12px) scale(.94); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
 
         .chapter-section { margin: 4.5rem 0; }
         .riddle-card, .ring-prompt {
@@ -1901,6 +1914,7 @@
             .gift-unlock-subtitle { animation: none; }
             .splash-stars { animation: none; }
             .chapter-view.is-active, .splash-card, .letter-modal-card, .ring-modal-card { animation: none; }
+            .chapter-three.is-entering .hero, .chapter-three.is-entering .timer-box { animation: none; }
             .happiness-note.is-flying, .bucket-heart, .emergency-love-heart { animation: none; }
             .chapter-four-message { animation: none; }
             .secret-reason-inner { transition: none; }
