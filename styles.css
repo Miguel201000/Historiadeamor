@@ -1909,9 +1909,6 @@
 
         @media (prefers-reduced-motion: reduce) {
             .countdown-floating-hearts { display: none; }
-            .gift-unlock-card h1,
-            .gift-unlock-card > .eyebrow,
-            .gift-unlock-subtitle { animation: none; }
             .splash-stars { animation: none; }
             .chapter-view.is-active, .splash-card, .letter-modal-card, .ring-modal-card { animation: none; }
             .chapter-three.is-entering .hero, .chapter-three.is-entering .timer-box { animation: none; }
@@ -1993,10 +1990,45 @@
         .gift-unlock-card {
             position: relative;
             z-index: 2;
+            isolation: isolate;
             width: min(100%, 720px);
             padding: clamp(1.75rem, 5vw, 3.5rem);
             text-align: center;
-            animation: countdown-card-arrive 850ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+            animation:
+                countdown-card-arrive 850ms cubic-bezier(0.2, 0.8, 0.2, 1) both,
+                countdown-card-entry-glow 1.6s ease-out 150ms both;
+        }
+
+        .gift-unlock-card::before,
+        .gift-unlock-card::after {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            content: "";
+            pointer-events: none;
+        }
+
+        .gift-unlock-card::before {
+            z-index: -1;
+            inset: -3px;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg 250deg,
+                rgba(255, 117, 140, 0.72) 285deg,
+                rgba(255, 209, 102, 0.55) 315deg,
+                transparent 345deg
+            );
+            filter: blur(15px);
+            opacity: 0.55;
+            animation: countdown-card-aura 14s linear infinite;
+        }
+
+        .gift-unlock-card::after {
+            z-index: 1;
+            background: linear-gradient(110deg, transparent 34%, rgba(255, 255, 255, 0.12) 48%, transparent 62%);
+            background-size: 300% 100%;
+            background-position: 100% 0;
+            animation: countdown-card-sheen 9s ease-in-out 1.4s infinite;
         }
 
         .gift-unlock-card > .eyebrow {
@@ -2082,6 +2114,17 @@
             from { opacity: 0; transform: translateY(18px) scale(0.97); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
+        @keyframes countdown-card-entry-glow {
+            0%, 100% { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28); }
+            45% { box-shadow: 0 8px 34px rgba(255, 117, 140, 0.24), 0 6px 18px rgba(0, 0, 0, 0.28); }
+        }
+        @keyframes countdown-card-aura {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes countdown-card-sheen {
+            0%, 12% { background-position: 100% 0; }
+            42%, 100% { background-position: 0 0; }
+        }
         @keyframes countdown-title-shimmer {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -2135,6 +2178,24 @@
             0% { opacity: 0.55; transform: translateY(-7px) scale(0.92); }
             55% { opacity: 1; transform: translateY(2px) scale(1.08); text-shadow: 0 0 18px rgba(255, 75, 114, 0.85); }
             100% { transform: translateY(0) scale(1); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .gift-unlock-screen,
+            .gift-unlock-screen::before,
+            .gift-unlock-screen::after,
+            .countdown-floating-hearts span,
+            .gift-unlock-card,
+            .gift-unlock-card::before,
+            .gift-unlock-card::after,
+            .gift-unlock-card h1,
+            .gift-unlock-card > .eyebrow,
+            .gift-unlock-subtitle,
+            .gift-countdown,
+            .gift-countdown .timer-box,
+            .gift-countdown .timer-box::before,
+            .gift-countdown .timer-box::after,
+            .gift-countdown .timer-number { animation: none; }
         }
 
         .countdown-audio-button {
