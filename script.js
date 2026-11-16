@@ -59,7 +59,7 @@
                 return;
             }
 
-            countdownBackgroundAudioStatus.textContent = 'No se pudo reproducir la música de fondo. Revisa que el archivo esté en la carpeta audios.';
+            countdownBackgroundAudioStatus.textContent = 'No se pudo reproducir la música de fondo. Revisa que el archivo esté en la carpeta musica3meses.';
             if (!error || error.name !== 'AbortError') {
                 console.error('No se pudo reproducir la música de fondo de la cuenta regresiva.', error);
             }
@@ -78,7 +78,7 @@
         countdownBackgroundAudioButton.addEventListener('click', startCountdownBackgroundAudio);
         countdownBackgroundAudio.addEventListener('error', () => {
             if (giftUnlockScreen.hidden) return;
-            countdownBackgroundAudioStatus.textContent = 'No se pudo cargar la música de fondo. Revisa que el archivo esté en la carpeta audios.';
+            countdownBackgroundAudioStatus.textContent = 'No se pudo cargar la música de fondo. Revisa que el archivo esté en la carpeta musica3meses.';
             console.error('No se pudo cargar la música de fondo de la cuenta regresiva.', countdownBackgroundAudio.error);
         });
 
