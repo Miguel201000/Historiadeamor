@@ -1284,41 +1284,101 @@
             overflow-y: auto;
             padding: 1.25rem;
             background:
-                radial-gradient(ellipse at 14% 12%, rgba(255, 205, 174, 0.32), transparent 38%),
-                radial-gradient(ellipse at 85% 85%, rgba(245, 114, 147, 0.3), transparent 42%),
-                linear-gradient(145deg, rgba(48, 25, 55, 0.94), rgba(103, 44, 75, 0.96) 55%, rgba(151, 72, 83, 0.95));
+                radial-gradient(circle at 82% 17%, rgba(255, 230, 177, 0.42), transparent 20%),
+                radial-gradient(ellipse at 12% 27%, rgba(255, 193, 184, 0.5), transparent 38%),
+                linear-gradient(180deg, #a8759f 0%, #d88da6 34%, #f0b59e 55%, #58b4c1 56%, #267c96 100%);
             transition: opacity 0.6s ease, visibility 0.6s ease;
         }
 
         .splash-screen.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
         .splash-screen[hidden] { display: none; }
 
-        .splash-stars {
+        .splash-ocean {
             position: absolute;
             inset: 0;
-            opacity: 0.65;
+            overflow: hidden;
             pointer-events: none;
-            background-image:
-                radial-gradient(2px 2px at 12% 21%, #fff8df 55%, transparent),
-                radial-gradient(1.5px 1.5px at 73% 16%, #fff 55%, transparent),
-                radial-gradient(2px 2px at 85% 68%, #ffe1d1 55%, transparent),
-                radial-gradient(1px 1px at 28% 78%, #fff 55%, transparent),
-                radial-gradient(1.5px 1.5px at 58% 88%, #fff 55%, transparent);
-            background-size: 290px 240px;
-            animation: stars-drift 20s linear infinite;
         }
 
-        @keyframes stars-drift { to { transform: translate3d(-18px, -24px, 0); } }
+        .splash-sun {
+            position: absolute;
+            top: 9%;
+            right: 14%;
+            width: clamp(4.5rem, 9vw, 7.5rem);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #fff4cf, #ffd486 72%, #ffb27b);
+            box-shadow: 0 0 42px rgba(255, 220, 159, 0.46), 0 0 110px rgba(255, 192, 154, 0.3);
+            animation: splash-sun-glow 7s ease-in-out infinite;
+        }
+
+        @keyframes splash-sun-glow {
+            50% { transform: scale(1.07); box-shadow: 0 0 58px rgba(255, 226, 170, 0.58), 0 0 130px rgba(255, 192, 154, 0.38); }
+        }
+
+        .splash-wave {
+            position: absolute;
+            left: -35%;
+            width: 170%;
+            height: 38%;
+            border-radius: 50% 50% 0 0 / 18% 18% 0 0;
+            transform-origin: center;
+        }
+
+        .splash-wave-back {
+            bottom: -19%;
+            background: rgba(130, 231, 216, 0.58);
+            animation: splash-wave-drift 17s ease-in-out infinite alternate;
+        }
+
+        .splash-wave-middle {
+            bottom: -25%;
+            background: linear-gradient(180deg, rgba(53, 185, 193, 0.88), rgba(36, 152, 174, 0.95));
+            animation: splash-wave-drift 13s ease-in-out infinite alternate-reverse;
+        }
+
+        .splash-wave-front {
+            bottom: -31%;
+            background: linear-gradient(180deg, rgba(32, 132, 160, 0.96), #155c79);
+            animation: splash-wave-drift 11s ease-in-out infinite alternate;
+        }
+
+        @keyframes splash-wave-drift {
+            from { transform: translateX(-3%) rotate(-1deg); }
+            to { transform: translateX(3%) rotate(1deg); }
+        }
+
+        .splash-bubble {
+            position: absolute;
+            bottom: -2rem;
+            width: clamp(0.8rem, 1.7vw, 1.4rem);
+            aspect-ratio: 1;
+            border: 1px solid rgba(239, 255, 250, 0.7);
+            border-radius: 50%;
+            background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.82), rgba(208, 255, 246, 0.12) 48%, rgba(255, 255, 255, 0.24));
+            box-shadow: inset -2px -2px 5px rgba(255, 255, 255, 0.24);
+            animation: splash-bubble-rise 10s linear infinite;
+        }
+
+        .splash-bubble-one { left: 13%; animation-delay: -2s; }
+        .splash-bubble-two { left: 35%; width: 0.75rem; animation-delay: -7s; animation-duration: 12s; }
+        .splash-bubble-three { right: 23%; animation-delay: -5s; animation-duration: 11s; }
+        .splash-bubble-four { right: 8%; width: 0.7rem; animation-delay: -9s; animation-duration: 13s; }
+
+        @keyframes splash-bubble-rise {
+            15% { opacity: 0.72; }
+            to { opacity: 0; transform: translate3d(28px, -110vh, 0) scale(1.15); }
+        }
 
         .splash-card {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             width: min(100%, 660px);
             padding: clamp(2rem, 7vw, 4rem);
             text-align: center;
-            border-color: rgba(255, 240, 228, 0.28);
-            background: rgba(68, 34, 65, 0.45);
-            box-shadow: 0 14px 30px rgba(32, 13, 35, 0.26);
+            border-color: rgba(255, 245, 224, 0.38);
+            background: rgba(26, 61, 81, 0.58);
+            box-shadow: 0 14px 34px rgba(14, 54, 72, 0.28);
             animation: splash-rise 0.9s cubic-bezier(.2,.8,.2,1) both;
         }
 
@@ -1342,9 +1402,20 @@
             background: linear-gradient(100deg, #fff5ec, #ffc1c8 55%, #ffe0ad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: splash-text-arrive 0.85s 0.12s both;
         }
 
-        .splash-subtitle { color: rgba(255, 245, 240, 0.82); line-height: 1.65; }
+        .splash-card .eyebrow { animation: splash-text-arrive 0.7s 0.08s both; }
+        .splash-subtitle {
+            color: rgba(255, 245, 240, 0.82);
+            line-height: 1.65;
+            animation: splash-text-arrive 0.7s 0.22s both;
+        }
+
+        @keyframes splash-text-arrive {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .chapter-choices {
             display: grid;
@@ -1371,6 +1442,15 @@
             cursor: pointer;
             transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
             text-decoration: none;
+            animation: splash-choice-arrive 0.72s cubic-bezier(.2,.8,.2,1) backwards;
+        }
+
+        .chapter-choice:nth-child(1) { animation-delay: 0.32s; }
+        .chapter-choice:nth-child(2) { animation-delay: 0.48s; }
+
+        @keyframes splash-choice-arrive {
+            from { opacity: 0; transform: translateY(18px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .chapter-choice > span:first-child { color: #ffd6a2; font-size: 0.77rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
@@ -1854,6 +1934,259 @@
         @keyframes ring-appear { to { opacity: 1; transform: translate(-50%, -17px) scale(1.12); } }
         @keyframes glow-appear { to { opacity: 1; } }
 
+        .splash-screen .chapter-choice-featured {
+            border-color: rgba(174, 237, 223, 0.48);
+            background: linear-gradient(135deg, rgba(28, 132, 150, 0.42), rgba(255, 202, 159, 0.22));
+        }
+
+        body.beach-chapter-active {
+            --bg-gradient: linear-gradient(180deg, #bd89a1 0%, #efb99d 34%, #66c2c2 35%, #20748b 100%);
+            --glass-bg: rgba(16, 75, 96, 0.62);
+            --glass-border: rgba(213, 248, 239, 0.3);
+            --primary: #f18a78;
+            --secondary: #3b9da7;
+            --accent: #ffdfa5;
+            --text-main: #fffaf0;
+            --text-sub: #d8eee9;
+            background:
+                radial-gradient(circle at 82% 8%, rgba(255, 229, 174, 0.64), transparent 8rem),
+                radial-gradient(ellipse at 10% 12%, rgba(255, 190, 177, 0.32), transparent 35%),
+                linear-gradient(180deg, #bd89a1 0%, #efb99d 34%, #66c2c2 35%, #20748b 100%);
+            background-attachment: fixed;
+        }
+
+        body.beach-chapter-active::before,
+        body.beach-chapter-active::after {
+            position: fixed;
+            z-index: 0;
+            right: -15%;
+            bottom: -19rem;
+            left: -15%;
+            height: 28rem;
+            border-radius: 50% 50% 0 0 / 16% 16% 0 0;
+            content: "";
+            pointer-events: none;
+        }
+
+        body.beach-chapter-active::before {
+            bottom: -16rem;
+            background: rgba(105, 220, 207, 0.26);
+            animation: chapter-ocean-swell 20s ease-in-out infinite alternate;
+        }
+
+        body.beach-chapter-active::after {
+            background: linear-gradient(180deg, rgba(31, 146, 162, 0.27), rgba(12, 73, 98, 0.52));
+            animation: chapter-ocean-swell 16s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes chapter-ocean-swell {
+            from { transform: translateX(-2%) rotate(-0.7deg); }
+            to { transform: translateX(2%) rotate(0.7deg); }
+        }
+
+        body.beach-chapter-active #canvas-bg .background-particle { color: rgba(218, 255, 246, 0.72); }
+        body.beach-chapter-active .chapter-nav {
+            border-color: rgba(210, 249, 238, 0.3);
+            background: rgba(13, 69, 88, 0.88);
+            box-shadow: 0 10px 28px rgba(9, 48, 65, 0.28);
+        }
+        body.beach-chapter-active .chapter-nav button[aria-pressed="true"] { background: rgba(255, 223, 165, 0.2); color: #ffe3b0; }
+        body.beach-chapter-active .chapter-nav button:hover,
+        body.beach-chapter-active .chapter-nav button:focus-visible,
+        body.beach-chapter-active .chapter-nav-link:hover,
+        body.beach-chapter-active .chapter-nav-link:focus-visible { color: #fff; outline-color: rgba(212, 250, 239, 0.82); }
+        body.beach-chapter-active .nav-caption { color: rgba(230, 249, 242, 0.72); }
+
+        body.beach-chapter-active .chapter-three .hero,
+        body.beach-chapter-active .chapter-three .chapter-section:not(.interactive-surprises):not(.memory-gallery-section):not(.anniversary-video):not(.chapter-four-preview),
+        body.beach-chapter-active .chapter-three .interactive-card,
+        body.beach-chapter-active .chapter-three .memory-gallery-section,
+        body.beach-chapter-active .chapter-three .anniversary-video {
+            border-color: rgba(207, 246, 236, 0.3);
+            background: linear-gradient(145deg, rgba(18, 83, 101, 0.84), rgba(13, 61, 82, 0.78));
+            box-shadow: 0 14px 34px rgba(7, 45, 62, 0.2), inset 0 1px rgba(239, 255, 247, 0.1);
+        }
+
+        body.beach-chapter-active .chapter-three .hero {
+            background: linear-gradient(135deg, rgba(20, 91, 107, 0.78), rgba(20, 72, 93, 0.72));
+        }
+        body.beach-chapter-active .chapter-three .hero h1 {
+            background: linear-gradient(100deg, #fff5d8, #a9eee0 58%, #ffe1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        body.beach-chapter-active .chapter-three .hero .eyebrow,
+        body.beach-chapter-active .chapter-three .section-eyebrow,
+        body.beach-chapter-active .chapter-three .chapter-soundtrack .section-eyebrow,
+        body.beach-chapter-active .chapter-three .memory-gallery-section .section-eyebrow,
+        body.beach-chapter-active .chapter-three .anniversary-video .section-eyebrow { color: #ffe0a8; }
+        body.beach-chapter-active .chapter-three .hero > p:not(.eyebrow) { color: rgba(235, 250, 243, 0.88); }
+        body.beach-chapter-active .chapter-three .timer-box {
+            border-color: rgba(201, 246, 236, 0.28);
+            background: rgba(10, 58, 77, 0.46);
+        }
+        body.beach-chapter-active .chapter-three .timer-number { color: #a9eee0; text-shadow: 0 0 16px rgba(103, 226, 209, 0.38); }
+        body.beach-chapter-active .chapter-three .section-title {
+            background: linear-gradient(90deg, #fff5d8, #a9eee0, #ffe1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        body.beach-chapter-active .chapter-three .section-copy,
+        body.beach-chapter-active .chapter-three .interactive-card .section-copy { color: rgba(228, 246, 240, 0.86); }
+        body.beach-chapter-active .chapter-three .interactive-card h3,
+        body.beach-chapter-active .chapter-three .ring-prompt h2 { color: #fff3d5; }
+
+        body.beach-chapter-active .chapter-soundtrack .playlist-player {
+            border-color: rgba(200, 245, 234, 0.25);
+            background:
+                radial-gradient(ellipse at 0% 50%, rgba(115, 224, 204, 0.18), transparent 58%),
+                linear-gradient(125deg, rgba(8, 57, 78, 0.75), rgba(26, 112, 124, 0.58));
+        }
+        body.beach-chapter-active .chapter-soundtrack .playlist-record {
+            border-color: rgba(212, 250, 237, 0.64);
+            background: repeating-radial-gradient(circle, #277b83 0 2px, #155b70 3px 5px, #1d6d7b 6px 7px);
+            color: #ffe1a7;
+        }
+        body.beach-chapter-active .chapter-soundtrack .playlist-record::before { background: linear-gradient(145deg, #f3cb8b, #5db9ae); }
+        body.beach-chapter-active .chapter-soundtrack .playlist-player-kicker { color: rgba(221, 246, 237, 0.72); }
+        body.beach-chapter-active .chapter-soundtrack .chapter-playlist-current { color: #fff5dc; }
+        body.beach-chapter-active .chapter-soundtrack .playlist-player audio { accent-color: #69c8bf; }
+        body.beach-chapter-active .chapter-soundtrack .playlist-skip-button,
+        body.beach-chapter-active .chapter-soundtrack .chapter-playlist button {
+            border-color: rgba(193, 239, 230, 0.3);
+            background: rgba(5, 50, 70, 0.35);
+            color: rgba(238, 250, 244, 0.9);
+        }
+        body.beach-chapter-active .chapter-soundtrack .chapter-playlist button[aria-pressed="true"] {
+            border-color: rgba(255, 222, 164, 0.58);
+            background: rgba(255, 222, 164, 0.15);
+            color: #ffe5b4;
+        }
+        body.beach-chapter-active .chapter-soundtrack .chapter-playlist-number { color: #9ce0d4; }
+        body.beach-chapter-active .chapter-soundtrack #chapterThreeAudioStatus { color: rgba(225, 247, 239, 0.82); }
+
+        body.beach-chapter-active .riddle-form input {
+            border-color: rgba(201, 244, 234, 0.34);
+            background: rgba(6, 51, 70, 0.48);
+            color: #fffaf0;
+        }
+        body.beach-chapter-active .riddle-form input::placeholder { color: rgba(224, 243, 237, 0.62); }
+        body.beach-chapter-active .riddle-form input:focus { border-color: #ffe0a8; box-shadow: 0 0 0 3px rgba(255, 224, 168, 0.16); }
+        body.beach-chapter-active .primary-button,
+        body.beach-chapter-active .chapter-four-button {
+            border-color: rgba(255, 239, 205, 0.62);
+            background: linear-gradient(120deg, #f8cb86, #ef987e 68%, #72c6bb);
+            box-shadow: 0 10px 26px rgba(7, 45, 62, 0.25), inset 0 1px rgba(255, 255, 255, 0.28);
+            color: #164b5b;
+        }
+        body.beach-chapter-active .primary-button:hover,
+        body.beach-chapter-active .primary-button:focus-visible { box-shadow: 0 14px 32px rgba(7, 45, 62, 0.35); }
+        body.beach-chapter-active .riddle-feedback,
+        body.beach-chapter-active .chapter-three .scratch-status { color: #ffe0a8; }
+        body.beach-chapter-active .secret-letter {
+            border-color: rgba(255, 224, 168, 0.5);
+            background: linear-gradient(135deg, rgba(101, 190, 174, 0.2), rgba(255, 255, 255, 0.08));
+        }
+        body.beach-chapter-active .secret-letter h3,
+        body.beach-chapter-active .secret-sparkle { color: #ffe5b1; }
+        body.beach-chapter-active .future-envelope {
+            border-color: rgba(205, 245, 235, 0.32);
+            background: linear-gradient(145deg, rgba(91, 190, 180, 0.2), rgba(244, 202, 157, 0.12));
+            color: #fff9eb;
+        }
+        body.beach-chapter-active .future-envelope > span:last-child { color: rgba(226, 245, 238, 0.78); }
+
+        body.beach-chapter-active .happiness-jar .jar-lid { background: linear-gradient(110deg, #f6d29a, #5cb9b3); }
+        body.beach-chapter-active .happiness-jar .jar-body {
+            border-color: rgba(206, 247, 239, 0.78);
+            background: linear-gradient(130deg, rgba(215, 255, 244, 0.23), rgba(94, 210, 195, 0.12) 58%, rgba(255, 255, 255, 0.16));
+            box-shadow: inset 8px 0 18px rgba(255, 255, 255, 0.12), inset -7px 0 18px rgba(115, 234, 213, 0.15);
+        }
+        body.beach-chapter-active .happiness-jar .jar-body span { color: #ffe1a8; }
+        body.beach-chapter-active .scratch-card {
+            border-color: rgba(210, 246, 233, 0.46);
+            background: linear-gradient(140deg, rgba(93, 204, 190, 0.25), rgba(24, 115, 137, 0.42));
+        }
+        body.beach-chapter-active .scratch-canvas { filter: hue-rotate(150deg) saturate(0.72); }
+        body.beach-chapter-active .scratch-prize { color: #fff5dc; }
+        body.beach-chapter-active .scratch-reveal-button { background: rgba(9, 58, 76, 0.88); color: #fff5dc; }
+        body.beach-chapter-active .secret-reason-front {
+            border-color: rgba(203, 242, 231, 0.38);
+            background: linear-gradient(145deg, rgba(88, 192, 177, 0.28), rgba(241, 199, 152, 0.2));
+            color: #fff4d9;
+        }
+        body.beach-chapter-active .secret-reason-back { background: linear-gradient(145deg, rgba(22, 111, 126, 0.98), rgba(11, 66, 88, 0.99)); }
+        body.beach-chapter-active .bucket-list-item {
+            border-color: rgba(203, 243, 233, 0.24);
+            background: rgba(205, 247, 236, 0.06);
+        }
+        body.beach-chapter-active .bucket-list-item:has(input:checked) { border-color: rgba(255, 224, 168, 0.56); background: rgba(255, 224, 168, 0.1); }
+        body.beach-chapter-active .bucket-list-item input { accent-color: #62c6b7; }
+        body.beach-chapter-active .bucket-list-item label span { color: rgba(239, 250, 244, 0.9); }
+        body.beach-chapter-active .bucket-list-item input:checked + span { color: #ffe3ad; text-decoration-color: rgba(255, 227, 173, 0.6); }
+        body.beach-chapter-active .bucket-heart { color: #9de7d7; }
+
+        body.beach-chapter-active .memory-gallery-section {
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(120, 226, 204, 0.17), transparent 62%),
+                linear-gradient(145deg, rgba(23, 100, 114, 0.82), rgba(13, 63, 84, 0.85));
+        }
+        body.beach-chapter-active .memory-gallery-stage {
+            border-color: rgba(207, 244, 234, 0.28);
+            background:
+                radial-gradient(ellipse at 50% 100%, rgba(255, 218, 162, 0.16), transparent 53%),
+                linear-gradient(180deg, rgba(5, 60, 79, 0.4), rgba(48, 146, 150, 0.3));
+        }
+        body.beach-chapter-active .memory-photo-card::before { background: rgba(17, 82, 94, 0.88); color: #fff5df; }
+        body.beach-chapter-active .memory-gallery-caption { color: rgba(224, 245, 237, 0.82); }
+        body.beach-chapter-active .anniversary-video {
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(121, 221, 202, 0.18), transparent 58%),
+                linear-gradient(145deg, rgba(18, 91, 108, 0.86), rgba(11, 58, 79, 0.9));
+        }
+        body.beach-chapter-active .anniversary-video::before { background: radial-gradient(circle, rgba(255, 222, 166, 0.2), transparent 70%); }
+        body.beach-chapter-active .anniversary-video::after { background: radial-gradient(circle, rgba(81, 209, 190, 0.2), transparent 70%); }
+        body.beach-chapter-active .anniversary-video-player {
+            border-color: rgba(202, 242, 232, 0.4);
+            background: rgba(5, 44, 64, 0.9);
+            accent-color: #65c5b8;
+        }
+        body.beach-chapter-active .anniversary-video-player.is-playing { box-shadow: 0 12px 32px rgba(5, 39, 57, 0.38), 0 0 22px rgba(101, 213, 194, 0.26); }
+        body.beach-chapter-active .video-download-button {
+            border-color: rgba(255, 239, 205, 0.6);
+            background: linear-gradient(120deg, #f8d08e, #f29a7d 74%, #73c9bc);
+            color: #164b5b;
+        }
+        body.beach-chapter-active .video-download-button span { color: #fff; }
+        body.beach-chapter-active .anniversary-video-status { color: rgba(228, 246, 240, 0.82); }
+
+        body.beach-chapter-active .chapter-four-button { color: #164b5b; }
+        body.beach-chapter-active .chapter-four-message {
+            border-color: rgba(208, 244, 234, 0.36);
+            background: rgba(20, 91, 106, 0.74);
+            color: #fff2d6;
+        }
+        body.beach-chapter-active footer { color: rgba(231, 247, 239, 0.8); }
+
+        body.beach-chapter-active .letter-modal-card,
+        body.beach-chapter-active .ring-modal-card {
+            border-color: rgba(202, 244, 234, 0.38);
+            background: linear-gradient(145deg, rgba(24, 112, 125, 0.98), rgba(10, 62, 83, 0.99));
+        }
+        body.beach-chapter-active .modal-backdrop { background: rgba(6, 39, 57, 0.82); }
+        body.beach-chapter-active .letter-modal-card h2,
+        body.beach-chapter-active .ring-modal-card h2,
+        body.beach-chapter-active .ring-message strong { color: #ffe2aa; }
+        body.beach-chapter-active .letter-modal-card > p:not(.eyebrow),
+        body.beach-chapter-active .ring-message { color: rgba(239, 249, 243, 0.9); }
+        body.beach-chapter-active .letter-signoff { color: #a9eee0 !important; }
+        body.beach-chapter-active .modal-close { border-color: rgba(210, 245, 235, 0.3); background: rgba(220, 255, 245, 0.1); }
+        body.beach-chapter-active .emergency-love-trigger {
+            border-color: rgba(255, 239, 205, 0.64);
+            background: linear-gradient(120deg, rgba(90, 195, 181, 0.97), rgba(23, 111, 131, 0.97));
+            box-shadow: 0 8px 22px rgba(7, 45, 62, 0.3), inset 0 1px rgba(255, 255, 255, 0.3);
+        }
+
         @media (max-width: 700px) {
             .chapter-three .container { padding: 5.6rem 1rem 1.5rem; }
             .chapter-three .hero { padding: 2rem 1rem; }
@@ -1908,9 +2241,13 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .countdown-floating-hearts { display: none; }
-            .splash-stars { animation: none; }
+            .countdown-floating-bubbles { display: none; }
+            .splash-sun, .splash-wave, .splash-bubble { animation: none; }
+            body.beach-chapter-active::before, body.beach-chapter-active::after { animation: none; }
             .chapter-view.is-active, .splash-card, .letter-modal-card, .ring-modal-card { animation: none; }
+            .splash-card .eyebrow, .splash-card h1, .splash-subtitle, .chapter-choice { animation: none; }
+            .chapter-choice { transition: none; }
+            .chapter-choice:hover, .chapter-choice:focus-visible { transform: none; }
             .chapter-three.is-entering .hero, .chapter-three.is-entering .timer-box { animation: none; }
             .happiness-note.is-flying, .bucket-heart, .emergency-love-heart { animation: none; }
             .chapter-four-message { animation: none; }
@@ -1930,9 +2267,10 @@
             isolation: isolate;
             padding: 1.25rem;
             background:
-                radial-gradient(ellipse at 50% 35%, rgba(168, 85, 247, 0.2), transparent 55%),
-                linear-gradient(135deg, #0f0c20, #1d102f 55%, #2a0826);
-            background-size: 180% 180%, 100% 100%;
+                radial-gradient(circle at 82% 10%, rgba(255, 227, 173, 0.52), transparent 9rem),
+                radial-gradient(ellipse at 10% 12%, rgba(255, 190, 177, 0.34), transparent 36%),
+                linear-gradient(180deg, #bd89a1 0%, #efb99d 34%, #66c2c2 35%, #20748b 100%);
+            background-size: 180% 180%, 100% 100%, 100% 100%;
             animation: countdown-screen-glow 18s ease-in-out infinite alternate;
         }
 
@@ -1948,9 +2286,9 @@
         .gift-unlock-screen::before {
             opacity: 0.3;
             background-image:
-                radial-gradient(circle, rgba(255, 226, 190, 0.8) 1px, transparent 1.8px),
-                radial-gradient(circle, rgba(255, 130, 150, 0.75) 1px, transparent 2px),
-                radial-gradient(circle, rgba(212, 170, 255, 0.65) 1px, transparent 2px);
+                radial-gradient(circle, rgba(226, 255, 246, 0.82) 1px, transparent 1.8px),
+                radial-gradient(circle, rgba(116, 231, 211, 0.72) 1px, transparent 2px),
+                radial-gradient(circle, rgba(255, 225, 176, 0.66) 1px, transparent 2px);
             background-position: 0 0, 32px 46px, 16px 98px;
             background-size: 74px 74px, 110px 110px, 153px 153px;
             animation: countdown-starfield-drift 38s linear infinite;
@@ -1958,34 +2296,84 @@
 
         .gift-unlock-screen::after {
             background:
-                radial-gradient(ellipse at 12% 18%, rgba(255, 117, 140, 0.2), transparent 34%),
-                radial-gradient(ellipse at 88% 78%, rgba(168, 85, 247, 0.2), transparent 38%),
-                radial-gradient(ellipse at 60% 5%, rgba(255, 209, 102, 0.1), transparent 30%);
+                radial-gradient(ellipse at 12% 18%, rgba(255, 196, 177, 0.26), transparent 34%),
+                radial-gradient(ellipse at 88% 78%, rgba(89, 217, 198, 0.22), transparent 38%),
+                radial-gradient(ellipse at 60% 5%, rgba(255, 222, 169, 0.2), transparent 30%);
             animation: countdown-orbs-drift 16s ease-in-out infinite alternate;
         }
 
         .gift-unlock-screen[hidden] { display: none; }
 
-        .countdown-floating-hearts {
+        .countdown-ocean {
+            position: absolute;
+            z-index: 0;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .countdown-sun {
+            position: absolute;
+            top: 9%;
+            right: 14%;
+            width: clamp(4.5rem, 9vw, 7.5rem);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #fff4cf, #ffd486 72%, #ffb27b);
+            box-shadow: 0 0 42px rgba(255, 220, 159, 0.46), 0 0 110px rgba(255, 192, 154, 0.3);
+            animation: countdown-sun-glow 7s ease-in-out infinite;
+        }
+
+        .countdown-wave {
+            position: absolute;
+            left: -35%;
+            width: 170%;
+            height: 38%;
+            border-radius: 50% 50% 0 0 / 18% 18% 0 0;
+            transform-origin: center;
+        }
+
+        .countdown-wave-back {
+            bottom: -19%;
+            background: rgba(130, 231, 216, 0.58);
+            animation: countdown-wave-drift 17s ease-in-out infinite alternate;
+        }
+
+        .countdown-wave-middle {
+            bottom: -25%;
+            background: linear-gradient(180deg, rgba(53, 185, 193, 0.88), rgba(36, 152, 174, 0.95));
+            animation: countdown-wave-drift 13s ease-in-out infinite alternate-reverse;
+        }
+
+        .countdown-wave-front {
+            bottom: -31%;
+            background: linear-gradient(180deg, rgba(32, 132, 160, 0.96), #155c79);
+            animation: countdown-wave-drift 11s ease-in-out infinite alternate;
+        }
+
+        .countdown-floating-bubbles {
             position: absolute;
             z-index: 1;
             inset: 0;
             overflow: hidden;
             pointer-events: none;
         }
-        .countdown-floating-hearts span {
+        .countdown-floating-bubbles span {
             position: absolute;
             bottom: -2.5rem;
-            color: rgba(255, 190, 207, 0.72);
-            font-size: 1.35rem;
-            text-shadow: 0 0 16px rgba(255, 117, 140, 0.55);
-            animation: countdown-floating-heart 19s linear infinite;
+            width: 1.15rem;
+            aspect-ratio: 1;
+            border: 1px solid rgba(239, 255, 250, 0.72);
+            border-radius: 50%;
+            background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.78), rgba(208, 255, 246, 0.1) 48%, rgba(255, 255, 255, 0.2));
+            box-shadow: inset -2px -2px 5px rgba(255, 255, 255, 0.22);
+            animation: countdown-floating-bubble 19s linear infinite;
         }
-        .countdown-floating-hearts span:nth-child(1) { left: 7%; animation-duration: 18s; animation-delay: -12s; }
-        .countdown-floating-hearts span:nth-child(2) { left: 24%; font-size: 0.9rem; animation-duration: 22s; animation-delay: -4s; }
-        .countdown-floating-hearts span:nth-child(3) { left: 73%; font-size: 1.6rem; animation-duration: 20s; animation-delay: -16s; }
-        .countdown-floating-hearts span:nth-child(4) { left: 91%; font-size: 1.1rem; animation-duration: 24s; animation-delay: -8s; }
-        .countdown-floating-hearts span:nth-child(5) { left: 49%; font-size: 0.85rem; animation-duration: 21s; animation-delay: -19s; }
+        .countdown-floating-bubbles span:nth-child(1) { left: 7%; animation-duration: 18s; animation-delay: -12s; }
+        .countdown-floating-bubbles span:nth-child(2) { left: 24%; width: 0.75rem; animation-duration: 22s; animation-delay: -4s; }
+        .countdown-floating-bubbles span:nth-child(3) { left: 73%; width: 1.45rem; animation-duration: 20s; animation-delay: -16s; }
+        .countdown-floating-bubbles span:nth-child(4) { left: 91%; width: 0.95rem; animation-duration: 24s; animation-delay: -8s; }
+        .countdown-floating-bubbles span:nth-child(5) { left: 49%; width: 0.7rem; animation-duration: 21s; animation-delay: -19s; }
 
         .gift-unlock-card {
             position: relative;
@@ -1993,6 +2381,10 @@
             isolation: isolate;
             width: min(100%, 720px);
             padding: clamp(1.75rem, 5vw, 3.5rem);
+            border-color: rgba(213, 248, 239, 0.34);
+            background: linear-gradient(145deg, rgba(18, 83, 101, 0.88), rgba(13, 61, 82, 0.9));
+            box-shadow: 0 14px 34px rgba(7, 45, 62, 0.28);
+            backdrop-filter: blur(12px);
             text-align: center;
             animation:
                 countdown-card-arrive 850ms cubic-bezier(0.2, 0.8, 0.2, 1) both,
@@ -2014,8 +2406,8 @@
             background: conic-gradient(
                 from 0deg,
                 transparent 0deg 250deg,
-                rgba(255, 117, 140, 0.72) 285deg,
-                rgba(255, 209, 102, 0.55) 315deg,
+                rgba(116, 231, 211, 0.72) 285deg,
+                rgba(255, 222, 169, 0.62) 315deg,
                 transparent 345deg
             );
             filter: blur(15px);
@@ -2025,13 +2417,14 @@
 
         .gift-unlock-card::after {
             z-index: 1;
-            background: linear-gradient(110deg, transparent 34%, rgba(255, 255, 255, 0.12) 48%, transparent 62%);
+            background: linear-gradient(110deg, transparent 34%, rgba(219, 255, 244, 0.14) 48%, transparent 62%);
             background-size: 300% 100%;
             background-position: 100% 0;
             animation: countdown-card-sheen 9s ease-in-out 1.4s infinite;
         }
 
         .gift-unlock-card > .eyebrow {
+            color: #ffe0a8;
             animation:
                 countdown-copy-rise 700ms 120ms both,
                 countdown-copy-glow 3.6s ease-in-out 900ms infinite;
@@ -2042,7 +2435,7 @@
             font-family: 'Playfair Display', serif;
             font-size: clamp(2rem, 6vw, 3.2rem);
             line-height: 1.2;
-            background: linear-gradient(45deg, #ff758c, #ff7eb3, #ffd166);
+            background: linear-gradient(45deg, #fff5d8, #a9eee0, #ffe1aa);
             background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -2053,7 +2446,7 @@
         }
 
         .gift-unlock-subtitle {
-            color: var(--text-sub);
+            color: rgba(231, 247, 240, 0.88);
             line-height: 1.7;
             animation:
                 countdown-copy-rise 800ms 380ms both,
@@ -2077,11 +2470,17 @@
                 countdown-box-arrive 650ms cubic-bezier(0.2, 0.8, 0.2, 1) both,
                 countdown-box-glow 3s ease-in-out 700ms infinite alternate;
         }
+        .gift-countdown .timer-box {
+            border-color: rgba(201, 246, 236, 0.3);
+            background: rgba(10, 58, 77, 0.62);
+        }
+        .gift-countdown .timer-number { color: #a9eee0; text-shadow: 0 0 14px rgba(103, 226, 209, 0.38); }
+        .gift-countdown .timer-label { color: rgba(225, 246, 238, 0.82); }
         .gift-countdown .timer-box::before,
         .gift-countdown .timer-box::after {
             position: absolute;
             z-index: -1;
-            color: rgba(255, 214, 162, 0.72);
+            color: rgba(167, 239, 223, 0.78);
             pointer-events: none;
         }
         .gift-countdown .timer-box::before {
@@ -2094,9 +2493,9 @@
         .gift-countdown .timer-box::after {
             bottom: 0.15rem;
             left: 0.5rem;
-            content: "♡";
+            content: "◦";
             font-size: 0.75rem;
-            animation: countdown-heart-float 3.2s ease-in-out infinite;
+            animation: countdown-bubble-drift 3.2s ease-in-out infinite;
         }
         .gift-countdown .timer-box:nth-child(2) { animation-delay: 90ms; }
         .gift-countdown .timer-box:nth-child(3) { animation-delay: 180ms; }
@@ -2116,7 +2515,7 @@
         }
         @keyframes countdown-card-entry-glow {
             0%, 100% { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28); }
-            45% { box-shadow: 0 8px 34px rgba(255, 117, 140, 0.24), 0 6px 18px rgba(0, 0, 0, 0.28); }
+            45% { box-shadow: 0 8px 34px rgba(99, 222, 201, 0.24), 0 6px 18px rgba(0, 0, 0, 0.28); }
         }
         @keyframes countdown-card-aura {
             to { transform: rotate(360deg); }
@@ -2130,12 +2529,12 @@
             50% { background-position: 100% 50%; }
         }
         @keyframes countdown-title-glow {
-            from { filter: drop-shadow(0 0 0 rgba(255, 117, 140, 0)); }
-            to { filter: drop-shadow(0 0 10px rgba(255, 117, 140, 0.48)); }
+            from { filter: drop-shadow(0 0 0 rgba(116, 231, 211, 0)); }
+            to { filter: drop-shadow(0 0 10px rgba(116, 231, 211, 0.48)); }
         }
         @keyframes countdown-copy-glow {
-            0%, 100% { text-shadow: 0 0 0 rgba(255, 209, 102, 0); }
-            50% { text-shadow: 0 0 10px rgba(255, 209, 102, 0.48); }
+            0%, 100% { text-shadow: 0 0 0 rgba(255, 222, 169, 0); }
+            50% { text-shadow: 0 0 10px rgba(255, 222, 169, 0.48); }
         }
         @keyframes countdown-screen-glow {
             from { background-position: 0% 35%, 0 0; }
@@ -2149,6 +2548,13 @@
             from { transform: translate3d(-1.5%, 1%, 0) scale(1); }
             to { transform: translate3d(1.5%, -1%, 0) scale(1.08); }
         }
+        @keyframes countdown-sun-glow {
+            50% { transform: scale(1.07); box-shadow: 0 0 58px rgba(255, 226, 170, 0.58), 0 0 130px rgba(255, 192, 154, 0.38); }
+        }
+        @keyframes countdown-wave-drift {
+            from { transform: translateX(-3%) rotate(-1deg); }
+            to { transform: translateX(3%) rotate(1deg); }
+        }
         @keyframes countdown-copy-rise {
             from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
@@ -2158,25 +2564,25 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
         @keyframes countdown-box-glow {
-            from { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(255, 117, 140, 0); }
-            to { border-color: rgba(255, 130, 150, 0.58); box-shadow: 0 0 18px rgba(255, 117, 140, 0.2), inset 0 0 12px rgba(255, 209, 102, 0.08); }
+            from { border-color: rgba(210, 249, 239, 0.16); box-shadow: 0 0 0 rgba(116, 231, 211, 0); }
+            to { border-color: rgba(142, 230, 215, 0.62); box-shadow: 0 0 18px rgba(91, 216, 195, 0.2), inset 0 0 12px rgba(255, 222, 169, 0.08); }
         }
         @keyframes countdown-star-twinkle {
             0%, 100% { opacity: 0.25; transform: scale(0.7) rotate(0deg); }
             50% { opacity: 1; transform: scale(1.2) rotate(24deg); }
         }
-        @keyframes countdown-heart-float {
+        @keyframes countdown-bubble-drift {
             0%, 100% { opacity: 0.25; transform: translateY(2px) scale(0.8); }
             50% { opacity: 0.85; transform: translateY(-4px) scale(1.05); }
         }
-        @keyframes countdown-floating-heart {
-            0% { opacity: 0; transform: translate3d(-12px, 0, 0) scale(0.75) rotate(-12deg); }
+        @keyframes countdown-floating-bubble {
+            0% { opacity: 0; transform: translate3d(-12px, 0, 0) scale(0.75); }
             12%, 78% { opacity: 0.7; }
-            100% { opacity: 0; transform: translate3d(22px, -112vh, 0) scale(1.15) rotate(24deg); }
+            100% { opacity: 0; transform: translate3d(22px, -112vh, 0) scale(1.15); }
         }
         @keyframes countdown-number-tick {
             0% { opacity: 0.55; transform: translateY(-7px) scale(0.92); }
-            55% { opacity: 1; transform: translateY(2px) scale(1.08); text-shadow: 0 0 18px rgba(255, 75, 114, 0.85); }
+            55% { opacity: 1; transform: translateY(2px) scale(1.08); text-shadow: 0 0 18px rgba(103, 226, 209, 0.75); }
             100% { transform: translateY(0) scale(1); }
         }
 
@@ -2184,7 +2590,9 @@
             .gift-unlock-screen,
             .gift-unlock-screen::before,
             .gift-unlock-screen::after,
-            .countdown-floating-hearts span,
+            .countdown-sun,
+            .countdown-wave,
+            .countdown-floating-bubbles span,
             .gift-unlock-card,
             .gift-unlock-card::before,
             .gift-unlock-card::after,
@@ -2209,6 +2617,12 @@
             font: 600 0.9rem 'Montserrat', sans-serif;
             cursor: pointer;
         }
+        .gift-unlock-card .countdown-audio-button {
+            border-color: rgba(205, 245, 235, 0.62);
+            background: rgba(92, 195, 181, 0.22);
+            color: #f0fff7;
+        }
+        .gift-unlock-card .countdown-audio-button:hover { background: rgba(92, 195, 181, 0.34); }
         .countdown-audio-button[hidden] { display: none; }
         .countdown-audio-button:focus-visible { outline: 2px solid #ffd6a2; outline-offset: 3px; }
         .countdown-audio-status { margin: 0.65rem 0 0; color: var(--text-sub); }

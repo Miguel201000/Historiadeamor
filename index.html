@@ -9,17 +9,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261116-countdown-card-effects-3">
+    <link rel="stylesheet" href="styles.css?v=20261116-countdown-beach">
 </head>
 <body>
 
     <div class="gift-unlock-screen" id="giftUnlockScreen" role="dialog" aria-modal="true" aria-labelledby="gift-unlock-title">
-        <div class="countdown-floating-hearts" aria-hidden="true">
-            <span>♡</span><span>✦</span><span>♡</span><span>♥</span><span>✧</span>
+        <div class="countdown-floating-bubbles" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="countdown-ocean" aria-hidden="true">
+            <span class="countdown-sun"></span>
+            <span class="countdown-wave countdown-wave-back"></span>
+            <span class="countdown-wave countdown-wave-middle"></span>
+            <span class="countdown-wave countdown-wave-front"></span>
         </div>
         <section class="gift-unlock-card glass">
             <p class="eyebrow">Una sorpresa especial</p>
-            <h1 id="gift-unlock-title">Este regalo se desbloqueará muy pronto 💖</h1>
+            <h1 id="gift-unlock-title">Este regalo se desbloqueará muy pronto 🌊</h1>
             <p class="gift-unlock-subtitle">La espera también es parte de nuestra historia. Vuelve cuando llegue el gran día ✨</p>
             <div class="gift-countdown" id="giftCountdown" role="timer" aria-label="Tiempo restante para desbloquear el regalo" aria-live="off">
                 <div class="timer-box"><div class="timer-number" id="giftDays">00</div><div class="timer-label">Días</div></div>
@@ -52,7 +58,16 @@
     <div id="canvas-bg" aria-hidden="true"></div>
 
     <div class="splash-screen" id="splashScreen" role="dialog" aria-modal="true" aria-labelledby="splash-title">
-        <div class="splash-stars" aria-hidden="true"></div>
+        <div class="splash-ocean" aria-hidden="true">
+            <span class="splash-sun"></span>
+            <span class="splash-wave splash-wave-back"></span>
+            <span class="splash-wave splash-wave-middle"></span>
+            <span class="splash-wave splash-wave-front"></span>
+            <span class="splash-bubble splash-bubble-one"></span>
+            <span class="splash-bubble splash-bubble-two"></span>
+            <span class="splash-bubble splash-bubble-three"></span>
+            <span class="splash-bubble splash-bubble-four"></span>
+        </div>
         <section class="splash-card glass">
             <p class="eyebrow">Un pequeño viaje por nosotros</p>
             <h1 id="splash-title">Nuestra Historia de Amor ❤️</h1>
@@ -65,25 +80,33 @@
                 </a>
                 <button class="chapter-choice chapter-choice-featured" type="button" data-chapter="three">
                     <span>Capítulo 2</span>
-                    <strong>3 Meses &amp; Una Promesa ✨</strong>
+                    <strong>3 Meses: Marea de Amor 🌊</strong>
                     <span class="choice-arrow" aria-hidden="true">↗</span>
                 </button>
             </div>
+            <button class="countdown-audio-button" id="chapterSelectionAudioButton" type="button" hidden>
+                🔊 Activar música
+            </button>
+            <p class="countdown-audio-status" id="chapterSelectionAudioStatus" role="status" aria-live="polite"></p>
+            <audio id="chapterSelectionAudio" loop preload="auto" aria-label="Kids durante la selección de capítulos" hidden>
+                <source src="musica3meses/kids%20(online-audio-converter.com).mp3" type="audio/mpeg">
+                Tu navegador no puede reproducir este audio.
+            </audio>
         </section>
     </div>
 
     <nav class="chapter-nav" id="chapterNav" aria-label="Cambiar capítulo" hidden>
         <span class="nav-caption">Nuestra historia</span>
         <a class="chapter-nav-link" href="dos-meses.html">2 meses</a>
-        <button type="button" data-chapter="three" aria-pressed="false">3 meses</button>
+        <button type="button" data-chapter="three" aria-pressed="false">Marea de amor</button>
     </nav>
 
     <main class="chapter-view chapter-three" id="chapterThree" aria-labelledby="title-three">
         <div class="container">
             <section class="hero glass">
-                <p class="eyebrow">21 de agosto · el comienzo de todo</p>
-                <h1 id="title-three">Para Aleja, mi persona favorita 💖</h1>
-                <p>Tres meses de momentos inolvidables</p>
+                <p class="eyebrow">Capítulo 2 · 21 de agosto</p>
+                <h1 id="title-three">Tres meses: un mar de amor para Aleja 🌊</h1>
+                <p>Recuerdos y promesas que navegan junto a nosotros</p>
                 <div class="timer-grid" aria-label="Tiempo transcurrido desde que comenzó nuestra historia">
                     <div class="timer-box"><div class="timer-number" id="days-three">00</div><div class="timer-label">Días</div></div>
                     <div class="timer-box"><div class="timer-number" id="hours-three">00</div><div class="timer-label">Horas</div></div>
@@ -283,7 +306,7 @@
             </section>
             <section class="chapter-section chapter-four-preview" aria-label="Adelanto del cuarto mes">
                 <button class="chapter-four-button" id="chapterFourButton" type="button" aria-expanded="false" aria-controls="chapterFourMessage">
-                    Capítulo 4
+                    Capítulo 4🎄
                 </button>
                 <p class="chapter-four-message" id="chapterFourMessage" role="status" aria-live="polite" hidden>
                     Paciencia, aún estamos escribiendo esta parte de nuestra historia ❤️
@@ -353,6 +376,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=20261115-countdown-video-no-seek-2" defer></script>
+    <script src="script.js?v=20261116-chapter-two-beach" defer></script>
 </body>
 </html>

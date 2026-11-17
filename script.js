@@ -206,6 +206,9 @@
         if (isTriviaView) document.body.classList.add('trivia-mode');
 
         const splashScreen = document.getElementById('splashScreen');
+        const chapterSelectionAudio = document.getElementById('chapterSelectionAudio');
+        const chapterSelectionAudioButton = document.getElementById('chapterSelectionAudioButton');
+        const chapterSelectionAudioStatus = document.getElementById('chapterSelectionAudioStatus');
         const chapterNav = document.getElementById('chapterNav');
         const chapterThreeAudio = document.getElementById('chapterThreeAudio');
         const chapterThreeAudioSource = document.getElementById('chapterThreeAudioSource');
@@ -221,6 +224,49 @@
             three: document.getElementById('chapterThree')
         };
         let isChapterThreeFlowActive = false;
+
+        function handleChapterSelectionAudioError(error) {
+            if (error && error.name === 'AbortError') return;
+            if (splashScreen.hidden || !giftUnlockScreen.hidden || isTriviaView) return;
+
+            chapterSelectionAudioButton.hidden = false;
+            if (error && error.name === 'NotAllowedError') {
+                chapterSelectionAudioStatus.textContent = 'Tu navegador bloqueó la reproducción automática. Toca «Activar música» para escucharla.';
+                return;
+            }
+
+            chapterSelectionAudioStatus.textContent = 'No se pudo reproducir la música. Revisa que el archivo esté en la carpeta musica3meses.';
+            console.error('No se pudo reproducir la música de la selección de capítulos.', error);
+        }
+
+        function startChapterSelectionAudio() {
+            if (splashScreen.hidden || !giftUnlockScreen.hidden || isTriviaView) return;
+
+            chapterSelectionAudio.loop = true;
+            chapterSelectionAudio.play().then(() => {
+                if (splashScreen.hidden) return;
+                chapterSelectionAudioButton.hidden = true;
+                chapterSelectionAudioStatus.textContent = '';
+            }).catch(handleChapterSelectionAudioError);
+        }
+
+        function stopChapterSelectionAudio() {
+            chapterSelectionAudio.pause();
+        }
+
+        chapterSelectionAudioButton.addEventListener('click', startChapterSelectionAudio);
+        chapterSelectionAudio.addEventListener('playing', () => {
+            chapterSelectionAudioButton.hidden = true;
+            chapterSelectionAudioStatus.textContent = '';
+        });
+        chapterSelectionAudio.addEventListener('error', () => {
+            if (splashScreen.hidden || !giftUnlockScreen.hidden || isTriviaView) return;
+            chapterSelectionAudioStatus.textContent = 'No se pudo cargar la música. Revisa que el archivo esté en la carpeta musica3meses.';
+            console.error('No se pudo cargar la música de la selección de capítulos.', chapterSelectionAudio.error);
+        });
+        document.addEventListener('gift-unlocked', startChapterSelectionAudio);
+        if (giftUnlockScreen.hidden && !isTriviaView) startChapterSelectionAudio();
+
         const chapterPlaylistTracks = [
             { src: 'audios/cancionaleja (online-audio-converter.com).mp3', title: 'Nuestra canción de 3 meses' },
             { src: 'musica3meses/WhatsApp Audio 2026-11-11 at 8.32.14 PM.mp3', title: 'Audio sorpresa' },
@@ -330,6 +376,7 @@
         });
 
         function selectChapter(chapter, showSplash = false) {
+            stopChapterSelectionAudio();
             Object.entries(chapterViews).forEach(([name, view]) => {
                 const isActive = name === chapter;
                 view.classList.toggle('is-active', isActive);
@@ -347,8 +394,12 @@
                 }
             });
             document.body.classList.add('chapter-selected');
+            document.body.classList.toggle('beach-chapter-active', chapter === 'three' && !showSplash);
             isChapterThreeFlowActive = chapter === 'three';
             chapterNav.hidden = false;
+            document.title = chapter === 'three' && !showSplash
+                ? 'Capítulo 2 · Marea de Amor 🌊'
+                : 'Nuestra Historia de Amor ❤️';
 
             if (chapter === 'three') {
                 observeMemoryGallery();
@@ -362,6 +413,7 @@
 
             if (showSplash) {
                 splashScreen.hidden = false;
+                startChapterSelectionAudio();
                 requestAnimationFrame(() => splashScreen.classList.remove('is-leaving'));
             } else {
                 splashScreen.classList.add('is-leaving');
