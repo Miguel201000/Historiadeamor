@@ -2509,6 +2509,34 @@
         .gift-countdown .timer-number { font-size: clamp(1.35rem, 5vw, 2rem); }
         .gift-countdown .timer-number.is-changing { animation: countdown-number-tick 480ms cubic-bezier(0.2, 0.8, 0.2, 1); }
 
+        @media (max-width: 700px), (pointer: coarse) {
+            .gift-unlock-screen,
+            .gift-unlock-screen::before,
+            .gift-unlock-screen::after,
+            .countdown-sun,
+            .countdown-wave { animation: none; }
+
+            .countdown-floating-bubbles { display: none; }
+
+            .gift-unlock-card {
+                -webkit-backdrop-filter: none;
+                backdrop-filter: none;
+                animation: none;
+            }
+
+            .gift-unlock-card::before { animation: countdown-card-aura 14s linear infinite; }
+            .gift-unlock-card::after { display: none; }
+
+            .gift-unlock-card > .eyebrow,
+            .gift-unlock-card h1,
+            .gift-unlock-subtitle,
+            .gift-countdown,
+            .gift-countdown .timer-box { animation: none; }
+
+            .gift-countdown .timer-box::before,
+            .gift-countdown .timer-box::after { animation: none; }
+        }
+
         @keyframes countdown-card-arrive {
             from { opacity: 0; transform: translateY(18px) scale(0.97); }
             to { opacity: 1; transform: translateY(0) scale(1); }
