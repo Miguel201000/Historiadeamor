@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261116-countdown-mobile-motion">
+    <link rel="stylesheet" href="styles.css?v=20261121-waiting-ambience">
 </head>
 <body>
 
@@ -44,15 +44,30 @@
         </section>
     </div>
 
-    <div class="countdown-video-screen" id="countdownVideoScreen" hidden>
-        <video id="countdownVideo" disablepictureinpicture playsinline preload="none" aria-label="Video de cuenta regresiva">
-            <source src="video/cuentaregresiva2_lTHFyzGy%20(online-video-cutter.com).mp4" type="video/mp4">
-            Tu navegador no puede reproducir este video.
-        </video>
-        <button class="countdown-video-audio" id="countdownVideoAudio" type="button" aria-pressed="false">
-            🔊 Reproducir con sonido
-        </button>
-        <p class="countdown-video-status" id="countdownVideoStatus" role="status" aria-live="polite"></p>
+    <div class="waiting-screen" id="waitingScreen" role="dialog" aria-modal="true" aria-labelledby="waiting-title waiting-message" hidden>
+        <div class="waiting-stars" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span></div>
+        <div class="waiting-hearts" aria-hidden="true"><span>♡</span><span>♡</span><span>♡</span><span>♡</span><span>♡</span></div>
+        <section class="waiting-card">
+            <div class="waiting-record" aria-hidden="true"><span>♥</span></div>
+            <h1 class="waiting-month-mark" id="waiting-title">3 Meses</h1>
+            <p class="waiting-eyebrow">Un pequeño momento más</p>
+            <p class="waiting-headline" id="waiting-message">Dando los últimos retoques ✨</p>
+            <p class="waiting-copy">En un momento podrás entrar a nuestra sorpresa. Gracias por esperar un poquito más mi amor.</p>
+            <p class="waiting-release">La página se desbloqueará a las <strong>11:00 a. m.</strong></p>
+            <div class="waiting-countdown" id="waitingCountdown" role="timer" aria-label="Tiempo restante hasta que esté lista la sorpresa" aria-live="off">
+                <div class="waiting-time-unit"><span id="waitingHours">00</span><small>Horas</small></div>
+                <span class="waiting-time-separator" aria-hidden="true">:</span>
+                <div class="waiting-time-unit"><span id="waitingMinutes">00</span><small>Minutos</small></div>
+                <span class="waiting-time-separator" aria-hidden="true">:</span>
+                <div class="waiting-time-unit"><span id="waitingSeconds">00</span><small>Segundos</small></div>
+            </div>
+            <button class="waiting-audio-button" id="waitingAudioButton" type="button" hidden>♫ Activar la canción</button>
+            <p class="waiting-audio-status" id="waitingAudioStatus" role="status" aria-live="polite"></p>
+            <audio id="waitingAudio" loop preload="auto" aria-label="Canción para acompañar la espera" hidden>
+                <source src="musica3meses/espera%20(online-audio-converter.com).mp3" type="audio/mpeg">
+                Tu navegador no puede reproducir este audio.
+            </audio>
+        </section>
     </div>
 
     <div id="canvas-bg" aria-hidden="true"></div>
@@ -376,6 +391,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=20261116-chapter-two-beach" defer></script>
+    <script src="script.js?v=20261121-waiting-title" defer></script>
 </body>
 </html>

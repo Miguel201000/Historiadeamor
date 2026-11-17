@@ -1,13 +1,18 @@
         const giftUnlockScreen = document.getElementById('giftUnlockScreen');
         const giftUnlockDate = new Date(2026, 10, 21);
+        const waitingUnlockDate = new Date(2026, 10, 21, 11, 0, 0);
         const countdownBackgroundAudio = document.getElementById('countdownBackgroundAudio');
         const countdownBackgroundAudioButton = document.getElementById('countdownBackgroundAudioButton');
         const countdownBackgroundAudioStatus = document.getElementById('countdownBackgroundAudioStatus');
-        const countdownVideoScreen = document.getElementById('countdownVideoScreen');
-        const countdownVideo = document.getElementById('countdownVideo');
-        const countdownVideoAudio = document.getElementById('countdownVideoAudio');
-        const countdownVideoStatus = document.getElementById('countdownVideoStatus');
-        const countdownVideoStorageKey = 'nuestraHistoriaCountdownVideo2Completed';
+        const waitingScreen = document.getElementById('waitingScreen');
+        const waitingAudio = document.getElementById('waitingAudio');
+        const waitingAudioButton = document.getElementById('waitingAudioButton');
+        const waitingAudioStatus = document.getElementById('waitingAudioStatus');
+        const waitingCountdownUnits = {
+            hours: document.getElementById('waitingHours'),
+            minutes: document.getElementById('waitingMinutes'),
+            seconds: document.getElementById('waitingSeconds')
+        };
         const giftCountdownUnits = {
             days: document.getElementById('giftDays'),
             hours: document.getElementById('giftHours'),
@@ -15,32 +20,22 @@
             seconds: document.getElementById('giftSeconds')
         };
         const giftLockedContent = Array.from(document.body.children)
-            .filter(element => element !== giftUnlockScreen && element !== countdownVideoScreen && element.tagName !== 'SCRIPT')
+            .filter(element => element !== giftUnlockScreen && element !== waitingScreen && element.tagName !== 'SCRIPT')
             .map(element => ({ element, wasInert: element.inert }));
         let giftCountdownInterval;
-        let countdownVideoStarted = false;
-        let lastCountdownVideoTime = 0;
-        let restoringCountdownVideoSeek = false;
-
-        function hasCompletedCountdownVideo() {
-            try {
-                return window.localStorage.getItem(countdownVideoStorageKey) === 'true';
-            } catch (error) {
-                console.error('No se pudo consultar si el video ya se reprodujo.', error);
-                return false;
-            }
-        }
+        let waitingCountdownInterval;
 
         function unlockGift() {
             stopCountdownBackgroundAudio();
-            countdownVideoScreen.hidden = true;
-            countdownVideo.pause();
+            stopWaitingAudio();
             giftUnlockScreen.hidden = true;
+            waitingScreen.hidden = true;
             document.body.classList.remove('gift-locked');
             giftLockedContent.forEach(({ element, wasInert }) => {
                 element.inert = wasInert;
             });
             window.clearInterval(giftCountdownInterval);
+            window.clearInterval(waitingCountdownInterval);
             document.dispatchEvent(new Event('gift-unlocked'));
         }
 
@@ -82,88 +77,78 @@
             console.error('No se pudo cargar la música de fondo de la cuenta regresiva.', countdownBackgroundAudio.error);
         });
 
-        function updateCountdownVideoAudioButton() {
-            const soundEnabled = !countdownVideo.muted && countdownVideo.volume > 0;
-            countdownVideoAudio.setAttribute('aria-pressed', String(soundEnabled));
-            countdownVideoAudio.textContent = soundEnabled
-                ? '🔊 Sonido activado'
-                : countdownVideo.paused ? '🔊 Reproducir con sonido' : '🔊 Activar sonido';
-        }
+        function handleWaitingAudioPlayError(error) {
+            if (waitingScreen.hidden) return;
 
-        function handleCountdownVideoPlayError(error) {
-            countdownVideoStatus.textContent = error && error.name === 'NotAllowedError'
-                ? 'Tu navegador bloqueó el inicio automático con sonido. Toca «Reproducir con sonido» para empezar.'
-                : 'No se pudo reproducir el video. Revisa la conexión e inténtalo de nuevo con «Reproducir con sonido».';
-            updateCountdownVideoAudioButton();
-            if (!error || error.name !== 'NotAllowedError') {
-                console.error('No se pudo reproducir el video de cuenta regresiva.', error);
+            if (error && error.name === 'NotAllowedError') {
+                waitingAudioButton.hidden = false;
+                waitingAudioStatus.textContent = 'Tu navegador bloqueó la reproducción automática. Toca «Activar la canción» para escucharla.';
+                return;
+            }
+
+            waitingAudioStatus.textContent = 'No se pudo reproducir la canción. Revisa que el archivo esté en la carpeta musica3meses.';
+            if (!error || error.name !== 'AbortError') {
+                console.error('No se pudo reproducir la canción de espera.', error);
             }
         }
 
-        function startCountdownVideo() {
-            if (countdownVideoStarted) return;
-            countdownVideoStarted = true;
+        function startWaitingAudio() {
+            if (waitingScreen.hidden) return;
+
+            waitingAudio.loop = true;
+            waitingAudio.play().then(() => {
+                waitingAudioButton.hidden = true;
+                waitingAudioStatus.textContent = '';
+            }).catch(handleWaitingAudioPlayError);
+        }
+
+        function stopWaitingAudio() {
+            waitingAudio.pause();
+            waitingAudioButton.hidden = true;
+            waitingAudioStatus.textContent = '';
+        }
+
+        waitingAudioButton.addEventListener('click', startWaitingAudio);
+        waitingAudio.addEventListener('error', () => {
+            if (waitingScreen.hidden) return;
+            waitingAudioStatus.textContent = 'No se pudo cargar la canción. Revisa que el archivo esté en la carpeta musica3meses.';
+            console.error('No se pudo cargar la canción de espera.', waitingAudio.error);
+        });
+
+        function updateWaitingCountdown() {
+            const remaining = waitingUnlockDate - new Date();
+            if (remaining <= 0) {
+                unlockGift();
+                return;
+            }
+
+            const totalSeconds = Math.floor(remaining / 1000);
+            const values = {
+                hours: Math.floor(totalSeconds / 3600),
+                minutes: Math.floor((totalSeconds % 3600) / 60),
+                seconds: totalSeconds % 60
+            };
+
+            Object.keys(waitingCountdownUnits).forEach(unit => {
+                waitingCountdownUnits[unit].textContent = String(values[unit]).padStart(2, '0');
+            });
+        }
+
+        function startWaitingScreen() {
             giftUnlockScreen.hidden = true;
-            countdownVideoScreen.hidden = false;
-            window.clearInterval(giftCountdownInterval);
-
-            countdownVideo.autoplay = true;
-            countdownVideo.controls = false;
-            countdownVideo.muted = false;
-            countdownVideo.volume = 1;
-            countdownVideo.play().then(() => {
-                countdownVideoStatus.textContent = '';
-                updateCountdownVideoAudioButton();
-            }).catch(handleCountdownVideoPlayError);
+            stopCountdownBackgroundAudio();
+            waitingScreen.hidden = false;
+            updateWaitingCountdown();
+            if (waitingScreen.hidden) return;
+            startWaitingAudio();
+            waitingCountdownInterval = window.setInterval(updateWaitingCountdown, 1000);
         }
-
-        countdownVideo.addEventListener('ended', () => {
-            try {
-                window.localStorage.setItem(countdownVideoStorageKey, 'true');
-            } catch (error) {
-                console.error('No se pudo guardar que el video de cuenta regresiva ya terminó.', error);
-            }
-            unlockGift();
-        });
-        countdownVideo.addEventListener('timeupdate', () => {
-            if (!restoringCountdownVideoSeek) {
-                lastCountdownVideoTime = countdownVideo.currentTime;
-            }
-        });
-        countdownVideo.addEventListener('seeking', () => {
-            if (restoringCountdownVideoSeek) return;
-
-            restoringCountdownVideoSeek = true;
-            countdownVideo.currentTime = lastCountdownVideoTime;
-        });
-        countdownVideo.addEventListener('seeked', () => {
-            restoringCountdownVideoSeek = false;
-        });
-        ['playing', 'pause', 'volumechange'].forEach(eventName => {
-            countdownVideo.addEventListener(eventName, updateCountdownVideoAudioButton);
-        });
-        countdownVideoAudio.addEventListener('click', () => {
-            countdownVideo.muted = false;
-            countdownVideo.volume = 1;
-            countdownVideo.controls = false;
-            countdownVideo.play().then(() => {
-                countdownVideoStatus.textContent = '';
-                updateCountdownVideoAudioButton();
-            }).catch(handleCountdownVideoPlayError);
-        });
-        countdownVideo.addEventListener('error', () => {
-            countdownVideoStatus.textContent = 'No se pudo cargar el video. Revisa que esté en la carpeta video.';
-        });
 
         function updateGiftCountdown() {
             const remaining = giftUnlockDate - new Date();
             if (remaining <= 0) {
-                stopCountdownBackgroundAudio();
-                if (hasCompletedCountdownVideo()) {
-                    unlockGift();
-                } else {
-                    startCountdownVideo();
-                }
+                window.clearInterval(giftCountdownInterval);
+                startWaitingScreen();
                 return;
             }
 
@@ -191,8 +176,10 @@
         giftLockedContent.forEach(({ element }) => {
             element.inert = true;
         });
-        if (hasCompletedCountdownVideo()) {
+        if (waitingUnlockDate <= new Date()) {
             unlockGift();
+        } else if (giftUnlockDate <= new Date()) {
+            startWaitingScreen();
         } else {
             updateGiftCountdown();
             if (!giftUnlockScreen.hidden) {
@@ -227,7 +214,7 @@
 
         function handleChapterSelectionAudioError(error) {
             if (error && error.name === 'AbortError') return;
-            if (splashScreen.hidden || !giftUnlockScreen.hidden || isTriviaView) return;
+            if (splashScreen.hidden || !giftUnlockScreen.hidden || !waitingScreen.hidden || isTriviaView) return;
 
             chapterSelectionAudioButton.hidden = false;
             if (error && error.name === 'NotAllowedError') {
@@ -240,7 +227,7 @@
         }
 
         function startChapterSelectionAudio() {
-            if (splashScreen.hidden || !giftUnlockScreen.hidden || isTriviaView) return;
+            if (splashScreen.hidden || !giftUnlockScreen.hidden || !waitingScreen.hidden || isTriviaView) return;
 
             chapterSelectionAudio.loop = true;
             chapterSelectionAudio.play().then(() => {
@@ -260,12 +247,12 @@
             chapterSelectionAudioStatus.textContent = '';
         });
         chapterSelectionAudio.addEventListener('error', () => {
-            if (splashScreen.hidden || !giftUnlockScreen.hidden || isTriviaView) return;
+            if (splashScreen.hidden || !giftUnlockScreen.hidden || !waitingScreen.hidden || isTriviaView) return;
             chapterSelectionAudioStatus.textContent = 'No se pudo cargar la música. Revisa que el archivo esté en la carpeta musica3meses.';
             console.error('No se pudo cargar la música de la selección de capítulos.', chapterSelectionAudio.error);
         });
         document.addEventListener('gift-unlocked', startChapterSelectionAudio);
-        if (giftUnlockScreen.hidden && !isTriviaView) startChapterSelectionAudio();
+        if (giftUnlockScreen.hidden && waitingScreen.hidden && !isTriviaView) startChapterSelectionAudio();
 
         const chapterPlaylistTracks = [
             { src: 'audios/cancionaleja (online-audio-converter.com).mp3', title: 'Nuestra canción de 3 meses' },
