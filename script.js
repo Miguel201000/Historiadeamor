@@ -41,6 +41,7 @@
 
         function stopCountdownBackgroundAudio() {
             countdownBackgroundAudio.pause();
+            countdownBackgroundAudio.currentTime = 0;
             countdownBackgroundAudioButton.hidden = true;
             countdownBackgroundAudioStatus.textContent = '';
         }
@@ -63,6 +64,8 @@
         function startCountdownBackgroundAudio() {
             if (giftUnlockScreen.hidden) return;
 
+            waitingAudio.pause();
+            waitingAudio.currentTime = 0;
             countdownBackgroundAudio.loop = true;
             countdownBackgroundAudio.play().then(() => {
                 countdownBackgroundAudioButton.hidden = true;
@@ -95,6 +98,7 @@
         function startWaitingAudio() {
             if (waitingScreen.hidden) return;
 
+            stopCountdownBackgroundAudio();
             waitingAudio.loop = true;
             waitingAudio.play().then(() => {
                 waitingAudioButton.hidden = true;
@@ -104,6 +108,7 @@
 
         function stopWaitingAudio() {
             waitingAudio.pause();
+            waitingAudio.currentTime = 0;
             waitingAudioButton.hidden = true;
             waitingAudioStatus.textContent = '';
         }
@@ -212,9 +217,17 @@
         };
         let isChapterThreeFlowActive = false;
 
+        function isChapterSelectionAudioActive() {
+            return !splashScreen.hidden
+                && !splashScreen.classList.contains('is-leaving')
+                && giftUnlockScreen.hidden
+                && waitingScreen.hidden
+                && !isTriviaView;
+        }
+
         function handleChapterSelectionAudioError(error) {
             if (error && error.name === 'AbortError') return;
-            if (splashScreen.hidden || !giftUnlockScreen.hidden || !waitingScreen.hidden || isTriviaView) return;
+            if (!isChapterSelectionAudioActive()) return;
 
             chapterSelectionAudioButton.hidden = false;
             if (error && error.name === 'NotAllowedError') {
@@ -227,11 +240,14 @@
         }
 
         function startChapterSelectionAudio() {
-            if (splashScreen.hidden || !giftUnlockScreen.hidden || !waitingScreen.hidden || isTriviaView) return;
+            if (!isChapterSelectionAudioActive()) return;
 
             chapterSelectionAudio.loop = true;
             chapterSelectionAudio.play().then(() => {
-                if (splashScreen.hidden) return;
+                if (!isChapterSelectionAudioActive()) {
+                    stopChapterSelectionAudio();
+                    return;
+                }
                 chapterSelectionAudioButton.hidden = true;
                 chapterSelectionAudioStatus.textContent = '';
             }).catch(handleChapterSelectionAudioError);
@@ -239,15 +255,20 @@
 
         function stopChapterSelectionAudio() {
             chapterSelectionAudio.pause();
+            chapterSelectionAudio.currentTime = 0;
         }
 
         chapterSelectionAudioButton.addEventListener('click', startChapterSelectionAudio);
         chapterSelectionAudio.addEventListener('playing', () => {
+            if (!isChapterSelectionAudioActive()) {
+                stopChapterSelectionAudio();
+                return;
+            }
             chapterSelectionAudioButton.hidden = true;
             chapterSelectionAudioStatus.textContent = '';
         });
         chapterSelectionAudio.addEventListener('error', () => {
-            if (splashScreen.hidden || !giftUnlockScreen.hidden || !waitingScreen.hidden || isTriviaView) return;
+            if (!isChapterSelectionAudioActive()) return;
             chapterSelectionAudioStatus.textContent = 'No se pudo cargar la música. Revisa que el archivo esté en la carpeta musica3meses.';
             console.error('No se pudo cargar la música de la selección de capítulos.', chapterSelectionAudio.error);
         });
@@ -400,8 +421,10 @@
 
             if (showSplash) {
                 splashScreen.hidden = false;
-                startChapterSelectionAudio();
-                requestAnimationFrame(() => splashScreen.classList.remove('is-leaving'));
+                requestAnimationFrame(() => {
+                    splashScreen.classList.remove('is-leaving');
+                    startChapterSelectionAudio();
+                });
             } else {
                 splashScreen.classList.add('is-leaving');
                 window.setTimeout(() => { splashScreen.hidden = true; }, 650);
