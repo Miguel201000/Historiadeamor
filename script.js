@@ -1,18 +1,8 @@
         const giftUnlockScreen = document.getElementById('giftUnlockScreen');
         const giftUnlockDate = new Date(2026, 10, 21);
-        const waitingUnlockDate = new Date(2026, 10, 21, 11, 0, 0);
         const countdownBackgroundAudio = document.getElementById('countdownBackgroundAudio');
         const countdownBackgroundAudioButton = document.getElementById('countdownBackgroundAudioButton');
         const countdownBackgroundAudioStatus = document.getElementById('countdownBackgroundAudioStatus');
-        const waitingScreen = document.getElementById('waitingScreen');
-        const waitingAudio = document.getElementById('waitingAudio');
-        const waitingAudioButton = document.getElementById('waitingAudioButton');
-        const waitingAudioStatus = document.getElementById('waitingAudioStatus');
-        const waitingCountdownUnits = {
-            hours: document.getElementById('waitingHours'),
-            minutes: document.getElementById('waitingMinutes'),
-            seconds: document.getElementById('waitingSeconds')
-        };
         const giftCountdownUnits = {
             days: document.getElementById('giftDays'),
             hours: document.getElementById('giftHours'),
@@ -20,22 +10,18 @@
             seconds: document.getElementById('giftSeconds')
         };
         const giftLockedContent = Array.from(document.body.children)
-            .filter(element => element !== giftUnlockScreen && element !== waitingScreen && element.tagName !== 'SCRIPT')
+            .filter(element => element !== giftUnlockScreen && element.tagName !== 'SCRIPT')
             .map(element => ({ element, wasInert: element.inert }));
         let giftCountdownInterval;
-        let waitingCountdownInterval;
 
         function unlockGift() {
             stopCountdownBackgroundAudio();
-            stopWaitingAudio();
             giftUnlockScreen.hidden = true;
-            waitingScreen.hidden = true;
             document.body.classList.remove('gift-locked');
             giftLockedContent.forEach(({ element, wasInert }) => {
                 element.inert = wasInert;
             });
             window.clearInterval(giftCountdownInterval);
-            window.clearInterval(waitingCountdownInterval);
             document.dispatchEvent(new Event('gift-unlocked'));
         }
 
@@ -64,11 +50,9 @@
         function startCountdownBackgroundAudio() {
             if (giftUnlockScreen.hidden) return;
 
-            waitingAudio.pause();
-            waitingAudio.currentTime = 0;
             countdownBackgroundAudio.loop = true;
             countdownBackgroundAudio.play().then(() => {
-                if (giftUnlockScreen.hidden || !waitingScreen.hidden) {
+                if (giftUnlockScreen.hidden) {
                     stopCountdownBackgroundAudio();
                     return;
                 }
@@ -84,81 +68,11 @@
             console.error('No se pudo cargar la música de fondo de la cuenta regresiva.', countdownBackgroundAudio.error);
         });
 
-        function handleWaitingAudioPlayError(error) {
-            if (waitingScreen.hidden) return;
-
-            if (error && error.name === 'NotAllowedError') {
-                waitingAudioButton.hidden = false;
-                waitingAudioStatus.textContent = 'Tu navegador bloqueó la reproducción automática. Toca «Activar la canción» para escucharla.';
-                return;
-            }
-
-            waitingAudioStatus.textContent = 'No se pudo reproducir la canción. Revisa que el archivo esté en la carpeta musica3meses.';
-            if (!error || error.name !== 'AbortError') {
-                console.error('No se pudo reproducir la canción de espera.', error);
-            }
-        }
-
-        function startWaitingAudio() {
-            if (waitingScreen.hidden) return;
-
-            stopCountdownBackgroundAudio();
-            waitingAudio.loop = true;
-            waitingAudio.play().then(() => {
-                waitingAudioButton.hidden = true;
-                waitingAudioStatus.textContent = '';
-            }).catch(handleWaitingAudioPlayError);
-        }
-
-        function stopWaitingAudio() {
-            waitingAudio.pause();
-            waitingAudio.currentTime = 0;
-            waitingAudioButton.hidden = true;
-            waitingAudioStatus.textContent = '';
-        }
-
-        waitingAudioButton.addEventListener('click', startWaitingAudio);
-        waitingAudio.addEventListener('error', () => {
-            if (waitingScreen.hidden) return;
-            waitingAudioStatus.textContent = 'No se pudo cargar la canción. Revisa que el archivo esté en la carpeta musica3meses.';
-            console.error('No se pudo cargar la canción de espera.', waitingAudio.error);
-        });
-
-        function updateWaitingCountdown() {
-            const remaining = waitingUnlockDate - new Date();
-            if (remaining <= 0) {
-                unlockGift();
-                return;
-            }
-
-            const totalSeconds = Math.floor(remaining / 1000);
-            const values = {
-                hours: Math.floor(totalSeconds / 3600),
-                minutes: Math.floor((totalSeconds % 3600) / 60),
-                seconds: totalSeconds % 60
-            };
-
-            Object.keys(waitingCountdownUnits).forEach(unit => {
-                waitingCountdownUnits[unit].textContent = String(values[unit]).padStart(2, '0');
-            });
-        }
-
-        function startWaitingScreen() {
-            window.clearInterval(giftCountdownInterval);
-            stopCountdownBackgroundAudio();
-            giftUnlockScreen.hidden = true;
-            waitingScreen.hidden = false;
-            updateWaitingCountdown();
-            if (waitingScreen.hidden) return;
-            startWaitingAudio();
-            waitingCountdownInterval = window.setInterval(updateWaitingCountdown, 1000);
-        }
-
         function updateGiftCountdown() {
             const remaining = giftUnlockDate - new Date();
             if (remaining <= 0) {
                 window.clearInterval(giftCountdownInterval);
-                startWaitingScreen();
+                unlockGift();
                 return;
             }
 
@@ -186,10 +100,8 @@
         giftLockedContent.forEach(({ element }) => {
             element.inert = true;
         });
-        if (waitingUnlockDate <= new Date()) {
+        if (giftUnlockDate <= new Date()) {
             unlockGift();
-        } else if (giftUnlockDate <= new Date()) {
-            startWaitingScreen();
         } else {
             updateGiftCountdown();
             if (!giftUnlockScreen.hidden) {
@@ -226,7 +138,6 @@
             return !splashScreen.hidden
                 && !splashScreen.classList.contains('is-leaving')
                 && giftUnlockScreen.hidden
-                && waitingScreen.hidden
                 && !isTriviaView;
         }
 
@@ -278,7 +189,7 @@
             console.error('No se pudo cargar la música de la selección de capítulos.', chapterSelectionAudio.error);
         });
         document.addEventListener('gift-unlocked', startChapterSelectionAudio);
-        if (giftUnlockScreen.hidden && waitingScreen.hidden && !isTriviaView) startChapterSelectionAudio();
+        if (giftUnlockScreen.hidden && !isTriviaView) startChapterSelectionAudio();
 
         const chapterPlaylistTracks = [
             { src: 'audios/cancionaleja (online-audio-converter.com).mp3', title: 'Nuestra canción de 3 meses' },
