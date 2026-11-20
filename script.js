@@ -68,6 +68,10 @@
             waitingAudio.currentTime = 0;
             countdownBackgroundAudio.loop = true;
             countdownBackgroundAudio.play().then(() => {
+                if (giftUnlockScreen.hidden || !waitingScreen.hidden) {
+                    stopCountdownBackgroundAudio();
+                    return;
+                }
                 countdownBackgroundAudioButton.hidden = true;
                 countdownBackgroundAudioStatus.textContent = '';
             }).catch(handleCountdownBackgroundAudioPlayError);
@@ -140,8 +144,9 @@
         }
 
         function startWaitingScreen() {
-            giftUnlockScreen.hidden = true;
+            window.clearInterval(giftCountdownInterval);
             stopCountdownBackgroundAudio();
+            giftUnlockScreen.hidden = true;
             waitingScreen.hidden = false;
             updateWaitingCountdown();
             if (waitingScreen.hidden) return;
@@ -601,10 +606,16 @@
             }, { once: true });
         }
 
+        const scratchCards = Array.from(document.querySelectorAll('.scratch-card'));
+        const scratchChoicePrompt = document.querySelector('.scratch-choice-prompt');
+        const scratchStatus = document.querySelector('.scratch-status');
+        let selectedScratchCard = null;
+
         function setupScratchCard(card) {
             const scratchCanvas = card.querySelector('.scratch-canvas');
             const context = scratchCanvas.getContext('2d', { willReadFrequently: true });
             const revealButton = card.querySelector('.scratch-reveal-button');
+            const choiceButton = card.querySelector('.scratch-choice-button');
             let isScratching = false;
 
             function drawScratchSurface() {
@@ -679,6 +690,7 @@
                 isScratching = false;
             });
             revealButton.addEventListener('click', () => revealScratchCard(card));
+            choiceButton.addEventListener('click', () => selectScratchPrize(card));
 
             if ('ResizeObserver' in window) {
                 new ResizeObserver(drawScratchSurface).observe(scratchCanvas);
@@ -692,10 +704,35 @@
             if (card.classList.contains('is-revealed')) return;
             card.classList.add('is-revealed');
             card.querySelector('.scratch-reveal-button').setAttribute('aria-pressed', 'true');
-            document.querySelector('.scratch-status').textContent = card.querySelector('.scratch-prize').textContent;
+            if (scratchCards.every(scratchCard => scratchCard.classList.contains('is-revealed'))) {
+                scratchChoicePrompt.hidden = false;
+                scratchCards.forEach(scratchCard => {
+                    scratchCard.querySelector('.scratch-choice-button').hidden = false;
+                });
+                scratchStatus.textContent = 'Raspaste las tres tarjetas. Ahora elige un único premio.';
+            } else {
+                scratchStatus.textContent = '¡Detalle revelado! Raspa las otras tarjetas para elegir tu premio.';
+            }
         }
 
-        document.querySelectorAll('.scratch-card').forEach(setupScratchCard);
+        function selectScratchPrize(card) {
+            if (selectedScratchCard || !scratchCards.every(scratchCard => scratchCard.classList.contains('is-revealed'))) return;
+
+            selectedScratchCard = card;
+            scratchCards.forEach(scratchCard => {
+                const choiceButton = scratchCard.querySelector('.scratch-choice-button');
+                const isSelected = scratchCard === selectedScratchCard;
+                scratchCard.classList.toggle('is-selected', isSelected);
+                scratchCard.classList.toggle('is-not-selected', !isSelected);
+                choiceButton.disabled = true;
+                choiceButton.setAttribute('aria-pressed', String(isSelected));
+                choiceButton.textContent = isSelected ? 'Premio elegido ✓' : 'No elegido';
+            });
+            scratchChoicePrompt.textContent = `¡Elegiste: ${card.querySelector('.scratch-prize').textContent}!`;
+            scratchStatus.textContent = 'Tu elección quedó guardada. Solo puedes elegir un premio.';
+        }
+
+        scratchCards.forEach(setupScratchCard);
 
         document.querySelectorAll('.secret-reason-card').forEach(card => {
             card.addEventListener('click', () => {

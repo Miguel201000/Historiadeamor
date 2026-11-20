@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261121-beach-chapter-3">
+    <link rel="stylesheet" href="styles.css?v=20261121-scratch-single-choice">
 </head>
 <body>
 
@@ -37,7 +37,7 @@
                 🔊 Activar música de fondo
             </button>
             <p class="countdown-audio-status" id="countdownBackgroundAudioStatus" role="status" aria-live="polite"></p>
-            <audio id="countdownBackgroundAudio" autoplay loop preload="auto" aria-label="Música de fondo de la cuenta regresiva" hidden>
+            <audio id="countdownBackgroundAudio" loop preload="auto" aria-label="Música de fondo de la cuenta regresiva" hidden>
                 <source src="musica3meses/cuentaregresiva2hola%20(online-audio-converter.com).mp3" type="audio/mpeg">
                 Tu navegador no puede reproducir este audio.
             </audio>
@@ -211,24 +211,28 @@
 
                 <article class="interactive-card glass scratch-section" aria-labelledby="scratch-title">
                     <h3 id="scratch-title">Raspa y gana del amor 💝</h3>
-                    <p class="section-copy">Raspa una tarjeta con el dedo o el mouse para descubrir tu detalle.</p>
+                    <p class="section-copy">Raspa las tres tarjetas para descubrir los detalles y luego elige solo uno.</p>
                     <div class="scratch-grid">
                         <div class="scratch-card">
                             <p class="scratch-prize">No te vuelvo a amagar besos</p>
                             <canvas class="scratch-canvas" aria-hidden="true"></canvas>
                             <button class="scratch-reveal-button" type="button">Revelar detalle</button>
+                            <button class="scratch-choice-button" type="button" aria-pressed="false" hidden>Elegir este premio</button>
                         </div>
                         <div class="scratch-card">
-                            <p class="scratch-prize">Tú eliges nuestra próxima salida</p>
+                            <p class="scratch-prize">Te pago lo que te debo (ya tu sabes)</p>
                             <canvas class="scratch-canvas" aria-hidden="true"></canvas>
                             <button class="scratch-reveal-button" type="button">Revelar detalle</button>
+                            <button class="scratch-choice-button" type="button" aria-pressed="false" hidden>Elegir este premio</button>
                         </div>
                         <div class="scratch-card">
-                            <p class="scratch-prize">Llenarte de cartas</p>
+                            <p class="scratch-prize">Casarnos</p>
                             <canvas class="scratch-canvas" aria-hidden="true"></canvas>
                             <button class="scratch-reveal-button" type="button">Revelar detalle</button>
+                            <button class="scratch-choice-button" type="button" aria-pressed="false" hidden>Elegir este premio</button>
                         </div>
                     </div>
+                    <p class="scratch-choice-prompt" role="status" aria-live="polite" hidden>¡Ya descubriste los tres! Elige solo un premio.</p>
                     <p class="scratch-status" role="status" aria-live="polite"></p>
                 </article>
 
@@ -391,6 +395,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=20261121-chapter-audio-scope" defer></script>
+    <script src="script.js?v=20261121-scratch-single-choice" defer></script>
 </body>
 </html>
