@@ -9,40 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261121-direct-unlock-no-entry">
+    <link rel="stylesheet" href="styles.css?v=20261121-open-chapters">
 </head>
 <body>
-
-    <div class="gift-unlock-screen" id="giftUnlockScreen" role="dialog" aria-modal="true" aria-labelledby="gift-unlock-title">
-        <div class="countdown-floating-bubbles" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span>
-        </div>
-        <div class="countdown-ocean" aria-hidden="true">
-            <span class="countdown-sun"></span>
-            <span class="countdown-wave countdown-wave-back"></span>
-            <span class="countdown-wave countdown-wave-middle"></span>
-            <span class="countdown-wave countdown-wave-front"></span>
-        </div>
-        <section class="gift-unlock-card glass">
-            <p class="eyebrow">Una sorpresa especial</p>
-            <h1 id="gift-unlock-title">Este regalo se desbloqueará muy pronto 🌊</h1>
-            <p class="gift-unlock-subtitle">La espera también es parte de nuestra historia. Vuelve cuando llegue el gran día ✨</p>
-            <div class="gift-countdown" id="giftCountdown" role="timer" aria-label="Tiempo restante para desbloquear el regalo" aria-live="off">
-                <div class="timer-box"><div class="timer-number" id="giftDays">00</div><div class="timer-label">Días</div></div>
-                <div class="timer-box"><div class="timer-number" id="giftHours">00</div><div class="timer-label">Horas</div></div>
-                <div class="timer-box"><div class="timer-number" id="giftMinutes">00</div><div class="timer-label">Minutos</div></div>
-                <div class="timer-box"><div class="timer-number" id="giftSeconds">00</div><div class="timer-label">Segundos</div></div>
-            </div>
-            <button class="countdown-audio-button" id="countdownBackgroundAudioButton" type="button" hidden>
-                🔊 Activar música de fondo
-            </button>
-            <p class="countdown-audio-status" id="countdownBackgroundAudioStatus" role="status" aria-live="polite"></p>
-            <audio id="countdownBackgroundAudio" loop preload="auto" aria-label="Música de fondo de la cuenta regresiva" hidden>
-                <source src="musica3meses/cuentaregresiva2hola%20(online-audio-converter.com).mp3" type="audio/mpeg">
-                Tu navegador no puede reproducir este audio.
-            </audio>
-        </section>
-    </div>
 
     <div id="canvas-bg" aria-hidden="true"></div>
 
@@ -58,9 +27,9 @@
             <span class="splash-bubble splash-bubble-four"></span>
         </div>
         <section class="splash-card glass">
-            <p class="eyebrow">Un pequeño viaje por nosotros</p>
+            <p class="eyebrow">¡Bienvenida, mi bb hermoso! 💖</p>
             <h1 id="splash-title">Nuestra Historia de Amor ❤️</h1>
-            <p class="splash-subtitle">Selecciona el capítulo que deseas revivir:</p>
+            <p class="splash-subtitle">Elige un capítulo y volvamos a vivir nuestros momentos favoritos ✨</p>
             <div class="chapter-choices">
                 <a class="chapter-choice" href="dos-meses.html">
                     <span>Capítulo 1</span>
@@ -73,10 +42,10 @@
                     <span class="choice-arrow" aria-hidden="true">↗</span>
                 </button>
             </div>
-            <button class="countdown-audio-button" id="chapterSelectionAudioButton" type="button" hidden>
+            <button class="audio-enable-button" id="chapterSelectionAudioButton" type="button" hidden>
                 🔊 Activar música
             </button>
-            <p class="countdown-audio-status" id="chapterSelectionAudioStatus" role="status" aria-live="polite"></p>
+            <p class="audio-status" id="chapterSelectionAudioStatus" role="status" aria-live="polite"></p>
             <audio id="chapterSelectionAudio" loop preload="auto" aria-label="Kids durante la selección de capítulos" hidden>
                 <source src="musica3meses/kids%20(online-audio-converter.com).mp3" type="audio/mpeg">
                 Tu navegador no puede reproducir este audio.
@@ -111,7 +80,7 @@
                     <div class="playlist-record" aria-hidden="true"><span>♡</span></div>
                     <div class="playlist-player-content">
                         <span class="playlist-player-kicker">Ahora suena</span>
-                        <p class="chapter-playlist-current" id="chapterPlaylistCurrent" aria-live="polite">Nuestra canción de 3 meses</p>
+                        <p class="chapter-playlist-current" id="chapterPlaylistCurrent" aria-live="polite">El Fin del Mundo - La La Love You, Axolotes Mexicanos</p>
                         <div class="player-waveform playlist-waveform" aria-hidden="true">
                             <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
                         </div>
@@ -277,10 +246,18 @@
             <section class="chapter-section anniversary-video" aria-labelledby="anniversary-video-title">
                 <p class="eyebrow section-eyebrow">Un recuerdo solo para ti</p>
                 <h2 class="section-title" id="anniversary-video-title">Tres meses de nosotros</h2>
-                <p class="section-copy anniversary-intro">Un pequeño recuerdo preparado con todo mi amor. Reprodúcelo aquí o descárgalo para guardarlo.</p>
+                <p class="section-copy anniversary-intro">Tu entrada a un recuerdo preparado con todo mi amor. Tócala para verlo o descárgalo para guardarlo.</p>
 
                 <div class="anniversary-player">
-                    <video class="anniversary-video-player" id="anniversaryVideo" controls playsinline preload="none" tabindex="0" aria-label="Video de aniversario de tres meses para Aleja">
+                    <button class="video-ticket" id="anniversaryVideoRevealButton" type="button" aria-controls="anniversaryVideo">
+                        <span class="video-ticket-icon" aria-hidden="true">▶</span>
+                        <span class="video-ticket-copy">
+                            <strong>Entrada especial</strong>
+                            <span>Toca aquí para ver nuestro video</span>
+                        </span>
+                        <span class="video-ticket-stamp" aria-hidden="true">3 MESES</span>
+                    </button>
+                    <video class="anniversary-video-player" id="anniversaryVideo" controls playsinline preload="none" tabindex="0" aria-label="Video de aniversario de tres meses para Aleja" hidden>
                         <source src="video/aleja.mp4" type="video/mp4">
                         Tu navegador no puede reproducir este video.
                     </video>
@@ -369,6 +346,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=20261121-direct-unlock-no-entry" defer></script>
+    <script src="script.js?v=20261121-open-chapters" defer></script>
 </body>
 </html>

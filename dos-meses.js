@@ -3,6 +3,12 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 const startDate = new Date('2026-08-21T00:00:00');
 const timerUnits = ['days', 'hours', 'minutes', 'seconds'];
 
+function showConfetti(options) {
+    if (typeof confetti !== 'function') return;
+    if (typeof confetti.reset === 'function') confetti.reset();
+    confetti({ ...options, particleCount: Math.min(options.particleCount || 15, 15) });
+}
+
 function updateTwoMonthTimer() {
     const elapsed = Date.now() - startDate.getTime();
     const values = elapsed < 0
@@ -184,8 +190,8 @@ loveLetterButton.addEventListener('click', () => {
     loveLetterButton.setAttribute('aria-expanded', String(isOpening));
     letterTitle.textContent = isOpening ? 'Con todo mi amor... 💖' : 'Toca aquí para abrir la carta';
     if (isOpening && typeof confetti === 'function') {
-        confetti({
-            particleCount: isCompactDevice ? 28 : 60,
+        showConfetti({
+            particleCount: 15,
             spread: 70,
             origin: { y: 0.7 },
             colors: ['#ff4b72', '#ff7eb3', '#ffffff'],
@@ -355,8 +361,8 @@ function initStarMap() {
         memoryStars.forEach(item => item.setAttribute('aria-pressed', String(item === star)));
         if (star.classList.contains('star-main') && typeof confetti === 'function') {
             const bounds = star.getBoundingClientRect();
-            confetti({
-                particleCount: isCompactDevice ? 14 : 28,
+            showConfetti({
+                particleCount: 15,
                 spread: 42,
                 startVelocity: 16,
                 gravity: 0.8,

@@ -1,118 +1,12 @@
-        const giftUnlockScreen = document.getElementById('giftUnlockScreen');
-        const giftUnlockDate = new Date(2026, 10, 21);
-        const countdownBackgroundAudio = document.getElementById('countdownBackgroundAudio');
-        const countdownBackgroundAudioButton = document.getElementById('countdownBackgroundAudioButton');
-        const countdownBackgroundAudioStatus = document.getElementById('countdownBackgroundAudioStatus');
-        const giftCountdownUnits = {
-            days: document.getElementById('giftDays'),
-            hours: document.getElementById('giftHours'),
-            minutes: document.getElementById('giftMinutes'),
-            seconds: document.getElementById('giftSeconds')
-        };
-        const giftLockedContent = Array.from(document.body.children)
-            .filter(element => element !== giftUnlockScreen && element.tagName !== 'SCRIPT')
-            .map(element => ({ element, wasInert: element.inert }));
-        let giftCountdownInterval;
-
-        function unlockGift() {
-            stopCountdownBackgroundAudio();
-            giftUnlockScreen.hidden = true;
-            document.body.classList.remove('gift-locked');
-            giftLockedContent.forEach(({ element, wasInert }) => {
-                element.inert = wasInert;
-            });
-            window.clearInterval(giftCountdownInterval);
-            document.dispatchEvent(new Event('gift-unlocked'));
-        }
-
-        function stopCountdownBackgroundAudio() {
-            countdownBackgroundAudio.pause();
-            countdownBackgroundAudio.currentTime = 0;
-            countdownBackgroundAudioButton.hidden = true;
-            countdownBackgroundAudioStatus.textContent = '';
-        }
-
-        function handleCountdownBackgroundAudioPlayError(error) {
-            if (giftUnlockScreen.hidden) return;
-
-            if (error && error.name === 'NotAllowedError') {
-                countdownBackgroundAudioButton.hidden = false;
-                countdownBackgroundAudioStatus.textContent = 'Tu navegador bloqueó la música automática. Toca «Activar música de fondo» para escucharla.';
-                return;
-            }
-
-            countdownBackgroundAudioStatus.textContent = 'No se pudo reproducir la música de fondo. Revisa que el archivo esté en la carpeta musica3meses.';
-            if (!error || error.name !== 'AbortError') {
-                console.error('No se pudo reproducir la música de fondo de la cuenta regresiva.', error);
-            }
-        }
-
-        function startCountdownBackgroundAudio() {
-            if (giftUnlockScreen.hidden) return;
-
-            countdownBackgroundAudio.loop = true;
-            countdownBackgroundAudio.play().then(() => {
-                if (giftUnlockScreen.hidden) {
-                    stopCountdownBackgroundAudio();
-                    return;
-                }
-                countdownBackgroundAudioButton.hidden = true;
-                countdownBackgroundAudioStatus.textContent = '';
-            }).catch(handleCountdownBackgroundAudioPlayError);
-        }
-
-        countdownBackgroundAudioButton.addEventListener('click', startCountdownBackgroundAudio);
-        countdownBackgroundAudio.addEventListener('error', () => {
-            if (giftUnlockScreen.hidden) return;
-            countdownBackgroundAudioStatus.textContent = 'No se pudo cargar la música de fondo. Revisa que el archivo esté en la carpeta musica3meses.';
-            console.error('No se pudo cargar la música de fondo de la cuenta regresiva.', countdownBackgroundAudio.error);
-        });
-
-        function updateGiftCountdown() {
-            const remaining = giftUnlockDate - new Date();
-            if (remaining <= 0) {
-                window.clearInterval(giftCountdownInterval);
-                unlockGift();
-                return;
-            }
-
-            const totalSeconds = Math.floor(remaining / 1000);
-            const values = {
-                days: Math.floor(totalSeconds / 86400),
-                hours: Math.floor((totalSeconds % 86400) / 3600),
-                minutes: Math.floor((totalSeconds % 3600) / 60),
-                seconds: totalSeconds % 60
-            };
-
-            Object.keys(giftCountdownUnits).forEach(unit => {
-                const element = giftCountdownUnits[unit];
-                const nextValue = String(values[unit]).padStart(2, '0');
-                if (element.textContent === nextValue) return;
-
-                element.textContent = nextValue;
-                element.classList.remove('is-changing');
-                void element.offsetWidth;
-                element.classList.add('is-changing');
-            });
-        }
-
-        document.body.classList.add('gift-locked');
-        giftLockedContent.forEach(({ element }) => {
-            element.inert = true;
-        });
-        if (giftUnlockDate <= new Date()) {
-            unlockGift();
-        } else {
-            updateGiftCountdown();
-            if (!giftUnlockScreen.hidden) {
-                startCountdownBackgroundAudio();
-                giftCountdownInterval = window.setInterval(updateGiftCountdown, 1000);
-            }
-        }
-
         const isTriviaView = new URLSearchParams(window.location.search).get('sorpresa') === '1';
         const isCompactDevice = window.matchMedia('(max-width: 700px), (pointer: coarse)').matches;
         if (isTriviaView) document.body.classList.add('trivia-mode');
+
+        function showConfetti(options) {
+            if (typeof confetti !== 'function') return;
+            if (typeof confetti.reset === 'function') confetti.reset();
+            confetti({ ...options, particleCount: Math.min(options.particleCount || 15, 15) });
+        }
 
         const splashScreen = document.getElementById('splashScreen');
         const chapterSelectionAudio = document.getElementById('chapterSelectionAudio');
@@ -127,7 +21,9 @@
         const chapterPlaylist = document.getElementById('chapterPlaylist');
         const chapterPlaylistSkip = document.getElementById('chapterPlaylistSkip');
         const anniversaryVideo = document.getElementById('anniversaryVideo');
+        const anniversaryVideoRevealButton = document.getElementById('anniversaryVideoRevealButton');
         const anniversaryVideoStatus = document.getElementById('anniversaryVideoStatus');
+        anniversaryVideo.preload = 'none';
         let pausedMusicTracks = null;
         const chapterViews = {
             three: document.getElementById('chapterThree')
@@ -137,7 +33,6 @@
         function isChapterSelectionAudioActive() {
             return !splashScreen.hidden
                 && !splashScreen.classList.contains('is-leaving')
-                && giftUnlockScreen.hidden
                 && !isTriviaView;
         }
 
@@ -188,18 +83,17 @@
             chapterSelectionAudioStatus.textContent = 'No se pudo cargar la música. Revisa que el archivo esté en la carpeta musica3meses.';
             console.error('No se pudo cargar la música de la selección de capítulos.', chapterSelectionAudio.error);
         });
-        document.addEventListener('gift-unlocked', startChapterSelectionAudio);
-        if (giftUnlockScreen.hidden && !isTriviaView) startChapterSelectionAudio();
+        if (!isTriviaView) startChapterSelectionAudio();
 
         const chapterPlaylistTracks = [
-            { src: 'audios/cancionaleja (online-audio-converter.com).mp3', title: 'Nuestra canción de 3 meses' },
-            { src: 'musica3meses/WhatsApp Audio 2026-11-11 at 8.32.14 PM.mp3', title: 'Audio sorpresa' },
-            { src: 'musica3meses/sonido.mp3', title: 'Melodía sorpresa 1' },
-            { src: 'musica3meses/sonido1.mp3', title: 'Melodía sorpresa 2' },
-            { src: 'musica3meses/sonido2.mp3', title: 'Melodía sorpresa 3' },
-            { src: 'musica3meses/sonido3.mp3', title: 'Melodía sorpresa 4' },
-            { src: 'musica3meses/sonido4.mp3', title: 'Melodía sorpresa 5' },
-            { src: 'musica3meses/sonido5.mp3', title: 'Melodía sorpresa 6' }
+            { src: 'audios/cancionaleja (online-audio-converter.com).mp3', title: 'El Fin del Mundo - La La Love You, Axolotes Mexicanos' },
+            { src: 'musica3meses/WhatsApp Audio 2026-11-11 at 8.32.14 PM.mp3', title: 'Devuélveme a mi chica - Hombres G' },
+            { src: 'musica3meses/sonido.mp3', title: 'Bonita - Juanes, Sebastian Yatra' },
+            { src: 'musica3meses/sonido1.mp3', title: 'Por Ti - 3AM' },
+            { src: 'musica3meses/sonido2.mp3', title: 'Gasolina - Daddy Yankee' },
+            { src: 'musica3meses/sonido3.mp3', title: 'Darte un Beso - Prince Royce' },
+            { src: 'musica3meses/sonido4.mp3', title: 'SUPERESTRELLA - Aitana' },
+            { src: 'musica3meses/sonido5.mp3', title: 'Doma - Jósean Log' }
         ];
         let currentChapterTrackIndex = 0;
         let previousRandomTrackIndex = -1;
@@ -247,6 +141,7 @@
             number.setAttribute('aria-hidden', 'true');
             number.textContent = String(index + 1).padStart(2, '0');
             const title = document.createElement('span');
+            title.className = 'chapter-playlist-title';
             title.textContent = track.title;
             button.append(number, title);
             button.addEventListener('click', () => {
@@ -266,6 +161,11 @@
             if (isChapterThreeFlowActive) playNextRandomChapterTrack();
         });
 
+        anniversaryVideoRevealButton.addEventListener('click', () => {
+            anniversaryVideoRevealButton.hidden = true;
+            anniversaryVideo.hidden = false;
+            anniversaryVideo.focus();
+        });
         anniversaryVideo.addEventListener('error', () => {
             anniversaryVideoStatus.textContent = 'No se pudo cargar el video. Revisa que aleja.mp4 esté en la carpeta video.';
         });
@@ -704,7 +604,7 @@
                 feedback.textContent = '¡La llave era tu nombre! Este secreto es para ti ✨';
                 secretLetter.hidden = false;
                 if (typeof confetti === 'function') {
-                    confetti({ particleCount: isCompactDevice ? 24 : 50, spread: 65, origin: { y: 0.7 }, colors: ['#ff8296', '#ffd6a2', '#ffffff'], disableForReducedMotion: true });
+                    showConfetti({ particleCount: 15, spread: 65, origin: { y: 0.7 }, colors: ['#ff8296', '#ffd6a2', '#ffffff'], disableForReducedMotion: true });
                 }
             } else {
                 feedback.textContent = 'Casi, mi amor. Son cinco letras y es la protagonista de esta historia 💕';
@@ -716,7 +616,7 @@
             openModal(ringModal, event.currentTarget);
             if (typeof confetti === 'function') {
                 const options = {
-                    particleCount: isCompactDevice ? 32 : 70,
+                    particleCount: 15,
                     spread: 100,
                     startVelocity: 38,
                     origin: { y: 0.65 },
@@ -726,9 +626,9 @@
                 if (typeof confetti.shapeFromText === 'function') {
                     options.shapes = [confetti.shapeFromText({ text: '💖', scalar: 1.4 })];
                 }
-                confetti(options);
-                window.setTimeout(() => confetti({ ...options, particleCount: isCompactDevice ? 18 : 38, origin: { x: 0.25, y: 0.72 } }), 240);
-                window.setTimeout(() => confetti({ ...options, particleCount: isCompactDevice ? 18 : 38, origin: { x: 0.75, y: 0.72 } }), 440);
+                showConfetti(options);
+                window.setTimeout(() => showConfetti({ ...options, origin: { x: 0.25, y: 0.72 } }), 240);
+                window.setTimeout(() => showConfetti({ ...options, origin: { x: 0.75, y: 0.72 } }), 440);
             }
         });
 
@@ -782,7 +682,7 @@
 
         let timerInterval = null;
         function updateTimerVisibility() {
-            const canUpdateTimer = !isTriviaView && giftUnlockScreen.hidden;
+            const canUpdateTimer = !isTriviaView;
             if (canUpdateTimer) updateTimer();
             const shouldRunTimer = canUpdateTimer && !document.hidden;
             if (shouldRunTimer && timerInterval === null) {
@@ -793,7 +693,6 @@
             }
         }
         document.addEventListener('visibilitychange', updateTimerVisibility);
-        document.addEventListener('gift-unlocked', updateTimerVisibility);
         updateTimerVisibility();
 
         // Partículas CSS para evitar redibujar el fondo mientras se hace scroll.
@@ -892,7 +791,7 @@
                 triviaCard.classList.remove('celebrate');
                 void triviaCard.offsetWidth;
                 triviaCard.classList.add('celebrate');
-                confetti({ particleCount: isCompactDevice ? 35 : 75, spread: 75, origin: { y: 0.65 }, colors: ['#ff4b72', '#a855f7', '#ffd166', '#ffffff'], disableForReducedMotion: true });
+                showConfetti({ particleCount: 15, spread: 75, origin: { y: 0.65 }, colors: ['#ff4b72', '#a855f7', '#ffd166', '#ffffff'], disableForReducedMotion: true });
             } else {
                 selectedButton.classList.add('incorrect');
                 feedback.textContent = 'Casi 💕 ¡La respuesta correcta está iluminada!';
@@ -938,13 +837,13 @@
                     redeemButton.disabled = true;
                     redeemButton.textContent = '¡Canjeado! 💖';
                     title.textContent = `${couponName} · ¡A disfrutar!`;
-                    confetti({ particleCount: isCompactDevice ? 22 : 45, spread: 55, origin: { y: 0.7 }, colors: ['#ff4b72', '#ffd166', '#ffffff'], disableForReducedMotion: true });
+                    showConfetti({ particleCount: 15, spread: 55, origin: { y: 0.7 }, colors: ['#ff4b72', '#ffd166', '#ffffff'], disableForReducedMotion: true });
                 });
                 coupon.append(title, redeemButton);
                 couponList.append(coupon);
             });
             document.getElementById('prizeSection').classList.remove('trivia-hidden');
-            confetti({ particleCount: isCompactDevice ? 75 : 150, spread: 110, origin: { y: 0.6 }, colors: ['#ff4b72', '#a855f7', '#ffd166', '#ffffff'], disableForReducedMotion: true });
+            showConfetti({ particleCount: 15, spread: 110, origin: { y: 0.6 }, colors: ['#ff4b72', '#a855f7', '#ffd166', '#ffffff'], disableForReducedMotion: true });
         }
 
         document.getElementById('restartTrivia').addEventListener('click', startTrivia);
