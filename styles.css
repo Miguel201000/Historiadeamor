@@ -1192,13 +1192,13 @@
         .scratch-status { min-height: 1.4em; margin-top: 0.8rem; color: #ffe0ad; font-size: 0.85rem; }
 
         .secret-reasons-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; margin-top: 1.5rem; }
-        .secret-reason-card { min-height: 155px; border: 0; border-radius: 16px; background: transparent; color: inherit; perspective: 900px; cursor: pointer; font: inherit; text-align: center; }
+        .secret-reason-card { width: 100%; min-width: 0; min-height: 180px; border: 0; border-radius: 16px; background: transparent; color: inherit; perspective: 900px; cursor: pointer; font: inherit; text-align: center; box-sizing: border-box; }
         .secret-reason-inner {
             position: relative;
             display: block;
             width: 100%;
             height: 100%;
-            min-height: 155px;
+            min-height: 180px;
             transform-style: preserve-3d;
             transition: transform 0.65s cubic-bezier(.2,.75,.25,1);
         }
@@ -1215,6 +1215,11 @@
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             box-shadow: 0 8px 25px rgba(24, 8, 30, 0.18);
+            box-sizing: border-box;
+            overflow: hidden;
+            overflow-wrap: anywhere;
+            word-break: normal;
+            hyphens: auto;
         }
         .secret-reason-front {
             background: linear-gradient(145deg, rgba(255, 225, 207, 0.18), rgba(185, 101, 127, 0.2));
@@ -2401,6 +2406,12 @@
             .nav-caption { display: none; }
             .chapter-nav { top: 0.65rem; right: 0.65rem; }
             .secret-reasons-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .secret-reason-card,
+            .secret-reason-inner { min-height: 210px; }
+            .secret-reason-front,
+            .secret-reason-back { padding: 0.75rem; }
+            .secret-reason-front { font-size: clamp(0.78rem, 3.8vw, 0.92rem); }
+            .secret-reason-back { font-size: clamp(0.68rem, 3.2vw, 0.78rem); line-height: 1.45; }
             body.beach-chapter-active .chapter-three .hero { padding: 2.25rem 1.1rem; }
             body.beach-chapter-active .chapter-three .hero h1 { font-size: clamp(2.1rem, 8vw, 3rem); }
             body.beach-chapter-active .chapter-three .chapter-section { margin: 2.5rem 0; }
