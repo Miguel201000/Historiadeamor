@@ -2214,7 +2214,7 @@
             margin: 0.2rem 0 0;
             color: #fff;
             font-family: 'Montserrat', 'Arial Black', sans-serif;
-            font-size: clamp(3.5rem, 16vw, 12rem);
+            font-size: clamp(9rem, 30vw, 20rem);
             font-weight: 900;
             line-height: 1;
             letter-spacing: 0;

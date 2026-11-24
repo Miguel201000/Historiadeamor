@@ -12,7 +12,7 @@
 <body class="four-month-page">
     <main class="four-month-page-shell">
         <section class="four-month-card" aria-labelledby="four-month-title">
-            <video class="four-month-card-video" id="fourMonthBackgroundVideo" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
+            <video class="four-month-card-video" id="fourMonthBackgroundVideo" autoplay loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
                 <source src="video/GTA%206%20Intro%20Screen%204K%20HD.mp4" type="video/mp4">
             </video>
             <p class="four-month-kicker">CAPÍTULO 3</p>
@@ -44,6 +44,25 @@
             console.error('No se pudo cargar el video de fondo del capítulo de cuatro meses.', fourMonthVideo.error);
         });
 
+        function startMutedVideoAfterAutoplayBlock(autoplayError) {
+            fourMonthVideo.muted = true;
+            fourMonthVideo.play().then(() => {
+                fourMonthSoundToggle.setAttribute('aria-pressed', 'false');
+                fourMonthSoundToggle.textContent = 'Activar sonido 🔊';
+                if (autoplayError && autoplayError.name === 'NotAllowedError') {
+                    fourMonthVideoStatus.textContent = 'El navegador bloqueó el audio automático. Toca «Activar sonido» para escucharlo.';
+                    return;
+                }
+
+                fourMonthVideoStatus.textContent = 'No se pudo iniciar el audio automáticamente. Puedes activarlo con el botón.';
+                console.error('No se pudo iniciar el audio automático del video.', autoplayError);
+            }).catch(error => {
+                fourMonthSoundToggle.disabled = true;
+                fourMonthVideoStatus.textContent = 'No se pudo reproducir el video de fondo.';
+                console.error('No se pudo iniciar el video en modo silencioso después de bloquear el audio.', error);
+            });
+        }
+
         fourMonthSoundToggle.addEventListener('click', async () => {
             if (!fourMonthVideo.muted) {
                 fourMonthVideo.muted = true;
@@ -64,6 +83,15 @@
                 console.error('No se pudo activar el sonido del video del capítulo de cuatro meses.', error);
             }
         });
+
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            fourMonthVideo.muted = false;
+            fourMonthVideo.play().then(() => {
+                fourMonthSoundToggle.setAttribute('aria-pressed', 'true');
+                fourMonthSoundToggle.textContent = 'Silenciar 🔇';
+                fourMonthVideoStatus.textContent = '';
+            }).catch(startMutedVideoAfterAutoplayBlock);
+        }
     </script>
 </body>
 </html>
