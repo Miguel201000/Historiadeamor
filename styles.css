@@ -1494,8 +1494,65 @@
             pointer-events: none;
         }
         .chapter-choice-two-months {
+            isolation: isolate;
+            overflow: hidden;
             border-color: rgba(255, 130, 150, 0.38);
             background: linear-gradient(135deg, rgba(255, 130, 150, 0.15), rgba(255, 245, 241, 0.06));
+        }
+        .chapter-choice-two-months::before,
+        .chapter-choice-two-months::after,
+        .chapter-choice-three-months::before,
+        .chapter-choice-three-months::after {
+            position: absolute;
+            z-index: 0;
+            content: "";
+            pointer-events: none;
+        }
+        .chapter-choice-two-months::before {
+            top: -1.65rem;
+            right: -0.5rem;
+            color: rgba(255, 130, 150, 0.18);
+            content: "♡";
+            font-size: 9rem;
+            line-height: 1;
+            text-shadow: 0 0 24px rgba(255, 130, 150, 0.22);
+            animation: chapter-one-heartbeat 3.2s ease-in-out infinite;
+        }
+        .chapter-choice-two-months::after {
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 82%, rgba(255, 201, 210, 0.2) 0 2px, transparent 3px),
+                radial-gradient(circle at 76% 21%, rgba(255, 228, 198, 0.28) 0 2px, transparent 3px),
+                radial-gradient(ellipse at 100% 100%, rgba(255, 130, 150, 0.17), transparent 58%);
+        }
+        .chapter-choice-three-months {
+            isolation: isolate;
+            overflow: hidden;
+        }
+        .chapter-choice-three-months::before {
+            right: -8%;
+            bottom: -66px;
+            left: -8%;
+            height: 112px;
+            border-radius: 50% 50% 0 0;
+            background: linear-gradient(180deg, rgba(153, 241, 225, 0.64), rgba(50, 153, 171, 0.42));
+            box-shadow: 0 -7px 22px rgba(136, 238, 224, 0.2);
+            transform: rotate(-4deg);
+            animation: chapter-two-card-wave 6.5s ease-in-out infinite;
+        }
+        .chapter-choice-three-months::after {
+            right: -12%;
+            bottom: -84px;
+            left: -12%;
+            height: 116px;
+            border-radius: 50% 50% 0 0;
+            background: linear-gradient(180deg, rgba(77, 183, 197, 0.58), rgba(24, 99, 132, 0.55));
+            transform: rotate(4deg);
+            animation: chapter-two-card-wave 8s -2s ease-in-out infinite reverse;
+        }
+        .chapter-choice-two-months > *,
+        .chapter-choice-three-months > * {
+            z-index: 1;
         }
         .chapter-choice-two-months .chapter-choice-decoration {
             color: #ff8296;
@@ -1511,6 +1568,10 @@
         @keyframes chapter-two-wave-drift {
             0%, 100% { transform: translateX(0) rotate(-5deg); }
             50% { transform: translateX(-7px) rotate(5deg); }
+        }
+        @keyframes chapter-two-card-wave {
+            0%, 100% { translate: 0 0; }
+            50% { translate: 0 -9px; }
         }
         .chapter-choice:hover, .chapter-choice:focus-visible {
             transform: translateY(-4px);
@@ -1529,37 +1590,42 @@
             grid-column: 1 / -1;
             width: min(100%, 320px);
             justify-self: center;
-            border-color: rgba(255, 0, 127, 0.66);
-            background: linear-gradient(125deg, #0d0221 4%, #24143a 52%, #7b1154 130%);
-            box-shadow: 0 0 17px rgba(255, 0, 127, 0.26), inset 0 0 24px rgba(255, 75, 92, 0.1);
+            border-color: rgba(232, 198, 112, 0.72);
+            background: linear-gradient(125deg, #123d32 4%, #174d3c 52%, #7a2635 130%);
+            box-shadow: 0 0 18px rgba(232, 198, 112, 0.2), inset 0 0 24px rgba(255, 255, 255, 0.06);
             cursor: pointer;
             animation: chapter-four-card-glow 3.8s ease-in-out infinite;
         }
-        .chapter-choice-coming-soon::before,
         .chapter-choice-coming-soon::after {
             position: absolute;
             z-index: 0;
             content: "";
             pointer-events: none;
         }
-        .chapter-choice-coming-soon::before {
-            top: 16px;
-            right: 18px;
-            width: 94px;
-            aspect-ratio: 1;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 204, 0, 0.28), rgba(255, 75, 92, 0.14) 48%, transparent 72%);
-            box-shadow: 0 0 25px rgba(255, 75, 92, 0.68);
-            animation: chapter-four-sunset-drift 5s ease-in-out infinite;
-        }
         .chapter-choice-coming-soon::after {
             inset: 0;
-            background: repeating-linear-gradient(
-                132deg,
-                transparent 0 17px,
-                rgba(255, 0, 127, 0.09) 17px 18px
-            );
-            opacity: 0.55;
+            background:
+                radial-gradient(circle at 18% 82%, rgba(255, 255, 255, 0.72) 0 1px, transparent 2px),
+                radial-gradient(circle at 72% 28%, rgba(255, 255, 255, 0.58) 0 1px, transparent 2px),
+                radial-gradient(circle at 42% 18%, rgba(255, 255, 255, 0.62) 0 1px, transparent 2px);
+            opacity: 0.68;
+        }
+        .chapter-choice-coming-soon::before {
+            position: absolute;
+            z-index: 0;
+            inset: 0 0 auto;
+            height: 22px;
+            content: "";
+            pointer-events: none;
+            background-image:
+                linear-gradient(180deg, transparent 0 10px, rgba(220, 218, 183, 0.66) 10px 12px, transparent 12px),
+                radial-gradient(circle at 8% 14px, #f5d889 0 3px, transparent 5px),
+                radial-gradient(circle at 28% 14px, #e86668 0 3px, transparent 5px),
+                radial-gradient(circle at 49% 14px, #f5d889 0 3px, transparent 5px),
+                radial-gradient(circle at 70% 14px, #e86668 0 3px, transparent 5px),
+                radial-gradient(circle at 91% 14px, #f5d889 0 3px, transparent 5px);
+            opacity: 0.84;
+            animation: chapter-four-garland-glow 2.6s ease-in-out infinite alternate;
         }
         .chapter-choice-coming-soon > * {
             position: relative;
@@ -1569,9 +1635,8 @@
             position: absolute;
             top: 0.95rem;
             right: 1.1rem;
-            color: #ffcc00;
             font-size: 2rem;
-            text-shadow: 0 0 12px rgba(255, 204, 0, 0.85), 0 0 24px rgba(255, 0, 127, 0.72);
+            filter: drop-shadow(0 0 10px rgba(255, 231, 168, 0.72));
             animation: chapter-four-sunset-drift 3.8s ease-in-out infinite;
         }
         .chapter-choice-coming-soon .choice-arrow {
@@ -1580,20 +1645,56 @@
             bottom: 1rem;
         }
         @keyframes chapter-four-card-glow {
-            0%, 100% { box-shadow: 0 0 17px rgba(255, 0, 127, 0.26), inset 0 0 24px rgba(255, 75, 92, 0.1); }
-            50% { box-shadow: 0 0 29px rgba(255, 0, 127, 0.5), inset 0 0 30px rgba(255, 75, 92, 0.2); }
+            0%, 100% { box-shadow: 0 0 18px rgba(232, 198, 112, 0.2), inset 0 0 24px rgba(255, 255, 255, 0.06); }
+            50% { box-shadow: 0 0 28px rgba(232, 198, 112, 0.42), inset 0 0 30px rgba(255, 255, 255, 0.11); }
         }
         @keyframes chapter-four-sunset-drift {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-4px) scale(1.05); }
+            0%, 100% { transform: translateY(0) rotate(-3deg) scale(1); }
+            50% { transform: translateY(-5px) rotate(3deg) scale(1.06); }
+        }
+        @keyframes chapter-four-garland-glow {
+            from { filter: brightness(0.82); }
+            to { filter: brightness(1.28); }
         }
         body.four-month-page {
+            position: relative;
+            isolation: isolate;
             min-height: 100vh;
             background:
-                radial-gradient(ellipse at 50% 100%, rgba(255, 75, 92, 0.24), transparent 48%),
-                linear-gradient(155deg, #0d0221 8%, #24143a 48%, #7b1154 100%);
+                radial-gradient(ellipse at 50% 100%, rgba(190, 48, 62, 0.3), transparent 48%),
+                radial-gradient(ellipse at 12% 8%, rgba(232, 198, 112, 0.12), transparent 34%),
+                linear-gradient(155deg, #09271f 8%, #123d32 48%, #4f1d2b 100%);
+        }
+        .four-month-snowfall {
+            position: fixed;
+            z-index: 1;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .four-month-snowfall span {
+            position: absolute;
+            top: -12vh;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: clamp(0.8rem, 2vw, 1.4rem);
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+            animation: four-month-snow-fall 10s linear infinite;
+        }
+        .four-month-snowfall span:nth-child(1) { left: 8%; animation-delay: -2s; }
+        .four-month-snowfall span:nth-child(2) { left: 24%; animation-delay: -7s; font-size: 0.9rem; }
+        .four-month-snowfall span:nth-child(3) { left: 47%; animation-delay: -4s; }
+        .four-month-snowfall span:nth-child(4) { left: 66%; animation-delay: -9s; font-size: 0.85rem; }
+        .four-month-snowfall span:nth-child(5) { left: 82%; animation-delay: -5s; }
+        .four-month-snowfall span:nth-child(6) { left: 94%; animation-delay: -1s; font-size: 0.9rem; }
+        @keyframes four-month-snow-fall {
+            from { opacity: 0; transform: translate3d(0, -5vh, 0) rotate(0); }
+            12% { opacity: 0.85; }
+            88% { opacity: 0.75; }
+            to { opacity: 0; transform: translate3d(34px, 115vh, 0) rotate(250deg); }
         }
         .four-month-page-shell {
+            position: relative;
+            z-index: 2;
             display: grid;
             min-height: 100vh;
             place-items: center;
@@ -1605,94 +1706,74 @@
             overflow: hidden;
             width: min(100%, 680px);
             padding: clamp(2rem, 7vw, 4rem);
-            border: 1px solid rgba(255, 0, 127, 0.56);
+            border: 1px solid rgba(232, 198, 112, 0.62);
             border-radius: 28px;
-            background: rgba(13, 2, 33, 0.04);
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.22), 0 24px 70px rgba(0, 0, 0, 0.3);
+            background: rgba(7, 37, 29, 0.64);
+            box-shadow: 0 0 36px rgba(232, 198, 112, 0.14), 0 24px 70px rgba(0, 0, 0, 0.36), inset 0 0 36px rgba(255, 255, 255, 0.035);
             color: #fff;
             text-align: center;
             animation: chapter-four-title-arrive 0.8s cubic-bezier(0.2, 0.75, 0.25, 1) both;
         }
-        .four-month-card-video {
-            position: absolute;
-            z-index: -2;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: blur(0.5px) brightness(1.04) saturate(1.12);
-            transform: scale(1.025);
-            pointer-events: none;
-        }
         .four-month-card::before {
             position: absolute;
             z-index: -1;
-            top: -50px;
-            right: -40px;
-            width: 190px;
-            aspect-ratio: 1;
-            border-radius: 50%;
-            background: repeating-linear-gradient(to bottom, #ffcc00 0 12px, #ff8b67 12px 19px, transparent 19px 27px);
-            box-shadow: 0 0 48px rgba(255, 75, 92, 0.45);
+            inset: 0 0 auto;
+            height: 34px;
+            border-radius: 28px 28px 0 0;
+            background-image:
+                linear-gradient(180deg, transparent 0 13px, rgba(220, 218, 183, 0.7) 13px 15px, transparent 15px),
+                radial-gradient(circle at 7% 17px, #f5d889 0 4px, transparent 7px),
+                radial-gradient(circle at 22% 17px, #e86668 0 4px, transparent 7px),
+                radial-gradient(circle at 38% 17px, #f5d889 0 4px, transparent 7px),
+                radial-gradient(circle at 54% 17px, #e86668 0 4px, transparent 7px),
+                radial-gradient(circle at 70% 17px, #f5d889 0 4px, transparent 7px),
+                radial-gradient(circle at 86% 17px, #e86668 0 4px, transparent 7px);
             content: "";
-            opacity: 0.16;
-            animation: chapter-four-sunset-drift 6s ease-in-out infinite;
+            opacity: 0.88;
+            animation: chapter-four-garland-glow 2.6s ease-in-out infinite alternate;
         }
         .four-month-card::after {
             position: absolute;
             z-index: -1;
             inset: 0;
-            background: linear-gradient(135deg, rgba(13, 2, 33, 0.08), rgba(36, 20, 58, 0.1) 58%, rgba(123, 17, 84, 0.09));
+            background:
+                linear-gradient(135deg, rgba(8, 41, 31, 0.22), rgba(19, 61, 50, 0.12) 58%, rgba(104, 35, 44, 0.22)),
+                radial-gradient(circle at 20% 85%, rgba(255, 255, 255, 0.12) 0 1px, transparent 2px);
             content: "";
             pointer-events: none;
         }
         .four-month-kicker {
-            color: #ffcc00;
+            color: #f0d58b;
             font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 0.34em;
-            text-shadow: 0 1px 6px rgba(13, 2, 33, 0.9);
+            text-shadow: 0 1px 6px rgba(4, 25, 19, 0.95);
         }
         .four-month-card h1 {
             margin: 0.75rem 0;
             font: 600 clamp(2.4rem, 8vw, 4.5rem)/1.1 'Playfair Display', serif;
-            text-shadow: 0 0 18px rgba(255, 0, 127, 0.72);
+            text-shadow: 0 0 18px rgba(232, 198, 112, 0.38);
         }
         .four-month-card > p:not(.four-month-kicker) {
             max-width: 470px;
             margin: 0 auto;
-            color: rgba(255, 244, 250, 0.82);
+            color: rgba(255, 248, 231, 0.9);
             line-height: 1.75;
-            text-shadow: 0 1px 6px rgba(13, 2, 33, 0.95);
+            text-shadow: 0 1px 6px rgba(4, 25, 19, 0.95);
         }
-        .four-month-card > .four-month-video-note {
+        .four-month-card-decoration {
+            position: absolute;
+            top: 0.8rem;
+            right: 1rem;
+            font-size: clamp(2.4rem, 6vw, 4rem);
+            filter: drop-shadow(0 0 12px rgba(232, 198, 112, 0.46));
+            animation: chapter-four-sunset-drift 4s ease-in-out infinite;
+        }
+        .four-month-card > .four-month-holiday-note {
             margin-top: 1rem;
-            color: #ffcc00;
+            color: #f0d58b;
             font-size: 0.9rem;
         }
-        .four-month-sound-toggle {
-            min-height: 46px;
-            margin-top: 1rem;
-            padding: 0.65rem 1rem;
-            border: 1px solid rgba(255, 204, 0, 0.56);
-            border-radius: 999px;
-            background: rgba(13, 2, 33, 0.58);
-            color: #fff8f4;
-            font: 600 0.9rem 'Montserrat', sans-serif;
-            cursor: pointer;
-            transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-        }
-        .four-month-sound-toggle:hover,
-        .four-month-sound-toggle:focus-visible {
-            transform: translateY(-2px);
-            background: rgba(255, 0, 127, 0.24);
-            box-shadow: 0 0 18px rgba(255, 0, 127, 0.34);
-            outline: 2px solid rgba(255, 204, 0, 0.78);
-            outline-offset: 3px;
-        }
-        .four-month-sound-toggle:disabled { cursor: not-allowed; opacity: 0.6; }
-        .four-month-video-status { margin-top: 0.6rem !important; color: #ffd6a2 !important; font-size: 0.85rem; }
-        .four-month-video-status:empty { display: none; }
         .four-month-back {
             display: inline-flex;
             align-items: center;
@@ -1700,28 +1781,28 @@
             min-height: 48px;
             margin-top: 1.6rem;
             padding: 0.75rem 1.1rem;
-            border: 1px solid rgba(255, 204, 0, 0.5);
+            border: 1px solid rgba(232, 198, 112, 0.62);
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(8, 41, 31, 0.64);
             color: #fff;
             font-weight: 600;
             text-decoration: none;
             transition: background 0.2s ease, box-shadow 0.2s ease;
         }
         .four-month-back:hover, .four-month-back:focus-visible {
-            background: rgba(255, 0, 127, 0.22);
-            box-shadow: 0 0 18px rgba(255, 0, 127, 0.36);
-            outline: 2px solid rgba(255, 204, 0, 0.8);
+            background: rgba(132, 38, 48, 0.7);
+            box-shadow: 0 0 18px rgba(232, 198, 112, 0.32);
+            outline: 2px solid rgba(232, 198, 112, 0.8);
             outline-offset: 3px;
         }
         .chapter-choice-coming-soon:hover,
         .chapter-choice-coming-soon:focus-visible {
             transform: none;
-            border-color: rgba(255, 0, 127, 0.8);
-            background: linear-gradient(125deg, #0d0221 4%, #24143a 52%, #7b1154 130%);
+            border-color: rgba(255, 235, 184, 0.9);
+            background: linear-gradient(125deg, #174b3b 4%, #205843 52%, #873340 130%);
         }
-        .chapter-choice-coming-soon:focus-visible { outline: 2px solid rgba(255, 204, 0, 0.9); outline-offset: 3px; }
-        .chapter-choice-note { color: rgba(255, 244, 250, 0.68); font-size: 0.82rem; }
+        .chapter-choice-coming-soon:focus-visible { outline: 2px solid rgba(255, 235, 184, 0.9); outline-offset: 3px; }
+        .chapter-choice-note { color: rgba(255, 248, 231, 0.78); font-size: 0.82rem; }
 
         .chapter-nav {
             position: fixed;
@@ -2106,8 +2187,9 @@
             overflow: hidden;
             padding: 1.5rem;
             background:
-                radial-gradient(ellipse at 50% 108%, rgba(255, 75, 92, 0.62), transparent 42%),
-                linear-gradient(155deg, #0d0221 8%, #24143a 42%, #7b1154 78%, #ff4b5c 130%);
+                radial-gradient(ellipse at 50% 108%, rgba(224, 185, 108, 0.2), transparent 42%),
+                radial-gradient(ellipse at 12% 18%, rgba(35, 101, 73, 0.24), transparent 36%),
+                linear-gradient(155deg, #071f19 8%, #103b30 42%, #592532 78%, #8a3438 130%);
             opacity: 1;
             transition: opacity 650ms ease;
         }
@@ -2123,16 +2205,16 @@
             inset: auto -12% -29% -12%;
             height: 54%;
             border-radius: 50% 50% 0 0;
-            background: linear-gradient(180deg, rgba(255, 75, 92, 0.28), rgba(13, 2, 33, 0.96));
-            filter: blur(1px);
-            opacity: 0.8;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(220, 237, 228, 0.6) 20%, rgba(9, 47, 36, 0.96) 23%);
+            filter: blur(2px);
+            opacity: 0.68;
             animation: chapter-four-horizon-rise 1.3s cubic-bezier(0.2, 0.75, 0.25, 1) both;
         }
         .chapter-four-cinematic::after {
             width: min(62vw, 520px);
             aspect-ratio: 1;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 75, 92, 0.26), rgba(123, 17, 84, 0.1) 48%, transparent 72%);
+            background: radial-gradient(circle, rgba(245, 214, 143, 0.22), rgba(190, 48, 62, 0.08) 48%, transparent 72%);
             transform: translateY(12%);
             animation: chapter-four-sun-breathe 4s ease-in-out infinite;
         }
@@ -2146,28 +2228,21 @@
         .chapter-four-cinematic-stars::before,
         .chapter-four-cinematic-stars::after {
             position: absolute;
-            width: 3px;
-            height: 3px;
-            border-radius: 50%;
-            background: #fff3d5;
+            inset: 0;
             content: "";
+            background-image:
+                radial-gradient(3px 3px at 20px 30px, rgba(255, 255, 255, 0.88) 98%, transparent),
+                radial-gradient(2px 2px at 80px 110px, rgba(255, 255, 255, 0.68) 98%, transparent),
+                radial-gradient(2px 2px at 140px 65px, rgba(245, 214, 143, 0.7) 98%, transparent);
+            background-size: 180px 180px;
             opacity: 0;
-            box-shadow:
-                12vw 14vh 0 1px rgba(255, 204, 0, 0.7),
-                28vw 36vh 0 rgba(255, 255, 255, 0.8),
-                46vw 12vh 0 1px rgba(255, 0, 127, 0.7),
-                67vw 28vh 0 rgba(255, 255, 255, 0.8),
-                85vw 17vh 0 1px rgba(255, 204, 0, 0.7),
-                19vw 72vh 0 rgba(255, 255, 255, 0.75),
-                58vw 82vh 0 1px rgba(255, 0, 127, 0.65),
-                78vw 68vh 0 rgba(255, 255, 255, 0.8);
-            animation: chapter-four-stars-twinkle 2.8s ease-in-out infinite alternate;
+            animation: chapter-four-snow-fall 10s linear infinite;
         }
-        .chapter-four-cinematic-stars::before { top: 8%; left: 7%; }
         .chapter-four-cinematic-stars::after {
-            top: 21%;
-            left: 39%;
-            animation-delay: 1.1s;
+            background-position: 70px 45px;
+            background-size: 250px 250px;
+            animation-duration: 15s;
+            animation-delay: -7s;
         }
         .chapter-four-cinematic.is-leaving {
             opacity: 0;
@@ -2183,15 +2258,35 @@
             outline: none;
             text-align: center;
         }
+        .chapter-four-cinematic-card::before {
+            position: absolute;
+            top: -13vh;
+            left: 50%;
+            width: 100vw;
+            height: 36px;
+            background-image:
+                linear-gradient(180deg, transparent 0 13px, rgba(220, 218, 183, 0.62) 13px 15px, transparent 15px),
+                radial-gradient(circle at 7% 17px, #f5d889 0 4px, transparent 7px),
+                radial-gradient(circle at 22% 17px, #e86668 0 4px, transparent 7px),
+                radial-gradient(circle at 38% 17px, #f5d889 0 4px, transparent 7px),
+                radial-gradient(circle at 54% 17px, #e86668 0 4px, transparent 7px),
+                radial-gradient(circle at 70% 17px, #f5d889 0 4px, transparent 7px),
+                radial-gradient(circle at 86% 17px, #e86668 0 4px, transparent 7px);
+            content: "";
+            opacity: 0.85;
+            pointer-events: none;
+            transform: translateX(-50%);
+            animation: chapter-four-garland-glow 2.6s ease-in-out infinite alternate;
+        }
         .chapter-four-cinematic-flare {
             position: absolute;
             z-index: 0;
             top: 28%;
             left: 50%;
             width: min(125vw, 1250px);
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255, 204, 0, 0.1), rgba(255, 237, 222, 0.76), rgba(255, 0, 127, 0.16), transparent);
-            box-shadow: 0 0 24px rgba(255, 204, 0, 0.36);
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(28, 89, 58, 0.1), rgba(255, 232, 170, 0.9), rgba(176, 46, 57, 0.45), transparent);
+            box-shadow: 0 0 24px rgba(241, 210, 135, 0.42);
             opacity: 0;
             pointer-events: none;
             transform: translateX(-140%) rotate(-12deg);
@@ -2200,7 +2295,7 @@
         .chapter-four-cinematic-kicker {
             position: relative;
             z-index: 1;
-            color: #ffcc00;
+            color: #f0d58b;
             font-size: clamp(0.9rem, 2.4vw, 1.15rem);
             font-weight: 700;
             letter-spacing: 0.42em;
@@ -2222,7 +2317,7 @@
             text-transform: uppercase;
             -webkit-text-stroke: 1px rgba(255, 255, 255, 0.72);
             paint-order: stroke fill;
-            text-shadow: 0 2px 0 rgba(36, 20, 58, 0.96), 0 0 10px rgba(255, 0, 127, 0.98), 0 0 32px rgba(255, 0, 127, 0.88), 0 8px 42px rgba(13, 2, 33, 0.84);
+            text-shadow: 0 2px 0 rgba(7, 31, 25, 0.96), 0 0 10px rgba(240, 213, 139, 0.78), 0 0 32px rgba(240, 213, 139, 0.52), 0 8px 42px rgba(4, 25, 19, 0.88);
             animation:
                 chapter-four-title-in 2.5s cubic-bezier(0.2, 0.75, 0.25, 1) both,
                 chapter-four-title-glow 3.2s 2.5s ease-in-out infinite;
@@ -2231,26 +2326,66 @@
             position: relative;
             z-index: 1;
             margin-top: 0.75rem;
-            color: #ffcc00;
+            color: #f0d58b;
             font-size: clamp(0.95rem, 2.8vw, 1.35rem);
             font-weight: 700;
             letter-spacing: 0.48em;
             text-indent: 0.48em;
-            text-shadow: 0 2px 14px rgba(13, 2, 33, 0.75), 0 0 18px rgba(255, 204, 0, 0.45);
+            text-shadow: 0 2px 14px rgba(7, 31, 25, 0.86), 0 0 18px rgba(240, 213, 139, 0.5);
             animation: chapter-four-caption-in 650ms 2.55s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+        }
+        .chapter-four-cinematic-sparkle {
+            position: absolute;
+            z-index: 1;
+            color: #fff9e8;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.85), 0 0 22px rgba(240, 213, 139, 0.7);
+            opacity: 0;
+            pointer-events: none;
+            animation:
+                chapter-four-sparkle-arrive 900ms 3s cubic-bezier(0.2, 0.75, 0.25, 1) both,
+                chapter-four-sparkle-glimmer 1.8s 3.9s ease-in-out infinite alternate;
+        }
+        .chapter-four-cinematic-sparkle-one { top: 46%; left: 17%; }
+        .chapter-four-cinematic-sparkle-two {
+            top: 57%;
+            right: 16%;
+            color: #f0d58b;
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            animation-delay: 3.2s, 4.1s;
+        }
+        .chapter-four-cinematic-sparkle-three {
+            top: 73%;
+            left: 50%;
+            font-size: 1rem;
+            animation-delay: 3.4s, 4.3s;
         }
         @keyframes chapter-four-horizon-rise {
             from { opacity: 0; transform: translateY(38px); }
-            to { opacity: 0.8; transform: translateY(0); }
+            to { opacity: 0.68; transform: translateY(0); }
         }
         @keyframes chapter-four-sun-breathe {
-            0%, 100% { opacity: 0.52; transform: translateY(12%) scale(0.92); }
-            50% { opacity: 0.9; transform: translateY(12%) scale(1.06); }
+            0%, 100% { opacity: 0.3; transform: translateY(12%) scale(0.92); }
+            50% { opacity: 0.66; transform: translateY(12%) scale(1.06); }
         }
         @keyframes chapter-four-light-sweep {
             0% { opacity: 0; transform: translateX(-140%) rotate(-12deg); }
             24% { opacity: 0.85; }
             100% { opacity: 0; transform: translateX(40%) rotate(-12deg); }
+        }
+        @keyframes chapter-four-snow-fall {
+            from { opacity: 0; background-position: 0 0; }
+            12% { opacity: 0.82; }
+            88% { opacity: 0.75; }
+            to { opacity: 0; background-position: 0 360px; }
+        }
+        @keyframes chapter-four-sparkle-arrive {
+            from { opacity: 0; transform: scale(0.35) rotate(-35deg); }
+            to { opacity: 0.9; transform: scale(1) rotate(0); }
+        }
+        @keyframes chapter-four-sparkle-glimmer {
+            from { filter: brightness(0.72); }
+            to { filter: brightness(1.35); }
         }
         @keyframes chapter-four-kicker-in {
             from { opacity: 0; filter: blur(8px); transform: translateY(18px); letter-spacing: 0.7em; }
@@ -2262,12 +2397,8 @@
             to { opacity: 1; filter: blur(0); transform: perspective(700px) scale(1) translateY(0); }
         }
         @keyframes chapter-four-title-glow {
-            0%, 100% { text-shadow: 0 2px 0 rgba(36, 20, 58, 0.96), 0 0 10px rgba(255, 0, 127, 0.98), 0 0 32px rgba(255, 0, 127, 0.88), 0 8px 42px rgba(13, 2, 33, 0.84); }
-            50% { text-shadow: 0 2px 0 rgba(36, 20, 58, 0.96), 0 0 16px rgba(255, 0, 127, 1), 0 0 42px rgba(255, 0, 127, 0.98), 0 8px 42px rgba(13, 2, 33, 0.84); }
-        }
-        @keyframes chapter-four-stars-twinkle {
-            from { opacity: 0.12; transform: scale(0.7); }
-            to { opacity: 0.88; transform: scale(1.15); }
+            0%, 100% { text-shadow: 0 2px 0 rgba(7, 31, 25, 0.96), 0 0 10px rgba(240, 213, 139, 0.78), 0 0 32px rgba(240, 213, 139, 0.52), 0 8px 42px rgba(4, 25, 19, 0.88); }
+            50% { text-shadow: 0 2px 0 rgba(7, 31, 25, 0.96), 0 0 16px rgba(255, 232, 170, 0.92), 0 0 42px rgba(240, 213, 139, 0.7), 0 8px 42px rgba(4, 25, 19, 0.88); }
         }
         @keyframes chapter-four-caption-in {
             from { opacity: 0; filter: blur(5px); transform: translateY(12px); }
@@ -2864,18 +2995,26 @@
         .splash-screen .chapter-choice-two-months .chapter-choice-decoration {
             animation: chapter-one-heartbeat 2.4s ease-in-out infinite;
         }
+        .splash-screen .chapter-choice-two-months::before {
+            animation: chapter-one-heartbeat 3.2s ease-in-out infinite;
+        }
         .splash-screen .chapter-choice-three-months .chapter-choice-decoration {
             animation: chapter-two-wave-drift 3.2s ease-in-out infinite;
+        }
+        .splash-screen .chapter-choice-three-months::before {
+            animation: chapter-two-card-wave 6.5s ease-in-out infinite;
+        }
+        .splash-screen .chapter-choice-three-months::after {
+            animation: chapter-two-card-wave 8s -2s ease-in-out infinite reverse;
         }
         .splash-screen .chapter-choice-coming-soon {
             animation: chapter-four-card-glow 3.8s ease-in-out infinite;
         }
         .splash-screen .chapter-choice-coming-soon::before {
-            animation: chapter-four-sunset-drift 5s ease-in-out infinite;
+            animation: chapter-four-garland-glow 2.6s ease-in-out infinite alternate;
         }
-
         @media (prefers-reduced-motion: reduce) {
-            .four-month-card-video { display: none; }
+            .four-month-snowfall span, .four-month-card-decoration { animation: none; }
             .splash-screen { transition: opacity 1ms, visibility 1ms; }
             .splash-sun, .splash-wave, .splash-bubble { animation: none; }
             body.beach-chapter-active::before, body.beach-chapter-active::after { animation: none; }
@@ -2885,7 +3024,9 @@
             .chapter-choice:hover, .chapter-choice:focus-visible { transform: none; }
             .splash-screen .chapter-choice-two-months .chapter-choice-decoration,
             .splash-screen .chapter-choice-three-months .chapter-choice-decoration { animation: none; }
-            .chapter-choice-coming-soon::before { animation: none; }
+            .splash-screen .chapter-choice-two-months::before,
+            .splash-screen .chapter-choice-three-months::before,
+            .splash-screen .chapter-choice-three-months::after { animation: none; }
             .splash-screen .chapter-choice-coming-soon,
             .splash-screen .chapter-choice-coming-soon::before,
             .splash-screen .chapter-choice-coming-soon .chapter-choice-decoration { animation: none; }
@@ -2894,7 +3035,9 @@
             .happiness-note.is-flying, .bucket-heart, .emergency-love-heart { animation: none; }
             .chapter-four-cinematic { transition: opacity 1ms; }
             .chapter-four-cinematic::before, .chapter-four-cinematic::after, .chapter-four-cinematic-flare,
+            .chapter-four-cinematic-card::before,
             .chapter-four-cinematic-stars::before, .chapter-four-cinematic-stars::after,
+            .chapter-four-cinematic-sparkle,
             .chapter-four-cinematic-kicker, .chapter-four-cinematic-card h2, .chapter-four-cinematic-caption { animation: none; }
             .four-month-card, .four-month-card::before { animation: none; }
             .secret-reason-inner { transition: none; }

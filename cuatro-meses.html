@@ -3,95 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capítulo 3 · Muy pronto ✨</title>
+    <title>Capítulo 3 · Navidad · Muy pronto ✨</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20261124-video-strong-visibility">
+    <link rel="stylesheet" href="styles.css?v=20261124-chapter-three-christmas-lights">
 </head>
 <body class="four-month-page">
+    <div class="four-month-snowfall" aria-hidden="true">
+        <span>❄</span><span>✦</span><span>❄</span><span>✧</span><span>❄</span><span>✦</span>
+    </div>
     <main class="four-month-page-shell">
         <section class="four-month-card" aria-labelledby="four-month-title">
-            <video class="four-month-card-video" id="fourMonthBackgroundVideo" autoplay loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
-                <source src="video/GTA%206%20Intro%20Screen%204K%20HD.mp4" type="video/mp4">
-            </video>
-            <p class="four-month-kicker">CAPÍTULO 3</p>
+            <p class="four-month-kicker">CAPÍTULO 3 · NAVIDAD</p>
             <h1 id="four-month-title">Muy pronto ✨</h1>
-            <p>Estamos preparando una nueva página para celebrar nuestros cuatro meses. Guarda la emoción; pronto habrá una sorpresa aquí. ❤️</p>
-            <p class="four-month-video-note">Un adelanto cinematográfico acompaña esta página.</p>
-            <button class="four-month-sound-toggle" id="fourMonthSoundToggle" type="button" aria-pressed="false">
-                Activar sonido 🔊
-            </button>
-            <p class="four-month-video-status" id="fourMonthVideoStatus" role="status" aria-live="polite"></p>
+            <p>La magia de nuestros cuatro meses está en camino. Que esta Navidad nos encuentre llenos de amor, abrazos y nuevos recuerdos. ❤️</p>
+            <p class="four-month-holiday-note">Una sorpresa especial, envuelta para nosotros. 🎁</p>
             <a class="four-month-back" href="index.html">Volver a capítulos <span aria-hidden="true">↗</span></a>
         </section>
     </main>
-    <script>
-        const fourMonthVideo = document.getElementById('fourMonthBackgroundVideo');
-        const fourMonthSoundToggle = document.getElementById('fourMonthSoundToggle');
-        const fourMonthVideoStatus = document.getElementById('fourMonthVideoStatus');
-
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            fourMonthVideo.removeAttribute('autoplay');
-            fourMonthVideo.pause();
-            fourMonthSoundToggle.disabled = true;
-            fourMonthVideoStatus.textContent = 'El fondo animado está pausado por la preferencia de movimiento reducido.';
-        }
-
-        fourMonthVideo.addEventListener('error', () => {
-            fourMonthSoundToggle.disabled = true;
-            fourMonthVideoStatus.textContent = 'No se pudo cargar el video de fondo.';
-            console.error('No se pudo cargar el video de fondo del capítulo de cuatro meses.', fourMonthVideo.error);
-        });
-
-        function startMutedVideoAfterAutoplayBlock(autoplayError) {
-            fourMonthVideo.muted = true;
-            fourMonthVideo.play().then(() => {
-                fourMonthSoundToggle.setAttribute('aria-pressed', 'false');
-                fourMonthSoundToggle.textContent = 'Activar sonido 🔊';
-                if (autoplayError && autoplayError.name === 'NotAllowedError') {
-                    fourMonthVideoStatus.textContent = 'El navegador bloqueó el audio automático. Toca «Activar sonido» para escucharlo.';
-                    return;
-                }
-
-                fourMonthVideoStatus.textContent = 'No se pudo iniciar el audio automáticamente. Puedes activarlo con el botón.';
-                console.error('No se pudo iniciar el audio automático del video.', autoplayError);
-            }).catch(error => {
-                fourMonthSoundToggle.disabled = true;
-                fourMonthVideoStatus.textContent = 'No se pudo reproducir el video de fondo.';
-                console.error('No se pudo iniciar el video en modo silencioso después de bloquear el audio.', error);
-            });
-        }
-
-        fourMonthSoundToggle.addEventListener('click', async () => {
-            if (!fourMonthVideo.muted) {
-                fourMonthVideo.muted = true;
-                fourMonthSoundToggle.setAttribute('aria-pressed', 'false');
-                fourMonthSoundToggle.textContent = 'Activar sonido 🔊';
-                return;
-            }
-
-            fourMonthVideo.muted = false;
-            try {
-                await fourMonthVideo.play();
-                fourMonthSoundToggle.setAttribute('aria-pressed', 'true');
-                fourMonthSoundToggle.textContent = 'Silenciar 🔇';
-                fourMonthVideoStatus.textContent = '';
-            } catch (error) {
-                fourMonthVideo.muted = true;
-                fourMonthVideoStatus.textContent = 'No se pudo activar el sonido. Inténtalo otra vez.';
-                console.error('No se pudo activar el sonido del video del capítulo de cuatro meses.', error);
-            }
-        });
-
-        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            fourMonthVideo.muted = false;
-            fourMonthVideo.play().then(() => {
-                fourMonthSoundToggle.setAttribute('aria-pressed', 'true');
-                fourMonthSoundToggle.textContent = 'Silenciar 🔇';
-                fourMonthVideoStatus.textContent = '';
-            }).catch(startMutedVideoAfterAutoplayBlock);
-        }
-    </script>
 </body>
 </html>

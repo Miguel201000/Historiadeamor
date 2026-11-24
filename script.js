@@ -11,8 +11,9 @@
 
         const splashScreen = document.getElementById('splashScreen');
         const chapterFourCinematic = document.getElementById('chapterFourCinematic');
-        const chapterFourCinematicDuration = 3500;
-        const chapterFourFadeDuration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 650;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const chapterFourCinematicDuration = prefersReducedMotion ? 1 : 5000;
+        const chapterFourFadeDuration = prefersReducedMotion ? 1 : 650;
         const chapterSelectionAudio = document.getElementById('chapterSelectionAudio');
         const chapterSelectionAudioButton = document.getElementById('chapterSelectionAudioButton');
         const chapterSelectionAudioStatus = document.getElementById('chapterSelectionAudioStatus');
