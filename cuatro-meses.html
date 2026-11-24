@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 3 · Muy pronto ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=20261124-video-contrast">
+</head>
+<body class="four-month-page">
+    <main class="four-month-page-shell">
+        <section class="four-month-card" aria-labelledby="four-month-title">
+            <video class="four-month-card-video" id="fourMonthBackgroundVideo" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
+                <source src="video/GTA%206%20Intro%20Screen%204K%20HD.mp4" type="video/mp4">
+            </video>
+            <p class="four-month-kicker">CAPÍTULO 3</p>
+            <h1 id="four-month-title">Muy pronto ✨</h1>
+            <p>Estamos preparando una nueva página para celebrar nuestros cuatro meses. Guarda la emoción; pronto habrá una sorpresa aquí. ❤️</p>
+            <p class="four-month-video-note">Un adelanto cinematográfico acompaña esta página.</p>
+            <button class="four-month-sound-toggle" id="fourMonthSoundToggle" type="button" aria-pressed="false">
+                Activar sonido 🔊
+            </button>
+            <p class="four-month-video-status" id="fourMonthVideoStatus" role="status" aria-live="polite"></p>
+            <a class="four-month-back" href="index.html">Volver a capítulos <span aria-hidden="true">↗</span></a>
+        </section>
+    </main>
+    <script>
+        const fourMonthVideo = document.getElementById('fourMonthBackgroundVideo');
+        const fourMonthSoundToggle = document.getElementById('fourMonthSoundToggle');
+        const fourMonthVideoStatus = document.getElementById('fourMonthVideoStatus');
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            fourMonthVideo.removeAttribute('autoplay');
+            fourMonthVideo.pause();
+            fourMonthSoundToggle.disabled = true;
+            fourMonthVideoStatus.textContent = 'El fondo animado está pausado por la preferencia de movimiento reducido.';
+        }
+
+        fourMonthVideo.addEventListener('error', () => {
+            fourMonthSoundToggle.disabled = true;
+            fourMonthVideoStatus.textContent = 'No se pudo cargar el video de fondo.';
+            console.error('No se pudo cargar el video de fondo del capítulo de cuatro meses.', fourMonthVideo.error);
+        });
+
+        fourMonthSoundToggle.addEventListener('click', async () => {
+            if (!fourMonthVideo.muted) {
+                fourMonthVideo.muted = true;
+                fourMonthSoundToggle.setAttribute('aria-pressed', 'false');
+                fourMonthSoundToggle.textContent = 'Activar sonido 🔊';
+                return;
+            }
+
+            fourMonthVideo.muted = false;
+            try {
+                await fourMonthVideo.play();
+                fourMonthSoundToggle.setAttribute('aria-pressed', 'true');
+                fourMonthSoundToggle.textContent = 'Silenciar 🔇';
+                fourMonthVideoStatus.textContent = '';
+            } catch (error) {
+                fourMonthVideo.muted = true;
+                fourMonthVideoStatus.textContent = 'No se pudo activar el sonido. Inténtalo otra vez.';
+                console.error('No se pudo activar el sonido del video del capítulo de cuatro meses.', error);
+            }
+        });
+    </script>
+</body>
+</html>

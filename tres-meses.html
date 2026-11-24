@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 2 · Marea de Amor 🌊</title>
+    <!-- Fuentes elegantes de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261124-cinematic-polish">
+</head>
+<body class="three-month-page">
+
+    <div id="canvas-bg" aria-hidden="true"></div>
+
+    <div id="splashScreen" hidden>
+        <button id="chapterSelectionAudioButton" type="button" hidden></button>
+        <p id="chapterSelectionAudioStatus"></p>
+        <audio id="chapterSelectionAudio" hidden></audio>
+    </div>
+
+    <nav class="chapter-nav" id="chapterNav" aria-label="Cambiar capítulo" hidden>
+        <span class="nav-caption">Nuestra historia</span>
+        <a class="chapter-nav-link" href="index.html">Capítulos</a>
+        <a class="chapter-nav-link" href="dos-meses.html">2 meses</a>
+        <span class="chapter-nav-current" aria-current="page">3 meses</span>
+    </nav>
+
+    <main class="chapter-view chapter-three is-active" id="chapterThree" aria-labelledby="title-three" aria-hidden="false">
+        <div class="container">
+            <section class="hero glass">
+                <p class="eyebrow">Capítulo 2 · 21 de agosto</p>
+                <h1 id="title-three">Tres meses: un mar de amor para Aleja 🌊</h1>
+                <p>Recuerdos y promesas que navegan junto a nosotros</p>
+                <div class="timer-grid" aria-label="Tiempo transcurrido desde que comenzó nuestra historia">
+                    <div class="timer-box"><div class="timer-number" id="days-three">00</div><div class="timer-label">Días</div></div>
+                    <div class="timer-box"><div class="timer-number" id="hours-three">00</div><div class="timer-label">Horas</div></div>
+                    <div class="timer-box"><div class="timer-number" id="minutes-three">00</div><div class="timer-label">Minutos</div></div>
+                    <div class="timer-box"><div class="timer-number" id="seconds-three">00</div><div class="timer-label">Segundos</div></div>
+                </div>
+            </section>
+
+            <section class="chapter-section chapter-soundtrack glass" aria-labelledby="chapter-soundtrack-title">
+                <p class="eyebrow section-eyebrow">Banda sonora</p>
+                <h2 class="section-title" id="chapter-soundtrack-title">Canciones🎶</h2>
+                <div class="playlist-player" id="chapterPlaylistPlayer">
+                    <div class="playlist-record" aria-hidden="true"><span>♡</span></div>
+                    <div class="playlist-player-content">
+                        <span class="playlist-player-kicker">Ahora suena</span>
+                        <p class="chapter-playlist-current" id="chapterPlaylistCurrent" aria-live="polite">El Fin del Mundo - La La Love You, Axolotes Mexicanos</p>
+                        <div class="player-waveform playlist-waveform" aria-hidden="true">
+                            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                        </div>
+                        <audio id="chapterThreeAudio" controls preload="none" aria-label="Playlist para Aleja">
+                            <source id="chapterThreeAudioSource" src="audios/cancionaleja (online-audio-converter.com).mp3" type="audio/mpeg">
+                            Tu navegador no puede reproducir este audio.
+                        </audio>
+                    </div>
+                </div>
+                <button class="playlist-skip-button" id="chapterPlaylistSkip" type="button">Siguiente canción al azar ↗</button>
+                <ol class="chapter-playlist" id="chapterPlaylist" aria-label="Canciones de nuestra playlist"></ol>
+                <p id="chapterThreeAudioStatus" role="status" aria-live="polite"></p>
+            </section>
+
+            <section class="chapter-section riddle-card glass" aria-labelledby="riddle-title">
+                <p class="eyebrow">Solo tú conoces la respuesta</p>
+                <h2 class="section-title" id="riddle-title">El Enigma de Nuestra Historia 🔐</h2>
+                <p class="section-copy">La persona que hace más bonito cada capítulo de esta historia tiene cinco letras. ¿Quién es?</p>
+                <form class="riddle-form" id="riddleForm">
+                    <label class="sr-only" for="riddleAnswer">Escribe la respuesta al acertijo</label>
+                    <input id="riddleAnswer" name="answer" type="text" autocomplete="off" maxlength="20" placeholder="Escribe la palabra secreta" required>
+                    <button class="primary-button" type="submit">Probar la llave ✨</button>
+                </form>
+                <p class="riddle-feedback" id="riddleFeedback" role="status" aria-live="polite"></p>
+                <article class="secret-letter" id="secretLetter" hidden>
+                    <span class="secret-sparkle" aria-hidden="true">✦</span>
+                    <h3>Un secreto para ti, Aleja 💌</h3>
+                    <p>Si pudiera volver al primer día, volvería a elegirte. Gracias por hacer que cada instante a tu lado se sienta como el comienzo de algo precioso. Te amo en todos los capítulos que todavía nos esperan. ❤️</p>
+                </article>
+            </section>
+
+            <section class="chapter-section" aria-labelledby="time-capsule-title">
+                <p class="eyebrow section-eyebrow">Para cada momento que venga</p>
+                <h2 class="section-title" id="time-capsule-title">Sobres para el Futuro 💌</h2>
+                <p class="section-copy">Guarda estas palabras y ábrelas justo cuando las necesites.</p>
+                <div class="future-envelopes">
+                    <button class="future-envelope glass" type="button" data-letter="miss">
+                        <span class="envelope-emoji" aria-hidden="true">💌</span>
+                        <strong>Abre esto cuando me extrañes</strong>
+                        <span>Un abrazo, aunque sea en palabras</span>
+                    </button>
+                    <button class="future-envelope glass" type="button" data-letter="difficult">
+                        <span class="envelope-emoji" aria-hidden="true">🕊️</span>
+                        <strong>Abre esto cuando tengamos un día difícil</strong>
+                        <span>Un recordatorio de que somos un equipo</span>
+                    </button>
+                    <button class="future-envelope glass" type="button" data-letter="trip">
+                        <span class="envelope-emoji" aria-hidden="true">🌅</span>
+                        <strong>Abre esto en nuestro próximo viaje</strong>
+                        <span>Para empezar una nueva aventura</span>
+                    </button>
+                </div>
+            </section>
+
+            <section class="chapter-section interactive-surprises" aria-labelledby="surprises-title">
+                <p class="eyebrow section-eyebrow">Pequeños detalles para sonreír</p>
+                <h2 class="section-title" id="surprises-title">Sorpresas hechas con amor ✨</h2>
+
+                <article class="interactive-card glass happiness-jar-section" aria-labelledby="happiness-jar-title">
+                    <h3 id="happiness-jar-title">El frasco de la felicidad 🫙</h3>
+                    <p class="section-copy">Toca el frasco y saca una notita para alegrarte el día.</p>
+                    <div class="jar-note-stage">
+                        <button class="happiness-jar" id="happinessJar" type="button" aria-label="Sacar una notita del frasco">
+                            <span class="jar-lid" aria-hidden="true"></span>
+                            <span class="jar-neck" aria-hidden="true"></span>
+                            <span class="jar-body" aria-hidden="true"><span>♡</span></span>
+                        </button>
+                        <p class="happiness-note" id="happinessNote" role="status" aria-live="polite" hidden></p>
+                    </div>
+                </article>
+
+                <article class="interactive-card glass scratch-section" aria-labelledby="scratch-title">
+                    <h3 id="scratch-title">Raspa y gana del amor 💝</h3>
+                    <p class="section-copy">Raspa las tres tarjetas para descubrir los detalles y luego elige solo uno.</p>
+                    <div class="scratch-grid">
+                        <div class="scratch-card">
+                            <p class="scratch-prize">No te vuelvo a amagar besos</p>
+                            <canvas class="scratch-canvas" aria-hidden="true"></canvas>
+                            <button class="scratch-reveal-button" type="button">Revelar detalle</button>
+                            <button class="scratch-choice-button" type="button" aria-pressed="false" hidden>Elegir este premio</button>
+                        </div>
+                        <div class="scratch-card">
+                            <p class="scratch-prize">Te pago lo que te debo (ya tu sabes)</p>
+                            <canvas class="scratch-canvas" aria-hidden="true"></canvas>
+                            <button class="scratch-reveal-button" type="button">Revelar detalle</button>
+                            <button class="scratch-choice-button" type="button" aria-pressed="false" hidden>Elegir este premio</button>
+                        </div>
+                        <div class="scratch-card">
+                            <p class="scratch-prize">Casarnos</p>
+                            <canvas class="scratch-canvas" aria-hidden="true"></canvas>
+                            <button class="scratch-reveal-button" type="button">Revelar detalle</button>
+                            <button class="scratch-choice-button" type="button" aria-pressed="false" hidden>Elegir este premio</button>
+                        </div>
+                    </div>
+                    <p class="scratch-choice-prompt" role="status" aria-live="polite" hidden>¡Ya descubriste los tres! Elige solo un premio.</p>
+                    <p class="scratch-status" role="status" aria-live="polite"></p>
+                </article>
+
+                <article class="interactive-card glass secret-reasons-section" aria-labelledby="secret-reasons-title">
+                    <h3 id="secret-reasons-title">Cofre de razones secretas 🔐</h3>
+                    <p class="section-copy">Toca una tarjeta para descubrir una de las muchas razones por las que te amo.</p>
+                    <div class="secret-reasons-grid">
+                        <button class="secret-reason-card" type="button" aria-pressed="false">
+                            <span class="secret-reason-inner">
+                                <span class="secret-reason-front">Tu forma de escucharme 🤍</span>
+                                <span class="secret-reason-back">Contigo puedo ser yo y sentir que siempre hay un lugar seguro para mis palabras.</span>
+                            </span>
+                        </button>
+                        <button class="secret-reason-card" type="button" aria-pressed="false">
+                            <span class="secret-reason-inner">
+                                <span class="secret-reason-front">Tu sonrisa ✨</span>
+                                <span class="secret-reason-back">Hasta un día común se vuelve especial cuando compartimos una sonrisa.</span>
+                            </span>
+                        </button>
+                        <button class="secret-reason-card" type="button" aria-pressed="false">
+                            <span class="secret-reason-inner">
+                                <span class="secret-reason-front">Lo que construimos 💞</span>
+                                <span class="secret-reason-back">Me encanta que podamos crecer, aprender y seguir eligiéndonos en equipo.</span>
+                            </span>
+                        </button>
+                        <button class="secret-reason-card" type="button" aria-pressed="false">
+                            <span class="secret-reason-inner">
+                                <span class="secret-reason-front">Los momentos sencillos ☁️</span>
+                                <span class="secret-reason-back">A tu lado, incluso los ratitos tranquilos se convierten en recuerdos que guardo.</span>
+                            </span>
+                        </button>
+                    </div>
+                </article>
+
+                <article class="interactive-card glass bucket-list-section" aria-labelledby="bucket-list-title">
+                    <h3 id="bucket-list-title">Nuestra lista de deseos 📝</h3>
+                    <p class="section-copy">Planes bonitos que todavía nos esperan.</p>
+                    <ul class="bucket-list">
+                        <li class="bucket-list-item">
+                            <label><input type="checkbox"><span>Agarrar esos gorditos</span></label>
+                        </li>
+                        <li class="bucket-list-item">
+                            <label><input type="checkbox"><span>Que seas mi garrapata hoy y siempre</span></label>
+                        </li>
+                        <li class="bucket-list-item">
+                            <label><input type="checkbox"><span>Perdernos en la locura cada dia</span></label>
+                        </li>
+                        <li class="bucket-list-item">
+                            <label><input type="checkbox"><span>Que te ganes a mi mamá</span></label>
+                        </li>
+                        <li class="bucket-list-item">
+                            <label><input type="checkbox"><span>Cumplir el deseo de poder casarnos y tener una vida juntos</span></label>
+                        </li>
+                    </ul>
+                </article>
+            </section>
+
+            <section class="chapter-section memory-gallery-section" aria-labelledby="memory-gallery-title">
+                <p class="eyebrow section-eyebrow">Nuestros instantes favoritos</p>
+                <h2 class="section-title" id="memory-gallery-title">Nuestro álbum de postales 📸</h2>
+                <p class="section-copy">Pequeños recuerdos de nuestra historia, reunidos en un solo lugar.</p>
+                <div class="memory-gallery-stage" id="memoryGalleryStage">
+                    <div class="memory-album" id="memoryAlbum" aria-label="Álbum de nuestros recuerdos"></div>
+                </div>
+                <p class="memory-gallery-caption" aria-live="polite">Cada postal guarda un momento que siempre quiero recordar. 💌</p>
+            </section>
+
+            <section class="chapter-section anniversary-video" aria-labelledby="anniversary-video-title">
+                <p class="eyebrow section-eyebrow">Un recuerdo solo para ti</p>
+                <h2 class="section-title" id="anniversary-video-title">Tres meses de nosotros</h2>
+                <p class="section-copy anniversary-intro">Tu entrada a un recuerdo preparado con todo mi amor. Tócala para verlo o descárgalo para guardarlo.</p>
+
+                <div class="anniversary-player">
+                    <button class="video-ticket" id="anniversaryVideoRevealButton" type="button" aria-controls="anniversaryVideo">
+                        <span class="video-ticket-icon" aria-hidden="true">▶</span>
+                        <span class="video-ticket-copy">
+                            <strong>Entrada especial</strong>
+                            <span>Toca aquí para ver nuestro video</span>
+                        </span>
+                        <span class="video-ticket-stamp" aria-hidden="true">3 MESES</span>
+                    </button>
+                    <video class="anniversary-video-player" id="anniversaryVideo" controls playsinline preload="none" tabindex="0" aria-label="Video de aniversario de tres meses para Aleja" hidden>
+                        <source src="video/aleja.mp4" type="video/mp4">
+                        Tu navegador no puede reproducir este video.
+                    </video>
+                    <a class="video-download-button" href="video/aleja.mp4" download="Nuestro_Video_Aleja.mp4">
+                        Descargar nuestro video <span aria-hidden="true">↓</span>
+                    </a>
+                    <p class="anniversary-video-status" id="anniversaryVideoStatus" role="status" aria-live="polite"></p>
+                </div>
+            </section>
+
+            <section class="chapter-section ring-prompt glass" aria-labelledby="ring-title">
+                <p class="eyebrow">Con todo mi amor</p>
+                <h2 id="ring-title">Una última sorpresa...</h2>
+                <p>Hay algo que quiero preguntarte, Aleja.</p>
+                <button class="primary-button ring-button" type="button" id="openRing">Abrir la cajita 🎁</button>
+            </section>
+            <footer>Hecho con todo el amor del mundo para ti ❤️</footer>
+        </div>
+    </main>
+
+    <div class="letter-modal" id="letterModal" role="dialog" aria-modal="true" aria-labelledby="letterModalTitle" hidden>
+        <div class="modal-backdrop" data-close-letter></div>
+        <section class="letter-modal-card">
+            <button class="modal-close" type="button" aria-label="Cerrar carta" data-close-letter>×</button>
+            <div class="letter-3d" aria-hidden="true"><div class="letter-3d-paper">♡</div></div>
+            <p class="eyebrow">Una nota para guardar</p>
+            <h2 id="letterModalTitle"></h2>
+            <p id="letterModalText"></p>
+            <p class="letter-signoff">Con amor, siempre 💖</p>
+        </section>
+    </div>
+
+    <div class="ring-modal" id="ringModal" role="dialog" aria-modal="true" aria-labelledby="ringModalTitle" hidden>
+        <div class="modal-backdrop" data-close-ring></div>
+        <section class="ring-modal-card">
+            <button class="modal-close" type="button" aria-label="Cerrar sorpresa" data-close-ring>×</button>
+            <p class="eyebrow">Para nuestro futuro</p>
+            <h2 id="ringModalTitle">Una promesa para nosotros 💍</h2>
+            <div class="jewelry-box" aria-hidden="true">
+                <div class="ring-glow"></div>
+                <div class="ring-illustration"><span></span></div>
+                <div class="box-lid"></div>
+                <div class="box-base"><span>♡</span></div>
+            </div>
+            <p class="ring-message">¿Querias un anillo no?, pues esta es una promesa de todo lo que quiero seguir construyendo a tu lado. ¿Hacemos este compromiso juntos? 💍✨ <strong>(Lo mejor va a ser en persona)</strong></p>
+        </section>
+    </div>
+
+    <button class="emergency-love-trigger" id="emergencyLoveTrigger" type="button" aria-haspopup="dialog">
+        <span aria-hidden="true">💌</span> Presionar si me extrañas
+    </button>
+    <div class="emergency-love-modal" id="emergencyLoveModal" role="dialog" aria-modal="true" aria-labelledby="emergencyLoveTitle" hidden>
+        <div class="modal-backdrop" data-close-emergency-love></div>
+        <section class="emergency-love-card">
+            <button class="modal-close" type="button" aria-label="Cerrar mensaje" data-close-emergency-love>×</button>
+            <span class="emergency-love-heart" aria-hidden="true">♡</span>
+            <p class="eyebrow">Un abrazo, aunque sea en palabras</p>
+            <h2 id="emergencyLoveTitle">Si me extrañas, recuerda esto 💖</h2>
+            <p>No importa la distancia ni lo que esté pasando: siempre estoy pensando en ti y agradeciendo que formes parte de mi vida. Cierra los ojos, respira y recibe este abrazo enorme. Te quiero hoy, mañana y en todos nuestros días por venir. 🤍</p>
+            <p class="emergency-love-signoff">Con todo mi amor, siempre ✨</p>
+        </section>
+    </div>
+
+    <main class="trivia-view" id="triviaView">
+        <section class="trivia-card glass" aria-live="polite">
+            <h1>Trivia de nuestro amor 💘</h1>
+            <p>Responde con el corazón. ¡Cada partida elige preguntas diferentes!</p>
+            <div class="trivia-progress" id="triviaProgress"></div>
+            <h2 id="triviaQuestion"></h2>
+            <div class="answer-list" id="answerList"></div>
+            <p class="trivia-feedback" id="triviaFeedback" role="status"></p>
+            <section id="prizeSection" class="trivia-hidden">
+                <h2>¡Premio secreto desbloqueado! 🎁</h2>
+                <p>Cupones de amor canjeables. Elige cuándo usar cada uno 💛</p>
+                <div class="coupon-list" id="couponList"></div>
+                <button class="restart-button" type="button" id="restartTrivia">Jugar otra vez 💞</button>
+            </section>
+        </section>
+    </main>
+
+    <script src="script.js?v=20261124-independent-chapters-v3" defer></script>
+</body>
+</html>

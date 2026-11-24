@@ -9,13 +9,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261121-open-chapters">
+    <link rel="stylesheet" href="styles.css?v=20261124-chapter-card-decor">
 </head>
 <body>
 
     <div id="canvas-bg" aria-hidden="true"></div>
 
-    <div class="splash-screen" id="splashScreen" role="dialog" aria-modal="true" aria-labelledby="splash-title">
+    <div class="chapter-four-cinematic" id="chapterFourCinematic" aria-hidden="false">
+        <span class="chapter-four-cinematic-stars" aria-hidden="true"></span>
+        <section class="chapter-four-cinematic-card" role="dialog" aria-modal="true" aria-labelledby="chapterFourCinematicTitle chapterFourCinematicCaption" tabindex="-1">
+            <span class="chapter-four-cinematic-flare" aria-hidden="true"></span>
+            <p class="chapter-four-cinematic-kicker">CAPÍTULO 3</p>
+            <h2 id="chapterFourCinematicTitle">Cuatro</h2>
+            <p class="chapter-four-cinematic-caption" id="chapterFourCinematicCaption">MESES</p>
+        </section>
+    </div>
+
+    <div class="splash-screen" id="splashScreen" role="dialog" aria-modal="true" aria-labelledby="splash-title" hidden>
         <div class="splash-ocean" aria-hidden="true">
             <span class="splash-sun"></span>
             <span class="splash-wave splash-wave-back"></span>
@@ -31,16 +41,25 @@
             <h1 id="splash-title">Nuestra Historia de Amor ❤️</h1>
             <p class="splash-subtitle">Elige un capítulo y volvamos a vivir nuestros momentos favoritos ✨</p>
             <div class="chapter-choices">
-                <a class="chapter-choice" href="dos-meses.html">
+                <a class="chapter-choice chapter-choice-two-months" href="dos-meses.html">
                     <span>Capítulo 1</span>
                     <strong>2 Meses Together 💖</strong>
+                    <span class="chapter-choice-decoration" aria-hidden="true">♡</span>
                     <span class="choice-arrow" aria-hidden="true">↗</span>
                 </a>
-                <button class="chapter-choice chapter-choice-featured" type="button" data-chapter="three">
+                <a class="chapter-choice chapter-choice-featured chapter-choice-three-months" href="tres-meses.html">
                     <span>Capítulo 2</span>
                     <strong>3 Meses: Marea de Amor 🌊</strong>
+                    <span class="chapter-choice-decoration" aria-hidden="true">🌊</span>
                     <span class="choice-arrow" aria-hidden="true">↗</span>
-                </button>
+                </a>
+                <a class="chapter-choice chapter-choice-coming-soon" href="cuatro-meses.html" aria-label="Capítulo 3, muy pronto">
+                    <span>Capítulo 3</span>
+                    <strong>Haz clic para un pequeño adelanto</strong>
+                    <span class="chapter-choice-decoration" aria-hidden="true">☀</span>
+                    <span class="chapter-choice-note">El próximo capítulo</span>
+                    <span class="choice-arrow" aria-hidden="true">↗</span>
+                </a>
             </div>
             <button class="audio-enable-button" id="chapterSelectionAudioButton" type="button" hidden>
                 🔊 Activar música
@@ -56,7 +75,7 @@
     <nav class="chapter-nav" id="chapterNav" aria-label="Cambiar capítulo" hidden>
         <span class="nav-caption">Nuestra historia</span>
         <a class="chapter-nav-link" href="dos-meses.html">2 meses</a>
-        <button type="button" data-chapter="three" aria-pressed="false">3 meses</button>
+        <a class="chapter-nav-link" href="tres-meses.html">3 meses</a>
     </nav>
 
     <main class="chapter-view chapter-three" id="chapterThree" aria-labelledby="title-three">
@@ -274,14 +293,6 @@
                 <p>Hay algo que quiero preguntarte, Aleja.</p>
                 <button class="primary-button ring-button" type="button" id="openRing">Abrir la cajita 🎁</button>
             </section>
-            <section class="chapter-section chapter-four-preview" aria-label="Adelanto del cuarto mes">
-                <button class="chapter-four-button" id="chapterFourButton" type="button" aria-expanded="false" aria-controls="chapterFourMessage">
-                    Capítulo 4🎄
-                </button>
-                <p class="chapter-four-message" id="chapterFourMessage" role="status" aria-live="polite" hidden>
-                    Paciencia, aún estamos escribiendo esta parte de nuestra historia ❤️
-                </p>
-            </section>
             <footer>Hecho con todo el amor del mundo para ti ❤️</footer>
         </div>
     </main>
@@ -346,6 +357,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=20261121-open-chapters" defer></script>
+    <script src="script.js?v=20261124-independent-chapters-v3" defer></script>
 </body>
 </html>

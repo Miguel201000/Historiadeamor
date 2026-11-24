@@ -1,4 +1,5 @@
         const isTriviaView = new URLSearchParams(window.location.search).get('sorpresa') === '1';
+        const isThreeMonthPage = document.body.classList.contains('three-month-page');
         const isCompactDevice = window.matchMedia('(max-width: 700px), (pointer: coarse)').matches;
         if (isTriviaView) document.body.classList.add('trivia-mode');
 
@@ -9,6 +10,9 @@
         }
 
         const splashScreen = document.getElementById('splashScreen');
+        const chapterFourCinematic = document.getElementById('chapterFourCinematic');
+        const chapterFourCinematicDuration = 3500;
+        const chapterFourFadeDuration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 650;
         const chapterSelectionAudio = document.getElementById('chapterSelectionAudio');
         const chapterSelectionAudioButton = document.getElementById('chapterSelectionAudioButton');
         const chapterSelectionAudioStatus = document.getElementById('chapterSelectionAudioStatus');
@@ -32,6 +36,7 @@
 
         function isChapterSelectionAudioActive() {
             return !splashScreen.hidden
+                && (!chapterFourCinematic || chapterFourCinematic.hidden)
                 && !splashScreen.classList.contains('is-leaving')
                 && !isTriviaView;
         }
@@ -83,8 +88,6 @@
             chapterSelectionAudioStatus.textContent = 'No se pudo cargar la música. Revisa que el archivo esté en la carpeta musica3meses.';
             console.error('No se pudo cargar la música de la selección de capítulos.', chapterSelectionAudio.error);
         });
-        if (!isTriviaView) startChapterSelectionAudio();
-
         const chapterPlaylistTracks = [
             { src: 'audios/cancionaleja (online-audio-converter.com).mp3', title: 'El Fin del Mundo - La La Love You, Axolotes Mexicanos' },
             { src: 'musica3meses/WhatsApp Audio 2026-11-11 at 8.32.14 PM.mp3', title: 'Devuélveme a mi chica - Hombres G' },
@@ -199,7 +202,7 @@
             chapterThreeAudio.addEventListener(eventName, () => chapterPlaylistPlayer.classList.remove('is-playing'));
         });
 
-        function selectChapter(chapter, showSplash = false) {
+        function selectChapter(chapter, showSplash = false, shouldStartMusic = true) {
             stopChapterSelectionAudio();
             Object.entries(chapterViews).forEach(([name, view]) => {
                 const isActive = name === chapter;
@@ -230,7 +233,7 @@
                 chapterThreeAudio.pause();
                 chapterThreeAudio.currentTime = 0;
                 previousRandomTrackIndex = -1;
-                playChapterTrack(0);
+                if (shouldStartMusic) playChapterTrack(0);
             } else {
                 chapterThreeAudio.pause();
             }
@@ -255,11 +258,40 @@
         if (isTriviaView) {
             splashScreen.hidden = true;
             chapterNav.hidden = true;
+            if (chapterFourCinematic) {
+                chapterFourCinematic.hidden = true;
+                chapterFourCinematic.setAttribute('aria-hidden', 'true');
+            }
+        } else if (isThreeMonthPage) {
+            splashScreen.hidden = true;
+            window.setTimeout(() => selectChapter('three', false, false), 0);
         } else {
             document.querySelectorAll('[data-chapter]').forEach(button => {
                 button.addEventListener('click', () => selectChapter(button.dataset.chapter));
             });
             chapterNav.hidden = true;
+
+            stopChapterSelectionAudio();
+            document.body.classList.add('chapter-four-cinematic-open');
+            chapterFourCinematic.querySelector('[role="dialog"]').focus();
+            window.setTimeout(() => {
+                splashScreen.hidden = false;
+                splashScreen.classList.add('is-entering');
+                chapterFourCinematic.setAttribute('aria-hidden', 'true');
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        chapterFourCinematic.classList.add('is-leaving');
+                        splashScreen.classList.remove('is-entering');
+                        window.setTimeout(() => {
+                            chapterFourCinematic.hidden = true;
+                            chapterFourCinematic.classList.remove('is-leaving');
+                            document.body.classList.remove('chapter-four-cinematic-open');
+                            splashScreen.querySelector('.chapter-choice').focus();
+                            startChapterSelectionAudio();
+                        }, chapterFourFadeDuration);
+                    });
+                });
+            }, chapterFourCinematicDuration);
         }
 
         const letterModal = document.getElementById('letterModal');
@@ -630,14 +662,6 @@
                 window.setTimeout(() => showConfetti({ ...options, origin: { x: 0.25, y: 0.72 } }), 240);
                 window.setTimeout(() => showConfetti({ ...options, origin: { x: 0.75, y: 0.72 } }), 440);
             }
-        });
-
-        const chapterFourButton = document.getElementById('chapterFourButton');
-        const chapterFourMessage = document.getElementById('chapterFourMessage');
-        chapterFourButton.addEventListener('click', () => {
-            const isOpening = chapterFourMessage.hidden;
-            chapterFourMessage.hidden = !isOpening;
-            chapterFourButton.setAttribute('aria-expanded', String(isOpening));
         });
 
         document.querySelectorAll('[data-close-letter]').forEach(button => {
