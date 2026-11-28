@@ -1,4 +1,6 @@
-        const isTriviaView = new URLSearchParams(window.location.search).get('sorpresa') === '1';
+        const pageQuery = new URLSearchParams(window.location.search);
+        const isTriviaView = pageQuery.get('sorpresa') === '1';
+        const isChapterSelectionView = pageQuery.get('capitulos') === '1';
         const isThreeMonthPage = document.body.classList.contains('three-month-page');
         const isCompactDevice = window.matchMedia('(max-width: 700px), (pointer: coarse)').matches;
         if (isTriviaView) document.body.classList.add('trivia-mode');
@@ -17,6 +19,8 @@
         const chapterSelectionAudio = document.getElementById('chapterSelectionAudio');
         const chapterSelectionAudioButton = document.getElementById('chapterSelectionAudioButton');
         const chapterSelectionAudioStatus = document.getElementById('chapterSelectionAudioStatus');
+        const storyWelcomeScreen = document.getElementById('storyWelcomeScreen');
+        const storyWelcomeEnterButton = document.getElementById('storyWelcomeEnterButton');
         const chapterNav = document.getElementById('chapterNav');
         const chapterThreeAudio = document.getElementById('chapterThreeAudio');
         const chapterThreeAudioSource = document.getElementById('chapterThreeAudioSource');
@@ -30,16 +34,17 @@
         const anniversaryVideoStatus = document.getElementById('anniversaryVideoStatus');
         anniversaryVideo.preload = 'none';
         let pausedMusicTracks = null;
+        let hasEnteredChapterSelection = false;
         const chapterViews = {
             three: document.getElementById('chapterThree')
         };
         let isChapterThreeFlowActive = false;
 
         function isChapterSelectionAudioActive() {
-            return !splashScreen.hidden
-                && (!chapterFourCinematic || chapterFourCinematic.hidden)
+            return hasEnteredChapterSelection
+                && !isTriviaView
                 && !splashScreen.classList.contains('is-leaving')
-                && !isTriviaView;
+                && (!chapterFourCinematic || !chapterFourCinematic.hidden || !splashScreen.hidden);
         }
 
         function handleChapterSelectionAudioError(error) {
@@ -57,7 +62,7 @@
         }
 
         function startChapterSelectionAudio() {
-            if (!isChapterSelectionAudioActive()) return;
+            if (!isChapterSelectionAudioActive() || !chapterSelectionAudio.paused) return;
 
             chapterSelectionAudio.loop = true;
             chapterSelectionAudio.play().then(() => {
@@ -257,6 +262,7 @@
         });
 
         if (isTriviaView) {
+            storyWelcomeScreen.hidden = true;
             splashScreen.hidden = true;
             chapterNav.hidden = true;
             if (chapterFourCinematic) {
@@ -266,6 +272,16 @@
         } else if (isThreeMonthPage) {
             splashScreen.hidden = true;
             window.setTimeout(() => selectChapter('three', false, false), 0);
+        } else if (isChapterSelectionView) {
+            chapterNav.hidden = true;
+            storyWelcomeScreen.hidden = true;
+            chapterFourCinematic.hidden = true;
+            chapterFourCinematic.setAttribute('aria-hidden', 'true');
+            splashScreen.classList.remove('is-leaving');
+            splashScreen.hidden = false;
+            hasEnteredChapterSelection = true;
+            splashScreen.querySelector('.chapter-choice').focus();
+            startChapterSelectionAudio();
         } else {
             document.querySelectorAll('[data-chapter]').forEach(button => {
                 button.addEventListener('click', () => selectChapter(button.dataset.chapter));
@@ -273,26 +289,37 @@
             chapterNav.hidden = true;
 
             stopChapterSelectionAudio();
+            storyWelcomeScreen.hidden = false;
             document.body.classList.add('chapter-four-cinematic-open');
-            chapterFourCinematic.querySelector('[role="dialog"]').focus();
-            window.setTimeout(() => {
-                splashScreen.hidden = false;
-                splashScreen.classList.add('is-entering');
-                chapterFourCinematic.setAttribute('aria-hidden', 'true');
-                requestAnimationFrame(() => {
+            storyWelcomeEnterButton.focus();
+            storyWelcomeEnterButton.addEventListener('click', () => {
+                if (hasEnteredChapterSelection) return;
+                hasEnteredChapterSelection = true;
+                storyWelcomeScreen.hidden = true;
+                chapterFourCinematic.hidden = false;
+                chapterFourCinematic.setAttribute('aria-hidden', 'false');
+                chapterFourCinematic.querySelector('[role="dialog"]').focus();
+                startChapterSelectionAudio();
+
+                window.setTimeout(() => {
+                    splashScreen.hidden = false;
+                    splashScreen.classList.add('is-entering');
+                    chapterFourCinematic.setAttribute('aria-hidden', 'true');
                     requestAnimationFrame(() => {
-                        chapterFourCinematic.classList.add('is-leaving');
-                        splashScreen.classList.remove('is-entering');
-                        window.setTimeout(() => {
-                            chapterFourCinematic.hidden = true;
-                            chapterFourCinematic.classList.remove('is-leaving');
-                            document.body.classList.remove('chapter-four-cinematic-open');
-                            splashScreen.querySelector('.chapter-choice').focus();
-                            startChapterSelectionAudio();
-                        }, chapterFourFadeDuration);
+                        requestAnimationFrame(() => {
+                            chapterFourCinematic.classList.add('is-leaving');
+                            splashScreen.classList.remove('is-entering');
+                            window.setTimeout(() => {
+                                chapterFourCinematic.hidden = true;
+                                chapterFourCinematic.classList.remove('is-leaving');
+                                document.body.classList.remove('chapter-four-cinematic-open');
+                                splashScreen.querySelector('.chapter-choice').focus();
+                                startChapterSelectionAudio();
+                            }, chapterFourFadeDuration);
+                        });
                     });
-                });
-            }, chapterFourCinematicDuration);
+                }, chapterFourCinematicDuration);
+            }, { once: true });
         }
 
         const letterModal = document.getElementById('letterModal');

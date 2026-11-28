@@ -3,24 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capítulo 3 · Navidad · Muy pronto ✨</title>
+    <meta name="theme-color" content="#09271f">
+    <title>Capítulo 3 · Navidad · Para Aleja, muy pronto ✨</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20261124-chapter-three-christmas-lights">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=20261127-chapter3-unlock">
 </head>
 <body class="four-month-page">
     <div class="four-month-snowfall" aria-hidden="true">
         <span>❄</span><span>✦</span><span>❄</span><span>✧</span><span>❄</span><span>✦</span>
     </div>
-    <main class="four-month-page-shell">
-        <section class="four-month-card" aria-labelledby="four-month-title">
+    <main class="four-month-page-shell" id="comingSoonScreen">
+        <section class="four-month-card" aria-labelledby="coming-soon-title">
+            <span class="four-month-card-decoration" aria-hidden="true">🎄</span>
             <p class="four-month-kicker">CAPÍTULO 3 · NAVIDAD</p>
-            <h1 id="four-month-title">Muy pronto ✨</h1>
-            <p>La magia de nuestros cuatro meses está en camino. Que esta Navidad nos encuentre llenos de amor, abrazos y nuevos recuerdos. ❤️</p>
+            <h1 id="coming-soon-title">Muy pronto ✨</h1>
+            <p>Aleja, la magia de nuestros cuatro meses está en camino. Que esta Navidad nos encuentre llenos de amor, abrazos y nuevos recuerdos. ❤️</p>
+            <p class="four-month-spoiler-intro">Un pequeño adelanto de lo que te espera:</p>
+            <ul class="four-month-spoiler-list">
+                <li><span aria-hidden="true">🎄</span><span>Un árbol con seis recuerdos nuestros para iluminar.</span></li>
+                <li><span aria-hidden="true">✨</span><span>Retos navideños, juegos y una ruleta de planes.</span></li>
+                <li><span aria-hidden="true">💌</span><span>Una carta especial y una sorpresa para cerrar el capítulo.</span></li>
+            </ul>
             <p class="four-month-holiday-note">Una sorpresa especial, envuelta para nosotros. 🎁</p>
-            <a class="four-month-back" href="index.html">Volver a capítulos <span aria-hidden="true">↗</span></a>
+            <p class="four-month-unlock-countdown" id="chapterUnlockCountdown" aria-live="off"></p>
+            <a class="four-month-back" href="index.html?capitulos=1">Volver a capítulos <span aria-hidden="true">↗</span></a>
         </section>
     </main>
+    <main class="four-month-page-shell" id="treePreview" hidden>
+        <div class="christmas-garland" aria-hidden="true"><span></span></div>
+        <header class="christmas-experience-hero">
+            <p class="four-month-kicker">✦ UNA NAVIDAD PARA NOSOTROS ✦</p>
+            <h1>Cuatro meses<br><span>con mi Aleja favorita</span></h1>
+            <p>Un pequeño mundo navideño para celebrar todo lo que hemos vivido y lo bonito que todavía nos espera, Aleja. ❤️</p>
+            <div class="christmas-anniversary-counter" aria-label="Tiempo transcurrido desde que comenzó nuestra historia">
+                <div class="christmas-counter-box"><span class="christmas-counter-number" id="days-four-month">00</span><span class="christmas-counter-label">Días</span></div>
+                <div class="christmas-counter-box"><span class="christmas-counter-number" id="hours-four-month">00</span><span class="christmas-counter-label">Horas</span></div>
+                <div class="christmas-counter-box"><span class="christmas-counter-number" id="minutes-four-month">00</span><span class="christmas-counter-label">Minutos</span></div>
+                <div class="christmas-counter-box"><span class="christmas-counter-number" id="seconds-four-month">00</span><span class="christmas-counter-label">Segundos</span></div>
+            </div>
+            <a class="christmas-scroll-link" href="#christmasTreeSection">Descubrir la sorpresa <span aria-hidden="true">↓</span></a>
+        </header>
+
+        <section class="christmas-activity-panel christmas-tree-panel" id="christmasTreeSection" aria-labelledby="four-month-title">
+            <div class="christmas-section-heading">
+                <p class="four-month-kicker">01 · NUESTROS RECUERDOS</p>
+                <h2 id="four-month-title">El árbol de nuestra historia</h2>
+                <p>Enciende las seis esferas. Cada una guarda un pedacito de nosotros.</p>
+            </div>
+            <div class="christmas-tree" id="christmasTree">
+                <svg class="christmas-tree-art" viewBox="0 0 320 350" aria-hidden="true">
+                    <path class="christmas-tree-star" d="M160 4 168 20 186 22 173 35 176 53 160 44 144 53 147 35 134 22 152 20Z"/>
+                    <path class="christmas-tree-branch christmas-tree-branch-bottom" d="m160 139-103 127h206z"/>
+                    <path class="christmas-tree-branch christmas-tree-branch-middle" d="m160 86-75 105h150z"/>
+                    <path class="christmas-tree-branch" d="m160 42-49 76h98z"/>
+                    <path class="christmas-tree-garland" d="M119 99 Q160 126 201 99 M92 164 Q160 196 228 164 M66 222 Q160 258 254 222"/>
+                    <path class="christmas-tree-trunk" d="M143 255h34v64h-34z"/>
+                </svg>
+                <button class="christmas-ornament" type="button" aria-pressed="false" aria-label="Encender esfera 1" data-title="Ese primer abrazo" data-message="Me acuerdo de la calma y la alegría de tenerte cerquita. Ojalá pudiera guardar ese abrazo para volver a él cada vez que te extraño.">1</button>
+                <button class="christmas-ornament" type="button" aria-pressed="false" aria-label="Encender esfera 2" data-title="Nuestras risas" data-message="Contigo hasta las cosas más sencillas terminan en una historia que me encanta recordar. Gracias por tantas risas que todavía me alegran el día.">2</button>
+                <button class="christmas-ornament" type="button" aria-pressed="false" aria-label="Encender esfera 3" data-title="Un momento solo nuestro" data-message="Entre todos los días, hay pequeños instantes contigo que se quedan brillando en mi memoria. Este árbol guarda uno de esos momentos especiales.">3</button>
+                <button class="christmas-ornament" type="button" aria-pressed="false" aria-label="Encender esfera 4" data-title="Tu sonrisa" data-message="Tu sonrisa tiene esa magia de hacer que todo se sienta un poquito mejor. Me encanta cuando aparece y saber que puedo compartir ese instante contigo.">4</button>
+                <button class="christmas-ornament" type="button" aria-pressed="false" aria-label="Encender esfera 5" data-title="Lo que hemos construido" data-message="En estos cuatro meses hemos juntado detalles, cariño y recuerdos que son nuestros. Me hace feliz todo lo bonito que seguimos creando, paso a paso.">5</button>
+                <button class="christmas-ornament" type="button" aria-pressed="false" aria-label="Encender esfera 6" data-title="Lo que todavía nos espera" data-message="Este es apenas un capítulo de nuestra historia. Me emociona pensar en todos los abrazos, aventuras y momentos lindos que todavía nos faltan por vivir.">6</button>
+            </div>
+            <p class="christmas-tree-progress" id="treeProgress" role="status" aria-live="polite">0 de 6 recuerdos encendidos</p>
+            <button class="four-month-letter-button" id="openFourMonthLetter" type="button" disabled>Abrir tu Carta de 4 Meses 💌</button>
+        </section>
+
+        <div class="christmas-activities-grid">
+            <section class="christmas-activity-panel christmas-light-game" aria-labelledby="light-game-title">
+                <p class="four-month-kicker">02 · RETO DE LUCES</p>
+                <h2 id="light-game-title">El código secreto del árbol</h2>
+                <p>Supera cuatro rondas: el patrón de colores es aleatorio y va creciendo. Si te equivocas, puedes volver a mirar la misma secuencia.</p>
+                <div class="christmas-round-progress" id="lightRoundProgress" role="group" aria-label="Rondas completadas: 0 de 4">
+                    <span data-round="1" aria-hidden="true">1</span>
+                    <span data-round="2" aria-hidden="true">2</span>
+                    <span data-round="3" aria-hidden="true">3</span>
+                    <span data-round="4" aria-hidden="true">4</span>
+                </div>
+                <div class="christmas-game-lights" role="group" aria-label="Secuencia de luces navideñas">
+                    <button class="christmas-game-light light-red" type="button" data-light="roja" aria-label="Luz roja" disabled>●</button>
+                    <button class="christmas-game-light light-gold" type="button" data-light="dorada" aria-label="Luz dorada" disabled>●</button>
+                    <button class="christmas-game-light light-green" type="button" data-light="verde" aria-label="Luz verde" disabled>●</button>
+                    <button class="christmas-game-light light-blue" type="button" data-light="azul" aria-label="Luz azul" disabled>●</button>
+                </div>
+                <button class="christmas-action-button" id="startLightGame" type="button">Comenzar ronda 1 de 4 ✨</button>
+                <p class="christmas-game-status" id="lightGameStatus" role="status" aria-live="polite">Pulsa para comenzar el reto.</p>
+                <p class="christmas-game-reward" id="lightGameReward" hidden>¡Superaste las cuatro rondas! El secreto del árbol: la Navidad es más bonita porque la comparto contigo. ❤️</p>
+            </section>
+
+            <section class="christmas-activity-panel christmas-snowglobe-activity" aria-labelledby="snowglobe-title">
+                <p class="four-month-kicker">03 · DESEO EN LA NIEVE</p>
+                <h2 id="snowglobe-title">Una bola de nieve para nosotros</h2>
+                <p>Escribe un deseo para nuestra historia y guárdalo dentro de esta pequeña esfera.</p>
+                <div class="christmas-snowglobe" id="christmasSnowglobe" aria-label="Bola de nieve con tu deseo">
+                    <div class="snowglobe-snow" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                    <span class="snowglobe-mini-tree" aria-hidden="true">🎄</span>
+                    <p id="snowglobeWish">Nuestro próximo deseo empieza aquí ✨</p>
+                </div>
+                <form class="christmas-wish-form" id="christmasWishForm">
+                    <label for="christmasWishInput">Mi deseo para nosotros</label>
+                    <input id="christmasWishInput" name="wish" type="text" maxlength="90" placeholder="Escribe un deseo bonito…" required>
+                    <button class="christmas-action-button" type="submit">Guardar mi deseo 💫</button>
+                </form>
+                <p class="christmas-wish-status" id="christmasWishStatus" role="status" aria-live="polite"></p>
+            </section>
+        </div>
+
+        <div class="christmas-extra-activities-grid">
+            <section class="christmas-activity-panel christmas-reaction-game" aria-labelledby="reaction-game-title">
+                <p class="four-month-kicker">04 · PRUEBA DE REFLEJOS</p>
+                <h2 id="reaction-game-title">El semáforo de los renos</h2>
+                <p>La señal aparecerá tras una espera aleatoria. Cuando se ponga verde, el cronómetro empezará; pulsa para detenerlo. Completa tres rondas y evita adelantarte.</p>
+                <div class="reaction-game-display" id="reactionDisplay" aria-hidden="true">
+                    <span id="reactionSignal">🛷</span>
+                </div>
+                <p class="reaction-round" id="reactionRound">Ronda 1 de 3</p>
+                <button class="christmas-action-button" id="reactionButton" type="button">Empezar reto 🦌</button>
+                <p class="christmas-activity-status" id="reactionStatus" role="status" aria-live="polite">Pulsa para empezar; no te adelantes a la señal verde.</p>
+            </section>
+
+            <section class="christmas-activity-panel christmas-star-hunt" aria-labelledby="star-hunt-title">
+                <p class="four-month-kicker">05 · MISIÓN CONTRARRELOJ</p>
+                <h2 id="star-hunt-title">Atrapa las estrellas fugaces</h2>
+                <p>Elige una dificultad y atrapa todas las estrellas antes de que termine el tiempo. ¡Cada acierto las hará más rápidas!</p>
+                <div class="star-hunt-difficulties" role="group" aria-label="Elige la dificultad">
+                    <button class="star-hunt-difficulty" type="button" data-star-difficulty="paseo" aria-pressed="false">Paseo</button>
+                    <button class="star-hunt-difficulty is-selected" type="button" data-star-difficulty="nieve" aria-pressed="true">Nieve</button>
+                    <button class="star-hunt-difficulty" type="button" data-star-difficulty="tormenta" aria-pressed="false">Tormenta</button>
+                </div>
+                <div class="star-hunt-score">
+                    <span>Estrellas <strong id="starHuntScore">0 / 7</strong></span>
+                    <span>Tiempo <strong id="starHuntTime">15 s</strong></span>
+                </div>
+                <div class="star-hunt-arena" id="starHuntArena">
+                    <span class="star-hunt-instruction" aria-hidden="true">¡Lista para volar!</span>
+                    <button class="star-hunt-target" id="starHuntTarget" type="button" aria-label="Atrapar estrella fugaz" disabled>✦</button>
+                </div>
+                <button class="christmas-action-button" id="startStarHunt" type="button">Empezar misión ⭐</button>
+                <p class="christmas-activity-status" id="starHuntStatus" role="status" aria-live="polite">¿Podrás atraparlas todas?</p>
+            </section>
+
+            <section class="christmas-activity-panel christmas-plan-wheel" aria-labelledby="plan-wheel-title">
+                <p class="four-month-kicker">06 · RULETA DE PLANES</p>
+                <h2 id="plan-wheel-title">¿Qué cita navideña hacemos?</h2>
+                <p>Deja que la suerte elija una mini aventura para compartir juntos.</p>
+                <div class="holiday-wheel-shell">
+                    <span class="holiday-wheel-pointer" aria-hidden="true">▼</span>
+                    <div class="holiday-wheel" id="holidayWheel" aria-hidden="true"><span>🎄</span></div>
+                </div>
+                <button class="christmas-action-button" id="spinHolidayWheel" type="button">Girar la ruleta 🎁</button>
+                <p class="christmas-wheel-result" id="holidayPlanResult" role="status" aria-live="polite">La ruleta tiene una sorpresa para nosotros…</p>
+            </section>
+        </div>
+
+        <section class="four-month-photo-story" aria-labelledby="photo-story-title">
+            <header class="photo-story-heading">
+                <p class="four-month-kicker">CUATRO MESES DE NOSOTROS</p>
+                <h2 id="photo-story-title">Mi capítulo favorito es contigo</h2>
+                <p>Y todavía nos quedan tantas fotos por tomar, lugares por descubrir y abrazos por guardar.</p>
+            </header>
+            <div class="photo-story-gallery" aria-label="Algunos momentos nuestros">
+                <figure class="photo-story-frame photo-story-featured">
+                    <img src="Imagenes/imagenes3meses/WhatsApp%20Image%202026-11-10%20at%207.14.17%20PM.jpeg" alt="Aleja y yo sonriendo juntos frente a un paisaje de montañas y agua" width="1280" height="960" loading="lazy" decoding="async">
+                    <figcaption>Mi sonrisa favorita</figcaption>
+                </figure>
+                <figure class="photo-story-frame photo-story-lakeside">
+                    <img src="Imagenes/imagenes3meses/WhatsApp%20Image%202026-11-10%20at%207.14.27%20PM.jpeg" alt="Aleja y yo juntos junto a un árbol, cerca del agua" width="960" height="1280" loading="lazy" decoding="async">
+                    <figcaption>Contigo, cualquier aventura</figcaption>
+                </figure>
+                <figure class="photo-story-frame photo-story-kiss">
+                    <img src="Imagenes/imagenes3meses/WhatsApp%20Image%202026-11-10%20at%207.14.50%20PM.jpeg" alt="Un beso compartido al aire libre, con las montañas detrás" width="1280" height="960" loading="lazy" decoding="async">
+                    <figcaption>Un recuerdo para siempre</figcaption>
+                </figure>
+            </div>
+            <p class="photo-story-signoff" aria-hidden="true">✦　♥　✦</p>
+        </section>
+
+        <section class="early-new-year-finale" aria-labelledby="early-new-year-title">
+            <div class="new-year-confetti" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <svg class="new-year-garland" viewBox="0 0 900 100" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M10 15 Q450 110 890 15"/>
+                <circle class="new-year-garland-bulb bulb-gold" cx="80" cy="32" r="9"/>
+                <circle class="new-year-garland-bulb bulb-red" cx="180" cy="45" r="9"/>
+                <circle class="new-year-garland-bulb bulb-green" cx="280" cy="55" r="9"/>
+                <circle class="new-year-garland-bulb bulb-gold" cx="385" cy="61" r="9"/>
+                <circle class="new-year-garland-bulb bulb-red" cx="500" cy="61" r="9"/>
+                <circle class="new-year-garland-bulb bulb-green" cx="610" cy="55" r="9"/>
+                <circle class="new-year-garland-bulb bulb-gold" cx="720" cy="45" r="9"/>
+                <circle class="new-year-garland-bulb bulb-red" cx="820" cy="32" r="9"/>
+            </svg>
+            <div class="new-year-firework new-year-firework-left" aria-hidden="true"><span>✦</span></div>
+            <div class="new-year-firework new-year-firework-right" aria-hidden="true"><span>✧</span></div>
+            <div class="new-year-firework new-year-firework-lower-left" aria-hidden="true"><span>✧</span></div>
+            <div class="new-year-firework new-year-firework-lower-right" aria-hidden="true"><span>✦</span></div>
+            <p class="four-month-kicker">UN BRINDIS POR LO QUE VIENE</p>
+            <p class="new-year-year" aria-label="2027">2027</p>
+            <h2 id="early-new-year-title">¡Feliz Año Nuevo adelantado, mi Aleja!</h2>
+            <p class="new-year-message">Este año fue más bonito porque te tuve a mi lado. Gracias por cada risa, cada abrazo y por hacer especiales hasta los días sencillos. Si el año que viene se parece un poquito a este, con tenerte conmigo ya será maravilloso. ❤️</p>
+            <p class="new-year-toast">Por nosotros y por todos los recuerdos que aún nos esperan <span aria-hidden="true">🥂</span></p>
+        </section>
+
+        <footer class="christmas-experience-footer">
+            <span aria-hidden="true">✦</span>
+            <p>Cada luz de este árbol guarda algo que agradezco de nosotros.</p>
+            <a class="four-month-back" href="index.html?capitulos=1">Volver a capítulos <span aria-hidden="true">↗</span></a>
+        </footer>
+    </main>
+
+    <div class="christmas-memory-modal" id="memoryModal" role="dialog" aria-modal="true" aria-labelledby="memoryModalTitle" aria-describedby="memoryModalText" hidden>
+        <button class="christmas-modal-backdrop" type="button" data-close-memory aria-label="Cerrar recuerdo"></button>
+        <section class="christmas-memory-modal-card">
+            <button class="christmas-modal-close" type="button" data-close-memory aria-label="Cerrar">×</button>
+            <span class="christmas-modal-sparkle" aria-hidden="true">✦</span>
+            <p class="four-month-kicker">UN RECUERDO PARA TI</p>
+            <h2 id="memoryModalTitle"></h2>
+            <p id="memoryModalText"></p>
+            <button class="four-month-back christmas-memory-close" type="button" data-close-memory>Seguir decorando</button>
+        </section>
+    </div>
+
+    <div class="christmas-memory-modal christmas-letter-modal" id="fourMonthLetter" role="dialog" aria-modal="true" aria-labelledby="fourMonthLetterTitle" aria-describedby="fourMonthLetterText" hidden>
+        <button class="christmas-modal-backdrop" type="button" data-close-letter aria-label="Cerrar carta"></button>
+        <article class="christmas-letter-paper">
+            <button class="christmas-modal-close" type="button" data-close-letter aria-label="Cerrar">×</button>
+            <div class="christmas-letter-seal" aria-hidden="true">♥</div>
+            <p class="four-month-kicker">PARA CELEBRAR NUESTROS CUATRO MESES</p>
+            <h2 id="fourMonthLetterTitle">Aleja, mi amor,</h2>
+            <div id="fourMonthLetterText">
+                <p>Felices cuatro meses, Aleja, mi vida. Gracias por cada sonrisa, cada palabra bonita y cada momento que hemos compartido. A tu lado, hasta los días comunes se vuelven recuerdos que quiero guardar con mucho cariño.</p>
+                <p>Me encanta lo que estamos construyendo: una historia hecha de confianza, ternura y pequeños detalles. Quiero seguir eligiéndote, acompañándote y descubriendo contigo todo lo bonito que todavía nos espera.</p>
+                <p>Que esta Navidad nos encuentre cerquita, llenos de ilusión y con el corazón encendido, igual que las luces de nuestro árbol.</p>
+                <p>Y cuando miremos atrás, ojalá podamos sonreír por todo lo que aprendimos, por cada abrazo que nos dimos y por haber seguido cuidando este amor con paciencia, alegría y mucha ternura.</p>
+            </div>
+            <p class="christmas-letter-signoff">Con todo mi amor, hoy y siempre ❤️</p>
+            <button class="four-month-back christmas-letter-close" type="button" data-close-letter>Guardar en mi corazón</button>
+        </article>
+    </div>
+    <script src="cuatro-meses.js?v=20261127-chapter3-unlock" defer></script>
 </body>
 </html>

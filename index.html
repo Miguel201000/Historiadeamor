@@ -9,13 +9,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=20261124-chapter-card-backgrounds">
+    <link rel="stylesheet" href="styles.css?v=20261127-story-welcome-chapter3-preview">
 </head>
 <body>
 
     <div id="canvas-bg" aria-hidden="true"></div>
 
-    <div class="chapter-four-cinematic" id="chapterFourCinematic" aria-hidden="false">
+    <div class="story-welcome-screen" id="storyWelcomeScreen" role="dialog" aria-modal="true" aria-labelledby="storyWelcomeTitle" hidden>
+        <section class="story-welcome-card">
+            <p class="story-welcome-kicker">UNA HISTORIA HECHA CON AMOR ✨</p>
+            <h1 id="storyWelcomeTitle">¡Bienvenida, Aleja! 💖</h1>
+            <p class="story-welcome-message">Qué alegría tenerte aquí. Preparé unos detallitos nuevos para que recorras nuestra historia con una sonrisa; cada capítulo guarda un pedacito de todo lo que te amo.</p>
+            <div class="story-welcome-updates">
+                <h2>Novedades para ti</h2>
+                <ul>
+                    <li><span aria-hidden="true">🎶</span><span>La música puede acompañarte desde que entres al modo historia.</span></li>
+                    <li><span aria-hidden="true">💌</span><span>Recuerdos y mensajitos para volver a sonreír.</span></li>
+                    <li><span aria-hidden="true">✨</span><span>Pequeñas sorpresas y detalles renovados para descubrir en cada capítulo.</span></li>
+                </ul>
+            </div>
+            <p class="story-welcome-signoff">Gracias por ser la parte más bonita de esta historia. Te amo muchísimo. ❤️</p>
+            <button class="story-welcome-enter-button" id="storyWelcomeEnterButton" type="button">Entrar al modo historia ♫</button>
+        </section>
+    </div>
+
+    <div class="chapter-four-cinematic" id="chapterFourCinematic" aria-hidden="true" hidden>
         <span class="chapter-four-cinematic-stars" aria-hidden="true"></span>
         <section class="chapter-four-cinematic-card" role="dialog" aria-modal="true" aria-labelledby="chapterFourCinematicTitle chapterFourCinematicCaption" tabindex="-1">
             <span class="chapter-four-cinematic-flare" aria-hidden="true"></span>
@@ -56,11 +74,12 @@
                     <span class="chapter-choice-decoration" aria-hidden="true">🌊</span>
                     <span class="choice-arrow" aria-hidden="true">↗</span>
                 </a>
-                <a class="chapter-choice chapter-choice-coming-soon" href="cuatro-meses.html" aria-label="Capítulo 3, sorpresa navideña muy pronto">
+                <a class="chapter-choice chapter-choice-coming-soon" href="cuatro-meses.html" aria-label="Capítulo 3: una sorpresa navideña con árbol de recuerdos, retos y una carta especial">
                     <span>Capítulo 3</span>
                     <strong>Una sorpresa navideña 🎄</strong>
                     <span class="chapter-choice-decoration" aria-hidden="true">🎄</span>
-                    <span class="chapter-choice-note">El próximo capítulo, envuelto en magia</span>
+                    <span class="chapter-choice-note">Árbol de recuerdos · retos navideños</span>
+                    <span class="chapter-choice-spoilers">Una carta especial y una sorpresa final 🎁</span>
                     <span class="choice-arrow" aria-hidden="true">↗</span>
                 </a>
             </div>
@@ -360,6 +379,6 @@
         </section>
     </main>
 
-    <script src="script.js?v=20261124-chapter-three-christmas-cinematic" defer></script>
+    <script src="script.js?v=20261127-chapter-selection-return" defer></script>
 </body>
 </html>
